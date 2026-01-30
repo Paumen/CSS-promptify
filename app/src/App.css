@@ -15,8 +15,14 @@
 
 /* Header */
 .app-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
+}
+
+.header-content {
+  text-align: left;
 }
 
 .app-header h1 {
@@ -29,6 +35,10 @@
   margin: 8px 0 0;
   color: #666;
   font-size: 14px;
+}
+
+.settings-btn {
+  white-space: nowrap;
 }
 
 /* Main Content */

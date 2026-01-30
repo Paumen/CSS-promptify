@@ -1,11 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAppStore, calculateStats } from './state';
+import { getAllRules } from './rules';
 import { InputPanel } from './ui/InputPanel';
 import { IssuesPanel } from './ui/IssuesPanel';
 import { OutputPanel } from './ui/OutputPanel';
+import { SettingsPanel } from './ui/SettingsPanel';
+import type { RuleGroup } from './types';
 import './App.css';
 
 function App() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   // Use individual selectors to avoid infinite re-renders
   const originalCss = useAppStore((state) => state.session.original_css);
   const outputCss = useAppStore((state) => state.outputCss);
@@ -13,12 +18,24 @@ function App() {
   const reset = useAppStore((state) => state.reset);
   const issues = useAppStore((state) => state.analysisResult?.issues);
   const selectedFixIds = useAppStore((state) => state.session.selected_fix_ids);
+  const config = useAppStore((state) => state.config);
 
   // Memoize stats to avoid recalculation on every render
   const stats = useMemo(() => ({
     before: calculateStats(originalCss || ''),
     after: calculateStats(outputCss || ''),
   }), [originalCss, outputCss]);
+
+  // Calculate active rules count
+  const activeRulesCount = useMemo(() => {
+    const allRules = getAllRules();
+    return allRules.filter((rule) => {
+      const groupEnabled = config.groups[rule.meta.group as RuleGroup]?.enabled ?? true;
+      if (!groupEnabled) return false;
+      const ruleConfig = config.rules[rule.meta.rule_id];
+      return ruleConfig?.enabled ?? rule.meta.enabled_by_default;
+    }).length;
+  }, [config]);
 
   const hasInput = originalCss.length > 0;
   const issueCount = issues?.length ?? 0;
@@ -27,9 +44,20 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>CSS Promptify</h1>
-        <p className="tagline">Analyze, fix, and optimize CSS for LLM consumption</p>
+        <div className="header-content">
+          <h1>CSS Promptify</h1>
+          <p className="tagline">Analyze, fix, and optimize CSS for LLM consumption</p>
+        </div>
+        <button
+          className="btn btn-secondary settings-btn"
+          onClick={() => setSettingsOpen(true)}
+          title="Configure rules"
+        >
+          Settings
+        </button>
       </header>
+
+      <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       <main className="app-main">
         <div className="panels">
@@ -83,7 +111,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>CSS Promptify v1.0 - 10 rules active</p>
+        <p>CSS Promptify v1.0 - {activeRulesCount} rules active</p>
       </footer>
     </div>
   );

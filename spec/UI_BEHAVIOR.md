@@ -13,6 +13,14 @@ It is written to prevent ambiguity and to keep LLM-assisted implementation consi
 
 ---
 
+## 0) UX clarification (v1)
+v1 is intentionally: **paste → analyze → select fixes → copy output**.
+
+- No “manual code editing” workflow beyond paste.
+- Apply/revert is implemented via **recompute output from original input + selected fixes** (deterministic).
+
+---
+
 ## 1) UI goals (v1)
 - Make analysis results easy to **see, filter, and understand**.
 - Make fixes **selectable**, **previewable**, **applyable**, and **revertible**.
@@ -23,16 +31,21 @@ It is written to prevent ambiguity and to keep LLM-assisted implementation consi
 
 ## 2) Required UI surfaces
 
-### 2.1 Editor Panel (CSS input/output)
-- Syntax-highlighted editor
-- Line numbers
-- Highlighting for selected issue ranges
-- The editor shows the **current CSS state** (after applied fixes)
+### 2.1 Input / Output view (CSS)
+- Syntax-highlighted CSS view
+- Line numbers (best-effort)
+- Highlighting for selected issue ranges (best-effort)
+- The tool shows:
+  - **Original input CSS** (what the user pasted)
+  - **Derived output CSS** (after selected fixes are applied)
+
+Notes:
+- v1 does not require live editing; paste in, copy out.
 
 ### 2.2 Issues Panel
 - Issues grouped by severity: error / warning / info
 - Counts per severity
-- Filters (severity, group, fixable, search)
+- Filters (severity, group, fixability, search)
 - Issue list items are clickable and show selection state
 
 ### 2.3 Issue Detail + Rule Logic Panel
@@ -43,18 +56,27 @@ When an issue is selected, show:
   - WHAT: what was detected
   - WHY: why it matters (LLM clarity / tokens / consolidation / modernity)
   - WHEN SAFE: constraints / caveats
+- If fixability = safe:
+  - show fix preview/diff
+  - show “Select fix” checkbox (or equivalent action)
+- If fixability = prompt:
+  - show “Copy LLM prompt” action
 
 ### 2.4 Fix Preview / Diff Panel
-- Before/after diff preview for the selected issue (or for a batch apply)
-- “Apply” action must be visible in this context
+- Before/after diff preview for:
+  - selected issue fix, OR
+  - a batch of selected fixes
+- The UI must clearly show what will change before the user commits to it.
 
-### 2.5 Applied Fixes Panel (session)
-- List of applied fixes (in order applied)
+### 2.5 Selected Fixes Panel (session)  ✅ (replaces “Applied Fixes Panel”)
+Because v1 uses **recompute-from-original**, we track *selected* fixes (not an undo stack).
+
+- List of **selected fixes** (deterministic order)
 - Each entry has:
-  - checkbox (checked = applied)
+  - checkbox (checked = selected)
   - rule_id
   - short description
-- Unchecking an applied fix reverts it (see section 6)
+- Unchecking a selected fix reverts it automatically (by recompute).
 
 ### 2.6 Copy + Export Controls
 Required buttons:
@@ -97,8 +119,8 @@ Notes:
 
 ### 4.1 Comments toggle
 - UI provides a clear toggle: **Inline comments: ON/OFF**
-- When ON: applied fixes include tool comments in the editor output
-- When OFF: editor output must not show tool comments
+- When ON: selected fixes include tool comments in the derived output
+- When OFF: derived output must not show tool comments
 
 ### 4.2 Comment format
 - Dedicated marker prefix required: `cssreview:`
@@ -108,20 +130,106 @@ Notes:
 Example:
 ```css
 color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */
-```
 
 ### 4.3 Remove tool comments
-- “Remove tool comments” removes only comments containing `cssreview:` and preserves all other user comments.
-- This action must be idempotent.
+
+“Remove tool comments” removes only comments containing cssreview: and preserves all other user comments.
+This action must be idempotent.
 
 ### 4.4 Copy modes
-- Copy output (no comments): copies CSS after stripping tool comments only
-- Copy output (with comments): copies CSS including tool comments if comments are ON; if comments are OFF, this copies the same as “no comments”
 
----
+Copy output (no comments): copies CSS after stripping tool comments only
+Copy output (with comments): copies CSS including tool comments if comments are ON; if comments are OFF, this copies the same as “no comments”
+
 
 ## 5) Analysis + issue navigation behavior
-
 ### 5.1 Analyze action
-- Runs parsing + rule evaluation and updates:
 
+Runs parsing + rule evaluation and updates:
+
+Issues list
+Stats (before baseline)
+Available fixes/prompts
+
+
+If parsing fails:
+
+show safety/invalid-syntax issue(s)
+keep UI usable (user can still copy original input, adjust settings, etc.)
+
+
+
+### 5.2 Selecting an issue
+Selecting an issue must:
+
+highlight code location (best-effort)
+show full rule logic panel (WHAT/WHY/WHEN SAFE)
+show fix preview/diff or LLM prompt actions depending on fixability
+
+
+## 6) Fix selection + apply + revert (core)
+### 6.1 Selection model (v1)
+
+Fixes are never auto-applied.
+User selects fixes via checkboxes (issue-level / rule-level / group-level / severity-level).
+Selected fixes are tracked as selected_fix_ids in session state.
+
+### 6.2 Apply model (v1)
+v1 may implement apply in either UX variant (both valid):
+
+Variant A (immediate): output updates as soon as user checks/unchecks fixes.
+Variant B (commit button): user checks fixes, then clicks “Apply selected” to update output.
+
+In both variants, the underlying behavior must be the same:
+
+Output is derived from original input + selected fixes, in deterministic order.
+
+### 6.3 Revert model (v1)
+Revert is simply unselect:
+
+User unchecks a selected fix
+Tool recomputes output CSS without that fix
+Output returns to the state “as if that fix was never selected”
+
+### 6.4 Deterministic ordering (required)
+When multiple fixes are selected, UI must apply them in a deterministic order (as defined in DATA_CONTRACTS):
+
+sort by earliest patch start position (line/column)
+tie-break by rule_id then fix.id
+
+The UI may display this order in “Selected Fixes Panel”.
+### 6.5 Conflicts (required)
+If two fixes overlap/conflict:
+
+UI must prevent selecting both OR allow selection but show deterministic resolution
+conflict must be visible to user
+behavior must be deterministic and explainable (“Fix A conflicts with Fix B; select one.”)
+
+
+## 7) Filtering behavior (Issues Panel)
+Filters must include:
+
+severity: error / warning / info (multi-select)
+group: modern / consolidation / format / tokens / safety / education (multi-select)
+fixability: safe / prompt / none OR fixable/non-fixable
+search: matches rule_id and message text
+
+Filters apply instantly to the visible list.
+
+## 8) Mobile behavior
+Minimum mobile requirements:
+
+Panels can be tabs/screens (Input / Fixes / Output / Settings)
+Tap targets are large enough for fingers
+Code is horizontally scrollable (no destructive wrapping)
+Copy buttons are reachable without precision clicking
+
+
+## 9) UI acceptance checks (behavioral)
+
+User can: paste → analyze → filter → select issue → preview fix → select fix → see output → unselect fix → output reverts → copy output.
+User can toggle inline comments ON/OFF and see output update immediately.
+Copy “no comments” never includes cssreview: comments even if comments are ON.
+“Remove tool comments” removes only tool comments, not user comments.
+
+END

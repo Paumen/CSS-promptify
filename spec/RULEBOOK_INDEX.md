@@ -35,7 +35,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 
 ---
 
-## 1) Safety
+## 1) Safety (errors and hard stops)
 
 ### safety/invalid-syntax
 - **group:** safety
@@ -46,6 +46,36 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
   - context: entire file parse result
 - **notes:**
   - Emit when CSS cannot be parsed or contains invalid syntax/value combinations detected by parser.
+
+### safety/parse-error-unclosed-block
+- **group:** safety
+- **default_severity:** error
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: parser error subtype “unclosed block/braces”
+- **notes:**
+  - Specific parse error classification for clearer UX.
+
+### safety/parse-error-unexpected-token
+- **group:** safety
+- **default_severity:** error
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: parser error subtype “unexpected token”
+- **notes:**
+  - Specific parse error classification for clearer UX.
+
+### safety/parse-error-invalid-value
+- **group:** safety
+- **default_severity:** error
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: parser error subtype “invalid value”
+- **notes:**
+  - Specific parse error classification for clearer UX.
 
 ### safety/unrecognized-property
 - **group:** safety
@@ -60,6 +90,40 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
   - MUST NOT emit warning/error in v1.
   - Intended to avoid “outdated linter” behavior.
 
+### safety/misspelled-property
+- **group:** safety
+- **default_severity:** warning
+- **fixability:** prompt
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: unknown properties that are “close” to a known property (typo suggestion)
+  - excludes: custom properties (`--*`)
+- **notes:**
+  - Example: `widht` → suggest `width`.
+  - Prompt-only by default (auto-fix can be risky).
+
+### safety/typo-suspicious-units-and-tokens
+- **group:** safety
+- **default_severity:** error
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: declaration values containing common typos
+  - examples: `2xp`, `1x`, `pX`, `#fffffg`
+- **notes:**
+  - “Typos spotter” rule for common mistakes.
+
+### safety/duplicate-property-in-block
+- **group:** safety
+- **default_severity:** error
+- **fixability:** prompt
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: duplicate property name inside the same `{ ... }` block
+- **notes:**
+  - You requested this as an error (strict).
+  - Prompt-only because duplicates may sometimes be intentional fallbacks.
+
 ---
 
 ## 2) Format (LLM structure-first)
@@ -70,9 +134,9 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: whitespace/indentation in declarations and blocks
+  - context: whitespace/indentation
 - **autofix_notes:**
-  - Replace `\t` with spaces according to `format/indent-2-spaces` policy.
+  - Replace `\t` with spaces according to `format/indent-2-spaces`.
 
 ### format/indent-2-spaces
 - **group:** format
@@ -80,24 +144,21 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: indentation of lines inside `{ ... }`
+  - context: indentation inside `{ ... }`
 - **params (session):**
   - `indentSize`: number (default 2)
 - **autofix_notes:**
-  - Normalize indentation to `indentSize` spaces.
-  - Preserve semantic structure (no minification).
+  - Normalize indentation to indentSize spaces.
 
-### format/property-per-line
+### format/multiple-declarations-per-line
 - **group:** format
 - **default_severity:** warning
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: declaration blocks where multiple declarations appear on one line
-- **params (session):**
-  - `allowSinglePropSingleLine`: boolean (default true via rule below)
+  - context: more than one declaration on the same line
 - **autofix_notes:**
-  - Split declarations so each property starts on a new line (except if overridden by single-prop rule).
+  - Split so each property starts on a new line.
 
 ### format/single-prop-single-line
 - **group:** format
@@ -109,9 +170,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **params (session):**
   - `enabled`: boolean (default true)
 - **autofix_notes:**
-  - If enabled and a block has a single declaration, allow:
-    - `.a { color: #fff; }`
-  - If disabled, always use multi-line block formatting.
+  - If enabled, allow `.a { color: #fff; }`.
 
 ### format/normalize-spaces
 - **group:** format
@@ -119,29 +178,58 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: spacing around `:` and `;` and after `,`
+  - context: spacing around `:` `;` and after `,`
 - **autofix_notes:**
   - Ensure `property: value;` spacing is consistent and minimal.
-  - Must not minify away structure (newlines/indentation remain).
 
-### format/sort-properties  ✅ (in scope v1)
+### format/one-selector-per-line
+- **group:** format
+- **default_severity:** info
+- **fixability:** safe
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: selector lists split by commas
+- **autofix_notes:**
+  - Put each selector (comma-separated) on its own line.
+
+### format/sort-properties
 - **group:** format
 - **default_severity:** info
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declarations inside a single block (do not cross blocks)
-  - excludes: custom properties (`--*`) (optional; see params)
 - **params (session):**
   - `mode`: `grouped | alphabetical` (default `grouped`)
   - `keepCustomPropsFirst`: boolean (default true)
 - **autofix_notes:**
-  - Deterministic ordering only.
-  - Must not remove declarations or change values.
-  - Must not reorder selectors, blocks, or at-rules.
+  - Deterministic ordering only; do not change values or remove props.
 - **notes:**
-  - This rule is **info-only** in v1 (never warning/error).
-  - Enabled by default, but still user-selectable to apply.
+  - Info-only in v1; enabled by default; user-selectable to apply.
+
+### format/max-nesting-depth
+- **group:** format
+- **default_severity:** warning
+- **fixability:** none
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: CSS nesting (native nesting blocks)
+- **params (session):**
+  - `maxDepth`: number (default 3)
+- **notes:**
+  - Warn if nesting depth exceeds maxDepth.
+
+### format/max-nesting-lines
+- **group:** format
+- **default_severity:** warning
+- **fixability:** none
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: CSS nesting (nested block length)
+- **params (session):**
+  - `maxLines`: number (default 30)
+- **notes:**
+  - Warn if a single nested block exceeds maxLines.
 
 ---
 
@@ -153,10 +241,31 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: numeric values in declarations
-  - examples: `0px`, `0rem`, `0em`, `0%` (only where exactly equivalent)
+  - context: numeric values
 - **autofix_notes:**
   - Convert `0<unit>` → `0` when unit is redundant.
+
+### tokens/remove-trailing-zeros
+- **group:** tokens
+- **default_severity:** warning
+- **fixability:** safe
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: numeric values with decimals
+  - examples: `1.0` → `1`, `1.50` → `1.5`
+- **autofix_notes:**
+  - Remove trailing zeros where value remains exact.
+
+### tokens/remove-leading-zero
+- **group:** tokens
+- **default_severity:** info
+- **fixability:** safe
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: decimals with leading zero
+  - examples: `0.5` → `.5`
+- **autofix_notes:**
+  - Remove leading zero where valid CSS and unchanged value.
 
 ### tokens/shorten-hex-colors
 - **group:** tokens
@@ -165,10 +274,9 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **enabled_by_default:** true
 - **applies_to:**
   - context: hex colors
-  - only: 6-digit hex where reducible (`#ffffff` → `#fff`)
+  - only: reducible 6-digit hex (`#ffffff` → `#fff`)
 - **autofix_notes:**
-  - Shorten only when mathematically equivalent.
-  - Do not change named colors or functions here (handled by separate modern rules if desired).
+  - Shorten only when equivalent.
 
 ### tokens/remove-redundant-whitespace-in-values
 - **group:** tokens
@@ -176,16 +284,13 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: whitespace inside values where semantics remain unchanged
-  - examples: `rgb(0, 0, 0)` → `rgb(0,0,0)` (optional), extra spaces in lists
+  - context: whitespace inside values where semantics unchanged
 - **params (session):**
   - `aggressiveness`: `low | medium` (default low)
-- **autofix_notes:**
-  - Must not collapse newlines/indentation (structure stays).
 
 ---
 
-## 4) Consolidation (reduce duplication, safe only)
+## 4) Consolidation / Shorthands
 
 ### consolidate/shorthand-margin-padding
 - **group:** consolidation
@@ -196,89 +301,117 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
   - context: within a single declaration block
   - properties: `margin-*`, `padding-*`
 - **autofix_notes:**
-  - Combine longhands into shorthand when mapping is deterministic.
-  - Preserve ordering and avoid changing behavior.
+  - Combine longhands into shorthand when deterministic.
 
-### consolidate/deduplicate-last-wins
+### consolidate/shorthand-full-values
 - **group:** consolidation
 - **default_severity:** warning
 - **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: within a single declaration block
-- **autofix_notes:**
-  - If the same property appears multiple times in the same block, keep only the effective one (last-wins).
-  - Must not remove fallbacks intentionally written (see params below).
+  - context: shorthand properties using 1–3 values
+  - properties: `margin`, `padding`, `inset`
 - **params (session):**
-  - `preserveKnownFallbackPatterns`: boolean (default true)
-  - examples: keep patterns like `background: ...` with gradients + fallback colors when recognized.
+  - `expandTo`: number (default 4)
+- **autofix_notes:**
+  - Expand shorthand so all values are explicit:
+    - `margin: 1px 2px;` → `margin: 1px 2px 1px 2px;`
+- **notes:**
+  - You requested explicit values for shorthands for clarity (LLM-friendly).
 
-### consolidate/merge-adjacent-identical-selectors
+### consolidate/duplicate-selectors
 - **group:** consolidation
-- **default_severity:** info
+- **default_severity:** warning
 - **fixability:** prompt
 - **enabled_by_default:** false
 - **applies_to:**
   - context: stylesheet-level; same selector repeated in multiple blocks
 - **notes:**
-  - Potentially changes cascade/order semantics.
-  - v1: provide LLM prompt only, no auto-fix.
+  - Warn for duplicate selectors. Prompt-only; merging may affect cascade/order.
 
 ---
 
-## 5) Modern (recognize + guidance; conservative)
+## 5) Modern / Best practices
 
-### modern/suggest-place-properties
+### modern/prefer-dvh-over-vh
 - **group:** modern
 - **default_severity:** info
 - **fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: alignment declarations
-  - properties: `align-items`, `justify-items`, `align-content`, `justify-content`
+  - context: values using `vh`
 - **notes:**
-  - Suggest `place-items` / `place-content` / `place-self` where safe.
-  - v1: prompt-only unless mapping is guaranteed deterministic.
+  - Prefer `dvh` over `vh`.
 
-### modern/container-queries-guidance
+### modern/prefer-hex-colors
 - **group:** modern
 - **default_severity:** info
-- **fixability:** prompt
+- **fixability:** safe
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: container query usage
-  - properties: `container`, `container-type`, `container-name`
-  - at-rules: `@container`
-- **notes:**
-  - Must recognize container features as valid.
-  - v1: guidance/prompt, no auto-fix.
+  - context: color values not in hex
+- **params (session):**
+  - `prefer`: "hex"
+- **autofix_notes:**
+  - Convert only when exact conversion is possible (e.g., integer rgb()).
 
-### modern/light-dark-guidance
-- **group:** modern
-- **default_severity:** info
-- **fixability:** none
-- **enabled_by_default:** true
-- **applies_to:**
-  - context: color functions
-  - functions: `light-dark()`
-- **notes:**
-  - Must recognize `light-dark()` as valid.
-  - Optional info explaining its purpose; no forced changes.
-
-### modern/suggest-logical-properties
+### modern/prefer-individual-transform-properties
 - **group:** modern
 - **default_severity:** info
 - **fixability:** prompt
 - **enabled_by_default:** false
 - **applies_to:**
-  - context: physical properties
-  - properties: `margin-left/right`, `padding-left/right`, etc.
+  - context: `transform:` usage that could be expressed as individual properties
 - **notes:**
-  - Guidance only in v1 to avoid semantic/layout intent mistakes.
+  - Prefer `translate`, `rotate`, `scale` (prompt-only in v1).
+
+### modern/avoid-px-except-approved-contexts
+- **group:** modern
+- **default_severity:** warning
+- **fixability:** prompt
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: values using `px`
+- **params (session):**
+  - `allowContainerUnits`: true
+  - `preferredUnitsIfContainerAllowed`:
+      elementInline: "cqi"
+      elementBlock: "cqb"
+  - `preferredUnitsIfContainerNotAllowed`:
+      elementHeight: "dvh"
+      elementWidth: "dvw"
+  - `preferredUnitsSpacingAndBorders`: "rem"
+  - `spacingAndBorderProps`:
+      - "margin"
+      - "padding"
+      - "border"
+      - "border-width"
+      - "outline"
+      - "gap"
+  - `elementSizeProps`:
+      - "width"
+      - "height"
+      - "min-width"
+      - "max-width"
+      - "min-height"
+      - "max-height"
+      - "top"
+      - "left"
+      - "right"
+      - "bottom"
+      - "inset"
+  - `exceptions`:
+      allowPxInsideVar: true
+      allowPxIfClampMiddleIsResponsiveOrVar: true
+      clampMiddleAllowedUnits: ["cqi","cqb","dvh","dvw","rem","em","svh","lvh","vw","vh"]
+- **notes:**
+  - Warn if `px` is used instead of responsive units.
+  - Exception: allow px in `clamp(min, middle, max)` if middle uses a preferred responsive unit or `var(--*)`.
+  - Exception: allow px if the value contains `var(--*)`.
 
 ---
 
-## 6) Education (learners-first)
+## 6) Education / Style policy
 
 ### education/explain-rule-logic
 - **group:** education
@@ -288,11 +421,178 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **applies_to:**
   - context: issue detail panel
 - **notes:**
-  - For any issue, UI must show WHAT / WHY / WHEN SAFE.
+  - UI shows WHAT / WHY / WHEN SAFE for any issue.
+
+### style/important-used
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: any declaration containing `!important`
+- **notes:**
+  - Always emit info when `!important` is used.
+
+### style/important-requires-comment
+- **group:** education
+- **default_severity:** warning
+- **fixability:** prompt
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: any declaration containing `!important`
+  - condition: same line MUST contain approval comment marker
+- **params (session):**
+  - `requiredCommentMarker`: "cssreview: important-ok:"
+  - `sameLineOnly`: true
+  - `minReasonLength`: 3
+- **notes:**
+  - Allowed example:
+    - `color: red !important; /* cssreview: important-ok: override legacy */`
+
+### info/universal-selector-used
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: selector contains universal selector `*`
+- **notes:**
+  - Emit info when universal selector is used.
+
+### info/too-many-colors
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: entire stylesheet
+- **params (session):**
+  - `maxDistinctColors`: number (default 20)
+- **notes:**
+  - Emit info if more than maxDistinctColors distinct colors are detected.
+
+### info/weird-z-index-usage
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: z-index usage
+- **params (session):**
+  - `maxDistinctZIndex`: number (default 10)
+  - `highValueThreshold`: number (default 999)
+- **notes:**
+  - Emit info if many distinct z-index values are used or very high values are used.
 
 ---
 
-## 7) Template for adding new rules (copy/paste)
+## 7) Layout / Anti-pattern warnings
+
+### layout/warn-float-or-clear
+- **group:** modern
+- **default_severity:** warning
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: declarations using `float` or `clear`
+- **notes:**
+  - Warn when float/clear are used.
+
+### layout/warn-display-table-layout
+- **group:** modern
+- **default_severity:** warning
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: `display: table`, `display: table-cell`, etc.
+- **notes:**
+  - Warn for use of display table for layouts.
+
+### layout/flex-properties-require-flex
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: rule blocks that include flex-related properties
+- **notes:**
+  - Emit info if flex properties are used but `display: flex|inline-flex` is not present in the same block.
+
+### layout/grid-properties-require-grid
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: rule blocks that include grid-related properties
+- **notes:**
+  - Emit info if grid properties are used but `display: grid|inline-grid` is not present in the same block.
+
+---
+
+## 8) Debug / Suspicious patterns
+
+### debug/suspicious-debug-styles
+- **group:** modern
+- **default_severity:** warning
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: declarations likely used as debugging
+- **params (session):**
+  - `suspiciousColors`: ["magenta", "lime"]
+  - `suspiciousPatterns`: ["outline: 1px solid red", "outline: 2px solid red"]
+- **notes:**
+  - Warn when debug-like styles appear (magenta/lime, red outline patterns, etc.).
+
+---
+
+## 9) Design system / value enforcement (optional)
+
+### design/step-values
+- **group:** tokens
+- **default_severity:** warning
+- **fixability:** prompt
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: declaration values for properties:
+    - `margin`, `gap`, `border`, `border-width`, `min-height`, `max-height`, `min-width`, `max-width`,
+      `top`, `left`, `right`, `bottom`, `inset`, `width`, `height`, `outline`
+  - value shape: plain numeric tokens with unit OR unitless `0`
+  - applies_to_all_tokens: true
+  - excludes:
+    - percentage values (e.g. `50%`)
+    - complex expressions/functions (v1 skip): `calc(...)`, `clamp(...)`, `min(...)`, `max(...)`, `var(...)`
+- **params (session):**
+  - `smallMax`: 6
+  - `midMin`: 7
+  - `midMax`: 20
+  - `midStep`: 2
+  - `largeMin`: 21
+  - `largeStep`: 4
+- **notes:**
+  - Logic per token:
+    - value <= 6 → allowed
+    - 7..20 → allowed only if even
+    - 21+ → allowed only if divisible by 4
+
+---
+
+## 10) Custom properties (variables)
+
+### vars/unused-custom-properties
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: custom property definitions `--*` within the provided input
+- **notes:**
+  - Emit info for custom properties defined but not referenced via `var(--*)` within the same input.
+
+---
+
+## 11) Template for adding new rules (copy/paste)
 
 ### <rule_id>
 - **group:** <group>

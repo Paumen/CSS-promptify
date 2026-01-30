@@ -1,3 +1,9 @@
+<!--
+STATUS: Human decision log
+SOURCE OF TRUTH: Human decisions in this file are final unless explicitly changed by a human
+LLM_POLICY: Read-only. Do not add, remove, or change decisions. You may suggest wording improvements only.
+-->
+
 # Decisions (ADR-lite)
 
 These are short “why” records to prevent revisiting settled choices and to keep LLM-assisted work aligned.

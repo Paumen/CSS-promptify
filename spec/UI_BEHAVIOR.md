@@ -1,3 +1,9 @@
+<!--
+STATUS: Authoritative reference for this topic
+SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
+LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
+-->
+
 # UI Behavior (v1)
 
 This document defines **UI behavior and state**, not visual design.  

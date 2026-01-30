@@ -17,6 +17,15 @@ If requirements conflict:
 6) spec/GLOSSARY.md
 7) spec/DECISIONS.md (read-only decision log)
 
+## Beginner mode 
+The human has no experience at coding and tooling. 
+
+When responding:
+- Always name exact files and folders to edit.
+- Avoid jargon; if you must use a term, define it in 1 sentence.
+- Prefer the simplest working solution that matches the spec. If more is intrestting, propose first.
+- When suggesting commands, explain what they do and what success looks like.
+
 ## Key constraints (must follow)
 - v1 is paste → analyze → select fixes → copy output. No code editing workflow beyond paste.
 - Apply/revert uses recompute-from-original using selected_fix_ids (deterministic order, conflict handling).
@@ -34,5 +43,5 @@ If requirements conflict:
   - how it maps to acceptance criteria and examples
 
 ## Questions
-Ask clarifying questions only if needed to avoid building the wrong behavior.
+Ask clarifying questions if needed to avoid building the wrong behavior.
 Otherwise, make a reasonable assumption and state it explicitly.

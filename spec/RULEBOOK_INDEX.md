@@ -237,7 +237,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
   - context: alignment declarations
   - properties: `align-items`, `justify-items`, `align-content`, `justify-content`
 - **notes:**
-  - Suggest `place-items` / `place-content` where safe.
+  - Suggest `place-items` / `place-content` / `place-self` where safe.
   - v1: prompt-only unless mapping is guaranteed deterministic.
 
 ### modern/container-queries-guidance

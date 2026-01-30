@@ -3,8 +3,13 @@ import { parse } from '../parser';
 import { noTabsRule } from './format/no-tabs';
 import { indent2SpacesRule } from './format/indent-2-spaces';
 import { multipleDeclarationsPerLineRule } from './format/multiple-declarations-per-line';
+import { normalizeSpacesRule } from './format/normalize-spaces';
+import { singlePropSingleLineRule } from './format/single-prop-single-line';
 import { zeroUnitsRule } from './tokens/zero-units';
 import { shortenHexColorsRule } from './tokens/shorten-hex-colors';
+import { removeTrailingZerosRule } from './tokens/remove-trailing-zeros';
+import { shorthandMarginPaddingRule } from './consolidation/shorthand-margin-padding';
+import { deduplicateLastWinsRule } from './consolidation/deduplicate-last-wins';
 import { resetIssueCounter } from './utils';
 import type { SessionConfig } from '../types';
 
@@ -281,5 +286,221 @@ describe('Example 3 from spec/EXAMPLES.md', () => {
     // Check zero unit fix
     const zeroIssue = allIssues.find((i) => i.rule_id === 'tokens/zero-units');
     expect(zeroIssue?.fix?.preview).toBe('0');
+  });
+});
+
+// ============================================================================
+// New Rules Tests
+// ============================================================================
+
+describe('format/normalize-spaces', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('detects missing space after colon', () => {
+    const css = '.card { padding:8px; }';
+    const { ast } = parse(css);
+    const issues = normalizeSpacesRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].rule_id).toBe('format/normalize-spaces');
+    expect(issues[0].message).toContain('space after colon');
+  });
+
+  it('detects multiple spaces after colon', () => {
+    const css = '.card { padding:   8px; }';
+    const { ast } = parse(css);
+    const issues = normalizeSpacesRule.run(ast, css, defaultConfig);
+
+    expect(issues.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('accepts properly spaced CSS', () => {
+    const css = '.card { padding: 8px; }';
+    const { ast } = parse(css);
+    const issues = normalizeSpacesRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(0);
+  });
+});
+
+describe('format/single-prop-single-line', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('detects multi-line single-property rule', () => {
+    const css = '.a {\n  color: #fff;\n}';
+    const { ast } = parse(css);
+    const issues = singlePropSingleLineRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].rule_id).toBe('format/single-prop-single-line');
+    expect(issues[0].fix?.preview).toBe('.a { color: #fff; }');
+  });
+
+  it('ignores multi-property rules', () => {
+    const css = '.a {\n  color: #fff;\n  padding: 8px;\n}';
+    const { ast } = parse(css);
+    const issues = singlePropSingleLineRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(0);
+  });
+
+  it('ignores already single-line rules', () => {
+    const css = '.a { color: #fff; }';
+    const { ast } = parse(css);
+    const issues = singlePropSingleLineRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(0);
+  });
+});
+
+describe('tokens/remove-trailing-zeros', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('removes trailing zeros from 0.50', () => {
+    const css = '.card { opacity: 0.50; }';
+    const { ast } = parse(css);
+    const issues = removeTrailingZerosRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].rule_id).toBe('tokens/remove-trailing-zeros');
+    expect(issues[0].fix?.preview).toBe('0.5');
+  });
+
+  it('removes trailing zeros from 1.0', () => {
+    const css = '.card { line-height: 1.0; }';
+    const { ast } = parse(css);
+    const issues = removeTrailingZerosRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].fix?.preview).toBe('1');
+  });
+
+  it('ignores numbers without trailing zeros', () => {
+    const css = '.card { opacity: 0.5; }';
+    const { ast } = parse(css);
+    const issues = removeTrailingZerosRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(0);
+  });
+});
+
+describe('consolidate/shorthand-margin-padding', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('detects all 4 margin longhands', () => {
+    const css = `.box {
+  margin-top: 4px;
+  margin-right: 8px;
+  margin-bottom: 4px;
+  margin-left: 8px;
+}`;
+    const { ast } = parse(css);
+    const issues = shorthandMarginPaddingRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].rule_id).toBe('consolidate/shorthand-margin-padding');
+    expect(issues[0].fix?.preview).toBe('margin: 4px 8px');
+  });
+
+  it('ignores partial margin longhands', () => {
+    const css = `.box {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}`;
+    const { ast } = parse(css);
+    const issues = shorthandMarginPaddingRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(0);
+  });
+
+  it('optimizes all same values', () => {
+    const css = `.box {
+  padding-top: 8px;
+  padding-right: 8px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+}`;
+    const { ast } = parse(css);
+    const issues = shorthandMarginPaddingRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].fix?.preview).toBe('padding: 8px');
+  });
+});
+
+describe('consolidate/deduplicate-last-wins', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('detects duplicate properties', () => {
+    const css = `.title {
+  font-weight: 400;
+  font-weight: 700;
+}`;
+    const { ast } = parse(css);
+    const issues = deduplicateLastWinsRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].rule_id).toBe('consolidate/deduplicate-last-wins');
+    expect(issues[0].message).toContain('font-weight');
+  });
+
+  it('ignores unique properties', () => {
+    const css = `.title {
+  font-weight: 700;
+  color: red;
+}`;
+    const { ast } = parse(css);
+    const issues = deduplicateLastWinsRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(0);
+  });
+});
+
+describe('Example 4 from spec/EXAMPLES.md - margin shorthand', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('consolidates margin longhands correctly', () => {
+    const css = `.box {
+  margin-top: 4px;
+  margin-right: 8px;
+  margin-bottom: 4px;
+  margin-left: 8px;
+}`;
+    const { ast } = parse(css);
+    const issues = shorthandMarginPaddingRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    // 4px 8px 4px 8px -> 4px 8px (vertical horizontal)
+    expect(issues[0].fix?.preview).toBe('margin: 4px 8px');
+  });
+});
+
+describe('Example 5 from spec/EXAMPLES.md - deduplicate', () => {
+  beforeEach(() => {
+    resetIssueCounter();
+  });
+
+  it('removes duplicate font-weight', () => {
+    const css = `.title {
+  font-weight: 400;
+  font-weight: 700;
+}`;
+    const { ast } = parse(css);
+    const issues = deduplicateLastWinsRule.run(ast, css, defaultConfig);
+
+    expect(issues).toHaveLength(1);
+    expect(issues[0].logic.why).toContain('700');
   });
 });

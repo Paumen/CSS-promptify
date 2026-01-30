@@ -4,7 +4,7 @@
  */
 
 import { parse } from '../parser';
-import { getAllRules } from '../rules';
+import { getAllRules, createParseErrorIssues } from '../rules';
 import type {
   AnalysisResult,
   SessionConfig,
@@ -36,9 +36,20 @@ export function analyze(css: string, config: SessionConfig): AnalysisResult {
   const { ast, errors } = parse(css);
   const issues: Issue[] = [];
 
+  // Add parse errors as issues (safety/invalid-syntax)
+  if (errors.length > 0) {
+    const parseErrorIssues = createParseErrorIssues(errors);
+    issues.push(...parseErrorIssues);
+  }
+
   // Run all enabled rules
   const rules = getAllRules();
   for (const rule of rules) {
+    // Skip invalid-syntax rule since we handle parse errors separately above
+    if (rule.meta.rule_id === 'safety/invalid-syntax') {
+      continue;
+    }
+
     const ruleConfig = config.rules[rule.meta.rule_id];
     const groupConfig = config.groups[rule.meta.group];
 

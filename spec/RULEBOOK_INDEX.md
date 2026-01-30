@@ -30,8 +30,71 @@ Each rule entry contains:
 ### 0.2 Applicability rule (important)
 Every rule MUST be explicit about where it applies (properties + context) to avoid accidental triggers.
 
-### 0.3 “Unrecognized property” policy
+### 0.3 "Unrecognized property" policy
 `safety/unrecognized-property` is **info-only** by default and must never block other fixes.
+
+---
+
+## 0.4 v1 Rule Selection (Implementation Tiers)
+
+Rules are organized into implementation tiers. **v1.0 first release includes Tier 1 + Tier 2 (20 rules)**.
+
+### Tier 1: Core Rules (Must Have) — 15 rules
+
+| rule_id | group | fixability | rationale |
+|---------|-------|------------|-----------|
+| `safety/invalid-syntax` | safety | none | Fundamental parse error detection |
+| `safety/unrecognized-property` | safety | none | Core modern-CSS policy |
+| `format/no-tabs` | format | safe | Basic LLM-friendly formatting |
+| `format/indent-2-spaces` | format | safe | Basic LLM-friendly formatting |
+| `format/multiple-declarations-per-line` | format | safe | Core formatting rule |
+| `format/single-prop-single-line` | format | safe | Token optimization |
+| `format/normalize-spaces` | format | safe | Clean spacing |
+| `tokens/zero-units` | tokens | safe | Simple, high-value |
+| `tokens/shorten-hex-colors` | tokens | safe | Simple, high-value |
+| `consolidate/shorthand-margin-padding` | consolidation | safe | High-impact consolidation |
+| `consolidate/deduplicate-last-wins` | consolidation | safe | Remove redundant declarations |
+| `education/explain-rule-logic` | education | none | UI feature (WHAT/WHY/WHEN) |
+| `style/important-used` | education | none | Basic awareness |
+| `layout/flex-properties-require-flex` | education | none | Common mistake detection |
+| `layout/grid-properties-require-grid` | education | none | Common mistake detection |
+
+### Tier 2: Valuable Additions — 5 rules
+
+| rule_id | group | fixability | rationale |
+|---------|-------|------------|-----------|
+| `safety/misspelled-property` | safety | prompt | Catches typos |
+| `safety/typo-suspicious-units-and-tokens` | safety | none | Catches `2xp` etc. |
+| `format/sort-properties` | format | safe | Per spec requirement |
+| `tokens/remove-trailing-zeros` | tokens | safe | Clean numbers |
+| `modern/prefer-hex-colors` | modern | safe | Simple conversion |
+
+### Tier 3: Defer to v1.1+ — remaining rules
+
+| rule_id | reason to defer |
+|---------|-----------------|
+| `safety/parse-error-*` (3 rules) | Subsume into invalid-syntax |
+| `safety/duplicate-property-in-block` | Complex; often intentional fallbacks |
+| `format/one-selector-per-line` | Lower priority formatting |
+| `format/max-nesting-depth` | Disabled by default |
+| `format/max-nesting-lines` | Disabled by default |
+| `tokens/remove-leading-zero` | Lower priority |
+| `tokens/remove-redundant-whitespace-in-values` | Edge cases |
+| `consolidate/shorthand-full-values` | May conflict with shorthand collapse |
+| `consolidate/duplicate-selectors` | Cascade-affecting; risky |
+| `modern/prefer-dvh-over-vh` | Browser support varies |
+| `modern/prefer-individual-transform-properties` | Complex analysis |
+| `modern/suggest-place-shorthand` | Prompt-only; lower priority |
+| `modern/avoid-px-except-approved-contexts` | Disabled by default; complex |
+| `style/important-requires-comment` | Can add in v1.1 |
+| `info/universal-selector-used` | Lower priority |
+| `info/too-many-colors` | Stylesheet-wide analysis |
+| `info/weird-z-index-usage` | Lower priority |
+| `layout/warn-float-or-clear` | Can add in v1.1 |
+| `layout/warn-display-table-layout` | Less common |
+| `debug/suspicious-debug-styles` | Can add in v1.1 |
+| `design/step-values` | Disabled by default; niche |
+| `vars/unused-custom-properties` | Disabled by default |
 
 ---
 
@@ -319,6 +382,20 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **notes:**
   - You requested explicit values for shorthands for clarity (LLM-friendly).
 
+### consolidate/deduplicate-last-wins
+- **group:** consolidation
+- **default_severity:** warning
+- **fixability:** safe
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: declarations inside a single block where the same property appears multiple times
+- **autofix_notes:**
+  - Remove earlier declarations of the same property, keeping only the last one.
+  - Safe because CSS "last declaration wins" semantics are preserved.
+- **notes:**
+  - Example: `font-weight: 400; font-weight: 700;` → `font-weight: 700;`
+  - Only applies within a single declaration block (not across blocks).
+
 ### consolidate/duplicate-selectors
 - **group:** consolidation
 - **default_severity:** warning
@@ -364,6 +441,18 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
   - context: `transform:` usage that could be expressed as individual properties
 - **notes:**
   - Prefer `translate`, `rotate`, `scale` (prompt-only in v1).
+
+### modern/suggest-place-shorthand
+- **group:** modern
+- **default_severity:** info
+- **fixability:** prompt
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: declaration blocks containing both `align-items` and `justify-items` (or `align-content` and `justify-content`, or `align-self` and `justify-self`)
+- **notes:**
+  - Suggest using `place-items`, `place-content`, or `place-self` shorthands.
+  - Prompt-only because values must match certain patterns for safe replacement.
+  - Example: `align-items: center; justify-items: center;` → suggest `place-items: center;`
 
 ### modern/avoid-px-except-approved-contexts
 - **group:** modern

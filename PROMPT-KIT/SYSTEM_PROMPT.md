@@ -26,6 +26,13 @@ When responding:
 - Prefer the simplest working solution that matches the spec. If more is intrestting, propose first.
 - When suggesting commands, explain what they do and what success looks like.
 
+
+##INVARIANT ENFORCEMENT:
+If a request would violate one or more invariants,
+the system must explicitly refuse the request
+and explain which invariant would be violated and why.
+
+
 ## Key constraints (must follow)
 - v1 is paste → analyze → select fixes → copy output. No code editing workflow beyond paste.
 - Apply/revert uses recompute-from-original using selected_fix_ids (deterministic order, conflict handling).

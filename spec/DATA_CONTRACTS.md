@@ -121,22 +121,31 @@ Canonical patch:
 ```
 
 ### 4.2 AppliedFix tracking (session)
-To support “apply selected fixes” AND “deselect to revert”, every applied fix is recorded.
+To support "apply selected fixes" AND "deselect to revert", the session tracks selected fix IDs.
 
+**SessionState (canonical)**:
 ```json
-
 {
   "original_css": "/* pasted css */",
   "selected_fix_ids": ["fix_000123", "fix_000200"],
   "comments_enabled": true
 }
-  "op": "replace_range",
-  "range": {
-    "start": { "line": 14, "column": 3 },
-    "end": { "line": 18, "column": 1 }
-  },
-  "text": "  margin: 4px 8px; /* cssreview: consolidate/shorthand: was margin-top/right/bottom/left */\n"
-}
+```
+
+**AppliedFix record** (internal tracking per fix):
+```json
+{
+  "fix_id": "fix_000123",
+  "rule_id": "consolidation/shorthand-margin-padding",
+  "patches": [
+    {
+      "op": "replace_range",
+      "range": {
+        "start": { "line": 14, "column": 3 },
+        "end": { "line": 18, "column": 1 }
+      },
+      "text": "  margin: 4px 8px; /* cssreview: consolidation/shorthand: was margin-top/right/bottom/left */\n"
+    }
   ],
   "comment": {
     "was_inserted": true,
@@ -146,32 +155,35 @@ To support “apply selected fixes” AND “deselect to revert”, every applie
 }
 ```
 
-4.3 Recompute rule (required)
+### 4.3 Recompute rule (required)
 The output is derived, not mutated:
 
+```
 output_css = apply(selected_fix_ids, original_css, comments_enabled)
+```
 
 Revert is automatic:
+- Unselect a fix ID → recompute output without that fix.
 
-Unselect a fix ID → recompute output without that fix.
-
-4.4 Deterministic apply order (required)
+### 4.4 Deterministic apply order (required)
 To ensure stable results, fixes MUST be applied in a deterministic order. v1 requirement:
 
-Primary sort key: earliest patch start position (range.start.line, then range.start.column)
-Tie-breakers: rule_id (lexicographic), then fix.id (lexicographic)
+1. **Primary sort key**: earliest patch start position (`range.start.line`, then `range.start.column`)
+2. **Tie-breakers**: `rule_id` (lexicographic), then `fix.id` (lexicographic)
 
 This order must be consistent every run.
-4.5 Conflicts (required behavior)
+
+### 4.5 Conflicts (required behavior)
 If two selected fixes modify overlapping ranges (conflict), the system must behave deterministically and visibly. v1 acceptable options:
 
-Option A (preferred): prevent selecting both and show a conflict notice
-Option B: allow selection but apply a deterministic resolution and show a conflict notice
+- **Option A (preferred)**: prevent selecting both and show a conflict notice
+- **Option B**: allow selection but apply a deterministic resolution and show a conflict notice
 
 In both cases:
+- behavior must be deterministic
+- user must be able to understand which fix is blocked/overridden
 
-behavior must be deterministic
-user must be able to understand which fix is blocked/overridden
+---
 
 ## 5) LLM prompt contract (for non-automatable fixes)
 
@@ -190,27 +202,36 @@ If `fixability` = `prompt`, the Issue includes an `llm_prompt` object.
 
 ---
 
-6) Invariants (must always be true)
-6.1 Determinism
+## 6) Invariants (must always be true)
+
+### 6.1 Determinism
 Same CSS input + same session config + same selected fixes ⇒ same Issues, same severities, same output formatting.
-6.2 Safety
-A safe fix MUST preserve selector specificity, rule order, and computed values (within deterministic equivalence like 0px → 0). If equivalence cannot be guaranteed deterministically, fixability MUST be prompt or none.
-6.3 User control
+
+### 6.2 Safety
+A safe fix MUST preserve selector specificity, rule order, and computed values (within deterministic equivalence like `0px → 0`). If equivalence cannot be guaranteed deterministically, fixability MUST be `prompt` or `none`.
+
+### 6.3 User control
 No fixes are applied automatically; only via explicit user selection. Revert MUST be possible by unselecting fixes (output recomputation).
-6.4 Tool comments only
-“Remove tool comments” MUST remove only comments that contain the marker prefix cssreview: and MUST NOT remove/alter user comments. Copy output must support both modes: with tool comments / without tool comments.
-6.5 Modern CSS & unrecognized properties
-Unrecognized properties MUST produce info only and MUST NOT block other fixes. Rules MUST declare applicability to prevent firing on unintended properties/contexts.
 
-7) Minimal validation rules (for implementers)
+### 6.4 Tool comments only
+"Remove tool comments" MUST remove only comments that contain the marker prefix `cssreview:` and MUST NOT remove/alter user comments. Copy output must support both modes: with tool comments / without tool comments.
 
-severity ∈ {error, warning, info}
-group ∈ {modern, consolidation, format, tokens, safety, education}
-fixability ∈ {safe, prompt, none}
-If fixability = safe ⇒ fix present and patches.length ≥ 1
-If fixability = prompt ⇒ llm_prompt present and fix absent
-If fixability = none ⇒ both fix and llm_prompt absent
-Deterministic apply order rule must be implemented
-Conflicts must be handled deterministically (block or deterministic resolve) with user-visible notice
+### 6.5 Modern CSS & unrecognized properties
+Unrecognized properties MUST produce `info` only and MUST NOT block other fixes. Rules MUST declare applicability to prevent firing on unintended properties/contexts.
+
+---
+
+## 7) Minimal validation rules (for implementers)
+
+- `severity` ∈ `{error, warning, info}`
+- `group` ∈ `{modern, consolidation, format, tokens, safety, education}`
+- `fixability` ∈ `{safe, prompt, none}`
+- If `fixability = safe` ⇒ `fix` present and `patches.length ≥ 1`
+- If `fixability = prompt` ⇒ `llm_prompt` present and `fix` absent
+- If `fixability = none` ⇒ both `fix` and `llm_prompt` absent
+- Deterministic apply order rule must be implemented
+- Conflicts must be handled deterministically (block or deterministic resolve) with user-visible notice
+
+---
 
 END

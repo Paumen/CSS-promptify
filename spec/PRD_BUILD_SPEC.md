@@ -1,3 +1,9 @@
+<!--
+STATUS: Authoritative reference for this topic
+SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
+LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
+-->
+
 # CSS Review Tool — PRD / POD / Build Spec (v1)
 Version: 1.1 (merged + tuned to your preferences)  
 Owner: (you)  

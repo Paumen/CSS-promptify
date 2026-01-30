@@ -1,0 +1,49 @@
+.output-panel {
+  min-width: 350px;
+}
+
+.output-controls {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+}
+
+.toggle-label input {
+  width: 16px;
+  height: 16px;
+}
+
+.css-output {
+  width: 100%;
+  min-height: 300px;
+  max-height: 400px;
+  overflow: auto;
+  padding: 12px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.css-output code {
+  font-family: inherit;
+}
+
+.panel-footer {
+  display: flex;
+  gap: 8px;
+  padding-top: 8px;
+}

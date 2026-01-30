@@ -3,6 +3,7 @@
  * Uses Zustand for session state
  */
 
+import { useMemo } from 'react';
 import { create } from 'zustand';
 import type {
   SessionState,
@@ -239,18 +240,24 @@ export const useAppStore = create<AppStore>((set, get) => ({
 
 /**
  * Selector hooks for common derived state
+ * Use useMemo to ensure stable references and prevent infinite loops
  */
+const EMPTY_ISSUES: Issue[] = [];
+
 export function useStats() {
   const originalCss = useAppStore((state) => state.session.original_css);
   const outputCss = useAppStore((state) => state.outputCss);
 
-  const before = calculateStats(originalCss || '');
-  const after = calculateStats(outputCss || '');
-  return { before, after };
+  return useMemo(() => {
+    const before = calculateStats(originalCss || '');
+    const after = calculateStats(outputCss || '');
+    return { before, after };
+  }, [originalCss, outputCss]);
 }
 
 export function useIssues(): Issue[] {
-  return useAppStore((state) => state.analysisResult?.issues ?? []);
+  const issues = useAppStore((state) => state.analysisResult?.issues);
+  return issues ?? EMPTY_ISSUES;
 }
 
 export function useSelectedFixIds(): string[] {

@@ -241,11 +241,12 @@ export const useAppStore = create<AppStore>((set, get) => ({
  * Selector hooks for common derived state
  */
 export function useStats() {
-  return useAppStore((state) => {
-    const before = calculateStats(state.session.original_css || '');
-    const after = calculateStats(state.outputCss || '');
-    return { before, after };
-  });
+  const originalCss = useAppStore((state) => state.session.original_css);
+  const outputCss = useAppStore((state) => state.outputCss);
+
+  const before = calculateStats(originalCss || '');
+  const after = calculateStats(outputCss || '');
+  return { before, after };
 }
 
 export function useIssues(): Issue[] {

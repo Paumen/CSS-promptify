@@ -6,7 +6,7 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 
 # Rulebook Index (v1)
 
-This file is the **catalog of rules**. It lists rule IDs, grouping, defaults, fixability, applicability, and (optionally) rule parameters.
+This file is the **catalog of rules**. It lists rule IDs, grouping, defaults, fixability, applicability, and (optionally) rule parameters.  
 It exists to keep the tool **modern**, avoid **outdated-linter** behavior, and prevent rules from firing in the wrong context.
 
 > Source of truth: If anything conflicts, `spec/PRD_BUILD_SPEC.md` wins.
@@ -22,6 +22,7 @@ Each rule entry contains:
 - **group**: `modern | consolidation | format | tokens | safety | education`
 - **default_severity**: `off | info | warning | error`
 - **fixability**: `safe | prompt | none`
+- **enabled_by_default**: `true | false` (v1: session-only toggles still start from this default)
 - **applies_to**: explicit applicability constraints (properties/contexts)
 - **autofix_notes**: conditions for safe auto-fix (if fixability = safe)
 - **params**: optional parameters that change behavior (v1 supports session-only)
@@ -40,6 +41,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** safety
 - **default_severity:** error
 - **fixability:** none
+- **enabled_by_default:** true
 - **applies_to:**
   - context: entire file parse result
 - **notes:**
@@ -49,6 +51,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** safety
 - **default_severity:** info
 - **fixability:** none
+- **enabled_by_default:** true
 - **applies_to:**
   - context: declaration property names
   - excludes: custom properties (`--*`)
@@ -65,6 +68,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** format
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: whitespace/indentation in declarations and blocks
 - **autofix_notes:**
@@ -74,6 +78,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** format
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: indentation of lines inside `{ ... }`
 - **params (session):**
@@ -86,6 +91,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** format
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: declaration blocks where multiple declarations appear on one line
 - **params (session):**
@@ -97,6 +103,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** format
 - **default_severity:** info
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: selector blocks with exactly 1 declaration
 - **params (session):**
@@ -110,11 +117,31 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** format
 - **default_severity:** info
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: spacing around `:` and `;` and after `,`
 - **autofix_notes:**
   - Ensure `property: value;` spacing is consistent and minimal.
   - Must not minify away structure (newlines/indentation remain).
+
+### format/sort-properties  ✅ (in scope v1)
+- **group:** format
+- **default_severity:** info
+- **fixability:** safe
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: declarations inside a single block (do not cross blocks)
+  - excludes: custom properties (`--*`) (optional; see params)
+- **params (session):**
+  - `mode`: `grouped | alphabetical` (default `grouped`)
+  - `keepCustomPropsFirst`: boolean (default true)
+- **autofix_notes:**
+  - Deterministic ordering only.
+  - Must not remove declarations or change values.
+  - Must not reorder selectors, blocks, or at-rules.
+- **notes:**
+  - This rule is **info-only** in v1 (never warning/error).
+  - Enabled by default, but still user-selectable to apply.
 
 ---
 
@@ -124,6 +151,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** tokens
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: numeric values in declarations
   - examples: `0px`, `0rem`, `0em`, `0%` (only where exactly equivalent)
@@ -134,6 +162,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** tokens
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: hex colors
   - only: 6-digit hex where reducible (`#ffffff` → `#fff`)
@@ -145,6 +174,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** tokens
 - **default_severity:** info
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: whitespace inside values where semantics remain unchanged
   - examples: `rgb(0, 0, 0)` → `rgb(0,0,0)` (optional), extra spaces in lists
@@ -161,6 +191,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** consolidation
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: within a single declaration block
   - properties: `margin-*`, `padding-*`
@@ -172,12 +203,12 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** consolidation
 - **default_severity:** warning
 - **fixability:** safe
+- **enabled_by_default:** true
 - **applies_to:**
   - context: within a single declaration block
 - **autofix_notes:**
   - If the same property appears multiple times in the same block, keep only the effective one (last-wins).
   - Must not remove fallbacks intentionally written (see params below).
-
 - **params (session):**
   - `preserveKnownFallbackPatterns`: boolean (default true)
   - examples: keep patterns like `background: ...` with gradients + fallback colors when recognized.
@@ -186,6 +217,7 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 - **group:** consolidation
 - **default_severity:** info
 - **fixability:** prompt
+- **enabled_by_default:** false
 - **applies_to:**
   - context: stylesheet-level; same selector repeated in multiple blocks
 - **notes:**
@@ -194,3 +226,88 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 
 ---
 
+## 5) Modern (recognize + guidance; conservative)
+
+### modern/suggest-place-properties
+- **group:** modern
+- **default_severity:** info
+- **fixability:** prompt
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: alignment declarations
+  - properties: `align-items`, `justify-items`, `align-content`, `justify-content`
+- **notes:**
+  - Suggest `place-items` / `place-content` where safe.
+  - v1: prompt-only unless mapping is guaranteed deterministic.
+
+### modern/container-queries-guidance
+- **group:** modern
+- **default_severity:** info
+- **fixability:** prompt
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: container query usage
+  - properties: `container`, `container-type`, `container-name`
+  - at-rules: `@container`
+- **notes:**
+  - Must recognize container features as valid.
+  - v1: guidance/prompt, no auto-fix.
+
+### modern/light-dark-guidance
+- **group:** modern
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: color functions
+  - functions: `light-dark()`
+- **notes:**
+  - Must recognize `light-dark()` as valid.
+  - Optional info explaining its purpose; no forced changes.
+
+### modern/suggest-logical-properties
+- **group:** modern
+- **default_severity:** info
+- **fixability:** prompt
+- **enabled_by_default:** false
+- **applies_to:**
+  - context: physical properties
+  - properties: `margin-left/right`, `padding-left/right`, etc.
+- **notes:**
+  - Guidance only in v1 to avoid semantic/layout intent mistakes.
+
+---
+
+## 6) Education (learners-first)
+
+### education/explain-rule-logic
+- **group:** education
+- **default_severity:** info
+- **fixability:** none
+- **enabled_by_default:** true
+- **applies_to:**
+  - context: issue detail panel
+- **notes:**
+  - For any issue, UI must show WHAT / WHY / WHEN SAFE.
+
+---
+
+## 7) Template for adding new rules (copy/paste)
+
+### <rule_id>
+- **group:** <group>
+- **default_severity:** <off|info|warning|error>
+- **fixability:** <safe|prompt|none>
+- **enabled_by_default:** <true|false>
+- **applies_to:**
+  - context: <where in CSS AST>
+  - properties/functions: <explicit list or pattern>
+  - excludes: <explicit list if needed>
+- **autofix_notes:** (only if safe)
+  - <conditions required to guarantee semantics-preserving transformation>
+- **params (session):** (optional)
+  - <paramName>: <type> (default <value>)
+- **notes:**
+  - <anything else the rule must guarantee>
+
+END

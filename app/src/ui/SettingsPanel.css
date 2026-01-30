@@ -1,0 +1,302 @@
+/* Settings Panel Overlay */
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.settings-panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 600px;
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Settings Header */
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  background: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.settings-summary {
+  font-size: 13px;
+  color: #666;
+  background: #e7f3ff;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.settings-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+}
+
+.settings-close:hover {
+  color: #333;
+}
+
+/* Settings Content */
+.settings-content {
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.settings-help {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #666;
+}
+
+.settings-help p {
+  margin: 4px 0;
+}
+
+.settings-help strong {
+  color: #333;
+}
+
+/* Group Section */
+.group-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.group-section[open] {
+  border-color: #0066cc;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f8f9fa;
+  cursor: pointer;
+  user-select: none;
+}
+
+.group-header:hover {
+  background: #f0f0f0;
+}
+
+.group-section[open] > .group-header {
+  background: #e7f3ff;
+  border-bottom: 1px solid #d0e5f9;
+}
+
+.group-toggle input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.group-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.group-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.group-count {
+  font-size: 11px;
+  color: #666;
+  background: #e0e0e0;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.group-description {
+  font-size: 12px;
+  color: #888;
+  margin-left: auto;
+}
+
+/* Group Rules List */
+.group-rules {
+  padding: 8px 0;
+  background: #fff;
+}
+
+/* Rule Item */
+.rule-item {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.rule-item:last-child {
+  border-bottom: none;
+}
+
+.rule-item:hover {
+  background: #fafafa;
+}
+
+.rule-item.rule-disabled {
+  opacity: 0.6;
+}
+
+.rule-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rule-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.rule-toggle input {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.rule-name {
+  font-family: monospace;
+  font-size: 13px;
+  color: #333;
+}
+
+.rule-meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  padding-left: 22px;
+}
+
+.rule-fixability {
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #f0f0f0;
+  color: #666;
+}
+
+.rule-applies {
+  font-size: 11px;
+  color: #888;
+  flex: 1;
+}
+
+/* Severity Button */
+.severity-btn {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  min-width: 60px;
+  transition: all 0.15s ease;
+}
+
+.severity-btn:hover {
+  transform: scale(1.05);
+}
+
+.severity-btn-off {
+  background: #e0e0e0;
+  color: #666;
+}
+
+.severity-btn-off:hover {
+  background: #d0d0d0;
+}
+
+.severity-btn-info {
+  background: #e7f3ff;
+  color: #0066cc;
+}
+
+.severity-btn-info:hover {
+  background: #d0e5f9;
+}
+
+.severity-btn-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.severity-btn-warning:hover {
+  background: #ffe69c;
+}
+
+.severity-btn-error {
+  background: #fee;
+  color: #c00;
+}
+
+.severity-btn-error:hover {
+  background: #fdd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .settings-overlay {
+    padding: 20px 10px;
+  }
+
+  .settings-panel {
+    max-height: calc(100vh - 40px);
+  }
+
+  .group-description {
+    display: none;
+  }
+
+  .rule-meta {
+    flex-wrap: wrap;
+  }
+
+  .rule-applies {
+    flex: none;
+    width: 100%;
+    margin-top: 4px;
+  }
+}

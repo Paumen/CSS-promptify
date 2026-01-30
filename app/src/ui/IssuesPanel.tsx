@@ -55,7 +55,10 @@ function IssueItem({ issue, isSelected, onToggle }: {
 }
 
 export function IssuesPanel() {
-  const { toggleFix, selectAllFixes, unselectAllFixes } = useAppStore();
+  // Use individual selectors to avoid infinite re-renders
+  const toggleFix = useAppStore((state) => state.toggleFix);
+  const selectAllFixes = useAppStore((state) => state.selectAllFixes);
+  const unselectAllFixes = useAppStore((state) => state.unselectAllFixes);
   const issues = useIssues();
   const selectedFixIds = useSelectedFixIds();
 

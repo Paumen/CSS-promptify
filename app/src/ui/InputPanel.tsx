@@ -2,7 +2,10 @@ import { useAppStore } from '../state';
 import './InputPanel.css';
 
 export function InputPanel() {
-  const { session, setOriginalCss, analyzeInput } = useAppStore();
+  // Use individual selectors to avoid infinite re-renders
+  const originalCss = useAppStore((state) => state.session.original_css);
+  const setOriginalCss = useAppStore((state) => state.setOriginalCss);
+  const analyzeInput = useAppStore((state) => state.analyzeInput);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setOriginalCss(e.target.value);
@@ -22,7 +25,7 @@ export function InputPanel() {
     // Cmd/Ctrl + Enter to analyze
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
       e.preventDefault();
-      if (session.original_css.length > 0) {
+      if (originalCss.length > 0) {
         analyzeInput();
       }
     }
@@ -37,7 +40,7 @@ export function InputPanel() {
       <div className="panel-content">
         <textarea
           className="css-input"
-          value={session.original_css}
+          value={originalCss}
           onChange={handleChange}
           onPaste={handlePaste}
           onKeyDown={handleKeyDown}
@@ -45,9 +48,9 @@ export function InputPanel() {
           spellCheck={false}
         />
       </div>
-      {session.original_css.length > 0 && (
+      {originalCss.length > 0 && (
         <div className="panel-footer">
-          <span className="char-count">{session.original_css.length} characters</span>
+          <span className="char-count">{originalCss.length} characters</span>
           <button className="btn btn-primary" onClick={analyzeInput}>
             Analyze
           </button>

@@ -3,7 +3,10 @@ import { useAppStore } from '../state';
 import './OutputPanel.css';
 
 export function OutputPanel() {
-  const { outputCss, session, toggleComments } = useAppStore();
+  // Use individual selectors to avoid infinite re-renders
+  const outputCss = useAppStore((state) => state.outputCss);
+  const commentsEnabled = useAppStore((state) => state.session.comments_enabled);
+  const toggleComments = useAppStore((state) => state.toggleComments);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -36,7 +39,7 @@ export function OutputPanel() {
           <label className="toggle-label">
             <input
               type="checkbox"
-              checked={session.comments_enabled}
+              checked={commentsEnabled}
               onChange={toggleComments}
             />
             Show comments

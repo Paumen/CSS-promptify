@@ -5,12 +5,16 @@ import { OutputPanel } from './ui/OutputPanel';
 import './App.css';
 
 function App() {
-  const { session, outputCss, analyzeInput, reset } = useAppStore();
+  // Use individual selectors to avoid infinite re-renders
+  const originalCss = useAppStore((state) => state.session.original_css);
+  const outputCss = useAppStore((state) => state.outputCss);
+  const analyzeInput = useAppStore((state) => state.analyzeInput);
+  const reset = useAppStore((state) => state.reset);
   const stats = useStats();
   const issues = useIssues();
   const selectedFixIds = useSelectedFixIds();
 
-  const hasInput = session.original_css.length > 0;
+  const hasInput = originalCss.length > 0;
   const hasAnalysis = issues.length > 0 || outputCss.length > 0;
 
   return (

@@ -130,6 +130,7 @@ Notes:
 Example:
 ```css
 color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */
+```
 
 ### 4.3 Remove tool comments
 

@@ -1,15 +1,23 @@
+## Quick Start (for Claude Code)
+See `CLAUDE.md` for Claude Code-specific instructions and quick orientation.
 
-## Source of truth
+## Source of Truth
 The authoritative spec is: `spec/PRD_BUILD_SPEC.md`
+For document hierarchy and conflict resolution, see: `spec/AUTHORITY.md`
 
-## LLM context pack (recommended read order)
-1. spec/PRD_BUILD_SPEC.md
-2. spec/DATA_CONTRACTS.md
-3. spec/RULEBOOK_INDEX.md
-4. spec/UI_BEHAVIOR.md
-5. spec/EXAMPLES.md
-6. spec/GLOSSARY.md
-7. spec/DECISIONS.md  
+## Canonical Reading Order
+1. `CLAUDE.md` — Quick orientation
+2. `spec/AUTHORITY.md` — Document hierarchy
+3. `spec/PRD_BUILD_SPEC.md` — Primary requirements
+4. `spec/DATA_CONTRACTS.md` — Data shapes & invariants
+5. `spec/UI_BEHAVIOR.md` — UI state & interactions
+6. `spec/RULEBOOK_INDEX.md` — Rule catalog
+7. `spec/EXAMPLES.md` — Before/after test cases
+8. `spec/TYPES.md` — TypeScript interfaces
+9. `spec/TERMINOLOGY.md` — Standardized terms
+10. `spec/GLOSSARY.md` — Definitions
+11. `spec/DECISIONS.md` — Decision log (read-only)
+12. `spec/OPEN_QUESTIONS.md` — Unresolved decisions
 
 # CSS Promptify (working name)
 
@@ -28,7 +36,7 @@ The app lets users paste CSS and get:
 
 ---
 
-## What’s in this repo
+## What's in this repo
 
 This repo contains both:
 1) **Spec / context pack** (source of truth)
@@ -36,10 +44,36 @@ This repo contains both:
 
 **Source of truth:** `spec/PRD_BUILD_SPEC.md`
 
-Recommended structure:
-- `spec/` → authoritative requirements + rulebook docs (LLM-friendly)
-- `app/` → React app (created later)
-- `docs/` → optional screenshots/notes (non-authoritative)
+### Repository Structure
+```
+CSS-promptify/
+├── CLAUDE.md                          # Claude Code instructions
+├── README.md                          # This file
+├── .gitignore                         # Git exclusions
+│
+├── PROMPT-KIT/                        # LLM guidance
+│   ├── SYSTEM_PROMPT.md              # Working instructions
+│   ├── CHANGE_REQUEST_PROMPT.md      # Change request template
+│   ├── WORKFLOW.md                   # LLM workflow guide
+│   └── IMPLEMENTATION_CHECKLIST.md   # Phased implementation guide
+│
+├── spec/                              # Authoritative specifications
+│   ├── AUTHORITY.md                  # Document hierarchy
+│   ├── PRD_BUILD_SPEC.md             # PRIMARY SOURCE OF TRUTH
+│   ├── DATA_CONTRACTS.md             # Data shapes & invariants
+│   ├── UI_BEHAVIOR.md                # UI state & interactions
+│   ├── RULEBOOK_INDEX.md             # Rule catalog (20+ rules)
+│   ├── EXAMPLES.md                   # Before/after test cases
+│   ├── TYPES.md                      # TypeScript interfaces
+│   ├── PROPERTY_SORT_ORDER.md        # Property sorting spec
+│   ├── TERMINOLOGY.md                # Standardized terms
+│   ├── OPEN_QUESTIONS.md             # Unresolved decisions
+│   ├── GLOSSARY.md                   # Definitions
+│   ├── DECISIONS.md                  # Decision log (read-only)
+│   └── test-cases.json               # Machine-readable tests
+│
+└── app/                               # React app (to be created)
+```
 
 ---
 
@@ -55,24 +89,29 @@ Recommended structure:
 
 ## How to use the spec (for humans + LLMs)
 
-If you’re using an LLM to help build this, feed files in this order:
+### For Claude Code
+Start with `CLAUDE.md` for quick orientation, then follow the canonical reading order above.
 
-1. `spec/PRD_BUILD_SPEC.md` (requirements + acceptance criteria)
-2. `spec/GLOSSARY.md` (definitions / vocabulary)
-3. `spec/DATA_CONTRACTS.md` (Issue/Fix objects + invariants)
-4. `spec/RULEBOOK_INDEX.md` (rule list + applicability)
-5. `spec/UI_BEHAVIOR.md` (UI state + interactions)
-6. `spec/EXAMPLES.md` (before/after examples)
+### For other LLMs
+Feed files in order from `spec/AUTHORITY.md` (see "Canonical Reading Order").
 
-Treat `spec/PRD_BUILD_SPEC.md` as the authority if there are conflicts.
+### Conflict Resolution
+If documents conflict, higher-ranked document wins. See `spec/AUTHORITY.md` for the full hierarchy.
+
+### Before Implementation
+Review `spec/OPEN_QUESTIONS.md` for decisions that need human input before proceeding.
 
 ---
 
 ## Status
 
-- ⏳ Spec v1.1 to be drafted
+- ✅ Spec v1.2 complete
+- ✅ Documentation and LLM guidance complete
+- ⏳ Open questions awaiting human decision (see `spec/OPEN_QUESTIONS.md`)
 - ⏳ App scaffolding not created yet
 - ⏳ Rule engine + UI implementation pending
+
+See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased implementation plan.
 
 ---
 

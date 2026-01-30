@@ -14,4 +14,6 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 - **Rule group**: Logical grouping of rules (modern/consolidation/format/tokens/safety/education).
 - **Session config**: Rule toggles, severities, and parameters that reset on refresh (v1).
 - **LLM prompt**: Copy-ready prompt generated for complex fixes that are not safe to automate.
-``
+- **Selected fix**: A fix the user has chosen to include in the output (via checkbox or equivalent action).
+- **Recompute**: The process of regenerating output CSS from original input + currently selected fixes.
+- **Conflict**: When two fixes modify overlapping ranges; must be handled deterministically.

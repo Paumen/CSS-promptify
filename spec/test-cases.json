@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Machine-readable test cases for CSS Promptify validation",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "example-1",
+      "name": "LLM-friendly formatting + color shortening",
+      "description": "Tabs to spaces, property-per-line, hex color shortening",
+      "input": ".button{display:flex;color:#ffffff}",
+      "expected_issues": [
+        {
+          "rule_id": "format/normalize-spaces",
+          "severity": "warning",
+          "fixability": "safe"
+        },
+        {
+          "rule_id": "format/property-per-line",
+          "severity": "warning",
+          "fixability": "safe"
+        },
+        {
+          "rule_id": "tokens/shorten-hex-colors",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".button {\n  display: flex;\n  color: #fff;\n}\n",
+      "expected_output_with_comments": ".button {\n  display: flex;\n  color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */\n}\n"
+    },
+    {
+      "id": "example-2",
+      "name": "Single-property selector stays one line",
+      "description": "Single declaration blocks should stay on one line",
+      "input": ".sr-only {\n  position: absolute;\n}",
+      "expected_issues": [],
+      "expected_output_no_comments": ".sr-only { position: absolute; }\n",
+      "expected_output_with_comments": ".sr-only { position: absolute; }\n",
+      "notes": "format/single-prop-single-line transforms this"
+    },
+    {
+      "id": "example-3",
+      "name": "Tabs to spaces + property-per-line + zero units",
+      "description": "Multiple formatting rules applied together",
+      "input": ".card {\n\tmargin: 0px;\n\tpadding: 0px 10px;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "format/no-tabs",
+          "severity": "warning",
+          "fixability": "safe"
+        },
+        {
+          "rule_id": "tokens/zero-units",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".card {\n  margin: 0;\n  padding: 0 10px;\n}\n",
+      "expected_output_with_comments": ".card {\n  margin: 0; /* cssreview: tokens/zero-units: was 0px */\n  padding: 0 10px; /* cssreview: tokens/zero-units: was 0px 10px */\n}\n"
+    },
+    {
+      "id": "example-4",
+      "name": "Consolidate margin longhands to shorthand",
+      "description": "Four margin longhands consolidated to shorthand",
+      "input": ".box {\n  margin-top: 4px;\n  margin-right: 8px;\n  margin-bottom: 4px;\n  margin-left: 8px;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "consolidation/shorthand-margin-padding",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".box {\n  margin: 4px 8px;\n}\n",
+      "expected_output_with_comments": ".box {\n  margin: 4px 8px; /* cssreview: consolidation/shorthand: was margin-top/right/bottom/left */\n}\n"
+    },
+    {
+      "id": "example-5",
+      "name": "Deduplicate last-wins",
+      "description": "Remove duplicate property, keep last declaration",
+      "input": ".text {\n  color: red;\n  font-size: 14px;\n  color: blue;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "consolidation/deduplicate-last-wins",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".text {\n  font-size: 14px;\n  color: blue;\n}\n",
+      "expected_output_with_comments": ".text {\n  font-size: 14px;\n  color: blue; /* cssreview: consolidation/deduplicate: removed earlier color: red */\n}\n"
+    },
+    {
+      "id": "example-6",
+      "name": "Unrecognized property (info-only)",
+      "description": "Unknown properties reported as info, don't block other fixes",
+      "input": ".future {\n  unknown-property: value;\n  color: #ffffff;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "safety/unrecognized-property",
+          "severity": "info",
+          "fixability": "none"
+        },
+        {
+          "rule_id": "tokens/shorten-hex-colors",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".future {\n  unknown-property: value;\n  color: #fff;\n}\n",
+      "expected_output_with_comments": ".future {\n  unknown-property: value;\n  color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */\n}\n",
+      "notes": "Unrecognized property does NOT block hex color fix"
+    },
+    {
+      "id": "example-7",
+      "name": "Prompt-only rule (place-properties)",
+      "description": "Modern CSS suggestion generates LLM prompt, not auto-fix",
+      "input": ".grid-item {\n  align-self: center;\n  justify-self: center;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "modern/suggest-place-properties",
+          "severity": "info",
+          "fixability": "prompt"
+        }
+      ],
+      "expected_output_no_comments": ".grid-item {\n  align-self: center;\n  justify-self: center;\n}\n",
+      "expected_output_with_comments": ".grid-item {\n  align-self: center;\n  justify-self: center;\n}\n",
+      "notes": "No auto-fix; user must copy LLM prompt"
+    },
+    {
+      "id": "example-8",
+      "name": "Property sorting (info-only, selectable)",
+      "description": "Properties can be reordered for consistency",
+      "input": ".element {\n  color: blue;\n  display: flex;\n  margin: 10px;\n  position: relative;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "format/sort-properties",
+          "severity": "info",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".element {\n  position: relative;\n  display: flex;\n  margin: 10px;\n  color: blue;\n}\n",
+      "expected_output_with_comments": ".element {\n  position: relative;\n  display: flex;\n  margin: 10px;\n  color: blue;\n}\n",
+      "notes": "Sort order follows PROPERTY_SORT_ORDER.md grouped mode"
+    },
+    {
+      "id": "example-9",
+      "name": "Selection model: apply + revert via recompute",
+      "description": "Demonstrates that reverting is done by unselecting and recomputing",
+      "input": ".test {\n  margin: 0px;\n  color: #ffffff;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "tokens/zero-units",
+          "severity": "warning",
+          "fixability": "safe"
+        },
+        {
+          "rule_id": "tokens/shorten-hex-colors",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "states": [
+        {
+          "name": "initial",
+          "selected_fix_ids": [],
+          "output": ".test {\n  margin: 0px;\n  color: #ffffff;\n}\n"
+        },
+        {
+          "name": "after selecting zero-units fix",
+          "selected_fix_ids": ["fix_zero_units"],
+          "output": ".test {\n  margin: 0;\n  color: #ffffff;\n}\n"
+        },
+        {
+          "name": "after selecting both fixes",
+          "selected_fix_ids": ["fix_zero_units", "fix_shorten_hex"],
+          "output": ".test {\n  margin: 0;\n  color: #fff;\n}\n"
+        },
+        {
+          "name": "after unselecting zero-units (revert)",
+          "selected_fix_ids": ["fix_shorten_hex"],
+          "output": ".test {\n  margin: 0px;\n  color: #fff;\n}\n"
+        }
+      ],
+      "notes": "Demonstrates recompute-from-original model"
+    },
+    {
+      "id": "example-10",
+      "name": "Invalid syntax (parse error)",
+      "description": "CSS with syntax errors still allows partial analysis",
+      "input": ".broken {\n  color: red\n  font-size: 14px;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "safety/invalid-syntax",
+          "severity": "error",
+          "fixability": "none"
+        }
+      ],
+      "expected_output_no_comments": ".broken {\n  color: red\n  font-size: 14px;\n}\n",
+      "notes": "Missing semicolon; UI should remain usable"
+    },
+    {
+      "id": "example-11",
+      "name": "Merge adjacent identical selectors",
+      "description": "Two adjacent rules with same selector merged",
+      "input": ".btn {\n  color: red;\n}\n.btn {\n  background: blue;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "consolidation/merge-adjacent-identical-selectors",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".btn {\n  color: red;\n  background: blue;\n}\n",
+      "expected_output_with_comments": ".btn {\n  color: red;\n  background: blue; /* cssreview: consolidation/merge: merged adjacent .btn rules */\n}\n"
+    },
+    {
+      "id": "example-12",
+      "name": "Remove redundant whitespace in values",
+      "description": "Extra spaces in property values normalized",
+      "input": ".spaced {\n  margin: 10px   20px;\n  padding:  5px;\n}",
+      "expected_issues": [
+        {
+          "rule_id": "tokens/remove-redundant-whitespace",
+          "severity": "warning",
+          "fixability": "safe"
+        }
+      ],
+      "expected_output_no_comments": ".spaced {\n  margin: 10px 20px;\n  padding: 5px;\n}\n",
+      "expected_output_with_comments": ".spaced {\n  margin: 10px 20px; /* cssreview: tokens/whitespace: normalized */\n  padding: 5px; /* cssreview: tokens/whitespace: normalized */\n}\n"
+    }
+  ],
+  "invariant_tests": [
+    {
+      "id": "inv-1",
+      "name": "Determinism",
+      "description": "Same input + config + fixes = same output",
+      "test_type": "property",
+      "assertion": "Running analysis twice with identical inputs produces identical outputs"
+    },
+    {
+      "id": "inv-2",
+      "name": "User comments preserved",
+      "description": "Remove tool comments must not affect user comments",
+      "input": ".test {\n  /* user comment */\n  color: #fff; /* cssreview: shortened */\n}",
+      "after_remove_tool_comments": ".test {\n  /* user comment */\n  color: #fff;\n}\n"
+    },
+    {
+      "id": "inv-3",
+      "name": "Unrecognized properties don't block",
+      "description": "Unknown properties reported as info, other fixes still work",
+      "test_type": "property",
+      "assertion": "If issue has rule_id=safety/unrecognized-property, other issues can still have fixes applied"
+    }
+  ]
+}

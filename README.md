@@ -99,7 +99,7 @@ Feed files in order from `spec/AUTHORITY.md` (see "Canonical Reading Order").
 If documents conflict, higher-ranked document wins. See `spec/AUTHORITY.md` for the full hierarchy.
 
 ### Before Implementation
-Review `spec/OPEN_QUESTIONS.md` for decisions that need human input before proceeding.
+All open questions have been decided. See `spec/OPEN_QUESTIONS.md` for resolved decisions and `spec/DECISIONS.md` for the full decision log.
 
 ---
 
@@ -107,7 +107,7 @@ Review `spec/OPEN_QUESTIONS.md` for decisions that need human input before proce
 
 - ✅ Spec v1.2 complete
 - ✅ Documentation and LLM guidance complete
-- ⏳ Open questions awaiting human decision (see `spec/OPEN_QUESTIONS.md`)
+- ✅ All open questions resolved (2026-01-30)
 - ⏳ App scaffolding not created yet
 - ⏳ Rule engine + UI implementation pending
 

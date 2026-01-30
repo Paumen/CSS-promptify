@@ -101,11 +101,80 @@ Format:
 ---
 
 ## 2026-01-29 — Not planned features
-**Decision:** These are not planned for v1, v2, v3 (unless explicitly changed later by a human decision):  
-- Auth/accounts (logins, user profiles)  
-- Project-wide analysis (cross-file; CSS+HTML usage; unused selectors)  
-- Server-side analysis / hosted API (sending CSS to a backend service)  
-**Rationale:** Not aligned with product direction (simple local paste/select/copy tool).  
+**Decision:** These are not planned for v1, v2, v3 (unless explicitly changed later by a human decision):
+- Auth/accounts (logins, user profiles)
+- Project-wide analysis (cross-file; CSS+HTML usage; unused selectors)
+- Server-side analysis / hosted API (sending CSS to a backend service)
+**Rationale:** Not aligned with product direction (simple local paste/select/copy tool).
 **Consequences:** Keep scope focused; avoid scope creep into backend/auth and cross-file complexity.
+
+---
+
+## 2026-01-30 — Token estimation is character-based in v1
+**Decision:** Use character-based heuristic (`tokens ≈ characters / 4`) for v1. Exact tokenization deferred to v2.
+**Rationale:** Simple to implement, sufficient for v1 scope; exact tokenization adds complexity without major user benefit.
+**Consequences:** Stats show approximate token counts. v2 may add model-specific tokenizers (cl100k_base, etc.).
+
+---
+
+## 2026-01-30 — Single-prop single-line is info-only by default
+**Decision:** `format/single-prop-single-line` is enabled with severity `info` by default.
+**Rationale:** Useful formatting suggestion but not critical enough to be warning-level.
+**Consequences:** Rule appears in issues list but doesn't pressure user to apply.
+
+---
+
+## 2026-01-30 — Format rules default to warning
+**Decision:** Format rules default to `warning` severity. Specific per-rule defaults may be adjusted later.
+**Rationale:** Warnings indicate recommendations without blocking; allows flexibility for future fine-tuning.
+**Consequences:** Most format issues show as warnings; user can adjust severity in session config.
+
+---
+
+## 2026-01-30 — Conflicts prevent selection (Option A)
+**Decision:** Conflicting fixes cannot both be selected. UI shows conflict notice and prevents second selection.
+**Rationale:** Simpler UX for v1; user must explicitly choose which fix to apply.
+**Consequences:** No need for deterministic conflict resolution logic; conflicts are mutually exclusive.
+
+---
+
+## 2026-01-30 — v1 tech stack confirmed
+**Decision:** v1 uses:
+- React 18+ with TypeScript
+- Vite (build tool)
+- css-tree (CSS parser)
+- React Context or Zustand (state management)
+- Plain CSS or CSS Modules (styling)
+- Vitest + React Testing Library (testing)
+**Rationale:** Modern, well-supported stack with low complexity; CSS for styling keeps bundle small and matches project philosophy.
+**Consequences:** No Tailwind; no Next.js SSR complexity; WASM-free parser.
+
+---
+
+## 2026-01-30 — CSS parser is css-tree
+**Decision:** Use css-tree as the CSS parser library.
+**Rationale:** Best balance of setup effort (~150KB bundle), detailed AST with location tracking, and modern CSS support. Pure JS (no WASM complexity).
+**Consequences:** Can parse container queries, :has(), and modern features; location tracking enables accurate issue reporting.
+
+---
+
+## 2026-01-30 — Property sort default is grouped mode
+**Decision:** Default property sort mode is `grouped` (properties sorted by logical category: positioning, layout, typography, colors, etc.).
+**Rationale:** Grouped ordering improves CSS readability and understanding of structure.
+**Consequences:** See `spec/PROPERTY_SORT_ORDER.md` for the canonical group ordering.
+
+---
+
+## 2026-01-30 — Maximum input size is 100KB
+**Decision:** Maximum CSS input size is 100KB. Show warning above 50KB. Primary input method is copy-paste (not file upload).
+**Rationale:** Covers most real-world CSS files while maintaining browser performance.
+**Consequences:** Very large framework CSS (>100KB) may need to be split; file upload is secondary feature.
+
+---
+
+## 2026-01-30 — Fix selection updates output immediately
+**Decision:** Use Variant A: output updates immediately as user checks/unchecks fixes (no "Apply" button).
+**Rationale:** More interactive and responsive UX; users see changes instantly.
+**Consequences:** Output pane must recompute on every selection change; may need debouncing for performance.
 
 END

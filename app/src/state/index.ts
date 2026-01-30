@@ -3,17 +3,18 @@
  * Uses Zustand for session state
  */
 
-import { useMemo } from 'react';
 import { create } from 'zustand';
 import type {
   SessionState,
   SessionConfig,
-  Issue,
   AnalysisResult,
   RuleGroup,
   Severity,
 } from '../types';
-import { analyze, applyFixes, calculateStats } from '../engine';
+import { analyze, applyFixes } from '../engine';
+
+// Re-export calculateStats for components to use
+export { calculateStats } from '../engine';
 
 /**
  * Default session configuration
@@ -238,28 +239,5 @@ export const useAppStore = create<AppStore>((set, get) => ({
   },
 }));
 
-/**
- * Selector hooks for common derived state
- * Use useMemo to ensure stable references and prevent infinite loops
- */
-const EMPTY_ISSUES: Issue[] = [];
-
-export function useStats() {
-  const originalCss = useAppStore((state) => state.session.original_css);
-  const outputCss = useAppStore((state) => state.outputCss);
-
-  return useMemo(() => {
-    const before = calculateStats(originalCss || '');
-    const after = calculateStats(outputCss || '');
-    return { before, after };
-  }, [originalCss, outputCss]);
-}
-
-export function useIssues(): Issue[] {
-  const issues = useAppStore((state) => state.analysisResult?.issues);
-  return issues ?? EMPTY_ISSUES;
-}
-
-export function useSelectedFixIds(): string[] {
-  return useAppStore((state) => state.session.selected_fix_ids);
-}
+// Note: Custom selector hooks removed to avoid React 18 infinite loop issues
+// Components should use useAppStore with individual selectors directly

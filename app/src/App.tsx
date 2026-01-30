@@ -1,4 +1,5 @@
-import { useAppStore, useStats, useIssues, useSelectedFixIds } from './state';
+import { useMemo } from 'react';
+import { useAppStore, calculateStats } from './state';
 import { InputPanel } from './ui/InputPanel';
 import { IssuesPanel } from './ui/IssuesPanel';
 import { OutputPanel } from './ui/OutputPanel';
@@ -10,12 +11,18 @@ function App() {
   const outputCss = useAppStore((state) => state.outputCss);
   const analyzeInput = useAppStore((state) => state.analyzeInput);
   const reset = useAppStore((state) => state.reset);
-  const stats = useStats();
-  const issues = useIssues();
-  const selectedFixIds = useSelectedFixIds();
+  const issues = useAppStore((state) => state.analysisResult?.issues);
+  const selectedFixIds = useAppStore((state) => state.session.selected_fix_ids);
+
+  // Memoize stats to avoid recalculation on every render
+  const stats = useMemo(() => ({
+    before: calculateStats(originalCss || ''),
+    after: calculateStats(outputCss || ''),
+  }), [originalCss, outputCss]);
 
   const hasInput = originalCss.length > 0;
-  const hasAnalysis = issues.length > 0 || outputCss.length > 0;
+  const issueCount = issues?.length ?? 0;
+  const hasAnalysis = issueCount > 0 || outputCss.length > 0;
 
   return (
     <div className="app">
@@ -65,7 +72,7 @@ function App() {
             )}
             <div className="stat">
               <span className="stat-label">Issues:</span>
-              <span className="stat-value">{issues.length}</span>
+              <span className="stat-value">{issueCount}</span>
               <span className="stat-detail">({selectedFixIds.length} selected)</span>
             </div>
             <button className="btn btn-secondary" onClick={reset}>

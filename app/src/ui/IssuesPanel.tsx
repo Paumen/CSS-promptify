@@ -1,7 +1,9 @@
-import { useAppStore, useIssues, useSelectedFixIds } from '../state';
+import { useAppStore } from '../state';
 import { hasSafeFix } from '../types';
 import type { Issue } from '../types';
 import './IssuesPanel.css';
+
+const EMPTY_ISSUES: Issue[] = [];
 
 function SeverityBadge({ severity }: { severity: string }) {
   return (
@@ -59,8 +61,10 @@ export function IssuesPanel() {
   const toggleFix = useAppStore((state) => state.toggleFix);
   const selectAllFixes = useAppStore((state) => state.selectAllFixes);
   const unselectAllFixes = useAppStore((state) => state.unselectAllFixes);
-  const issues = useIssues();
-  const selectedFixIds = useSelectedFixIds();
+  const rawIssues = useAppStore((state) => state.analysisResult?.issues);
+  const selectedFixIds = useAppStore((state) => state.session.selected_fix_ids);
+
+  const issues = rawIssues ?? EMPTY_ISSUES;
 
   const fixableIssues = issues.filter(hasSafeFix);
   const allSelected = fixableIssues.length > 0 &&

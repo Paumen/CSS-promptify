@@ -21,7 +21,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 
 ### Expected issues (summary)
 - format/normalize-spaces (info)
-- format/property-per-line (warning)
+- format/multiple-declarations-per-line (warning)
 - format/indent-2-spaces (warning)
 - tokens/shorten-hex-colors (warning)
 
@@ -36,7 +36,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected output (with comments)
 ```css
 .button {
-  display: flex; /* cssreview: format/property-per-line: split declarations */
+  display: flex; /* cssreview: format/multiple-declarations-per-line: split declarations */
   color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */
 }
 ```
@@ -199,7 +199,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ```
 
 ### Expected issues (summary)
-- modern/suggest-place-properties (info, prompt)
+- modern/suggest-place-shorthand (info, prompt)
 
 ### Expected “LLM prompt” output (concept)
 ```text

@@ -1,3 +1,16 @@
+
+## Source of truth
+The authoritative spec is: `spec/PRD_BUILD_SPEC.md`
+
+## LLM context pack (recommended read order)
+1. spec/PRD_BUILD_SPEC.md
+2. spec/DATA_CONTRACTS.md
+3. spec/RULEBOOK_INDEX.md
+4. spec/UI_BEHAVIOR.md
+5. spec/EXAMPLES.md
+6. spec/GLOSSARY.md
+7. spec/DECISIONS.md  
+
 # CSS Promptify (working name)
 
 Modern CSS review tool + LLM context pack: configurable rulebook, selective safe fixes, LLM-friendly formatting, inline fix comments, and prompt export for complex refactors.

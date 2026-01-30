@@ -108,7 +108,7 @@ CSS-promptify/
 │   ├── TYPES.md                      # TypeScript interfaces
 │   ├── PROPERTY_SORT_ORDER.md        # Property sort order spec
 │   ├── TERMINOLOGY.md                # Standardized terms
-│   ├── OPEN_QUESTIONS.md             # Unresolved decisions
+│   ├── OPEN_QUESTIONS.md             # Resolved decisions (all decided)
 │   ├── GLOSSARY.md                   # Definitions
 │   ├── DECISIONS.md                  # Decision log (read-only)
 │   └── test-cases.json               # Machine-readable tests
@@ -143,13 +143,25 @@ CSS-promptify/
 - **Fix a bug**: Check which spec defines the behavior → fix to match spec
 - **Change behavior**: Update spec first → then implementation
 
-## Tech Stack (Planned)
+## Tech Stack (Confirmed)
 
 - **Framework**: React 18+ with TypeScript
 - **Build**: Vite
-- **CSS Parser**: TBD (needs modern CSS support)
+- **CSS Parser**: css-tree (detailed AST, location tracking, modern CSS support)
 - **State**: React Context or Zustand
-- **Styling**: CSS Modules or Tailwind
+- **Styling**: Plain CSS or CSS Modules (not Tailwind)
+- **Testing**: Vitest + React Testing Library
+
+## Key v1 Decisions
+
+- **Token estimation**: Character-based heuristic (`tokens ≈ chars / 4`)
+- **Conflict handling**: Prevent selecting both conflicting fixes (Option A)
+- **Fix selection**: Immediate output update (Variant A, no "Apply" button)
+- **Property sort default**: Grouped mode
+- **Max input size**: 100KB (primary input is copy-paste, not file upload)
+- **Format severity**: Warning by default
+
+See `spec/DECISIONS.md` for full decision log.
 
 ## Contact
 

@@ -176,14 +176,16 @@ User selects fixes via checkboxes (issue-level / rule-level / group-level / seve
 Selected fixes are tracked as selected_fix_ids in session state.
 
 ### 6.2 Apply model (v1)
-v1 may implement apply in either UX variant (both valid):
+**v1 Decision:** Use Variant A (immediate update).
 
-Variant A (immediate): output updates as soon as user checks/unchecks fixes.
-Variant B (commit button): user checks fixes, then clicks “Apply selected” to update output.
+Output updates immediately as soon as user checks/unchecks fixes. No "Apply" button required.
 
-In both variants, the underlying behavior must be the same:
+Behavior:
+- User checks a fix → output recomputes instantly with that fix applied
+- User unchecks a fix → output recomputes instantly without that fix
+- Output is always derived from `original_css + selected_fix_ids + comments_enabled`
 
-Output is derived from original input + selected fixes, in deterministic order.
+Performance note: May need debouncing if rapid selection causes lag.
 
 ### 6.3 Revert model (v1)
 Revert is simply unselect:
@@ -200,11 +202,14 @@ tie-break by rule_id then fix.id
 
 The UI may display this order in “Selected Fixes Panel”.
 ### 6.5 Conflicts (required)
-If two fixes overlap/conflict:
+**v1 Decision:** Use Option A — prevent selecting both conflicting fixes.
 
-UI must prevent selecting both OR allow selection but show deterministic resolution
-conflict must be visible to user
-behavior must be deterministic and explainable (“Fix A conflicts with Fix B; select one.”)
+If two fixes overlap/conflict:
+1. UI blocks selection of the second fix
+2. UI shows a conflict notice: "Fix A conflicts with Fix B. Deselect Fix A to select Fix B."
+3. User must explicitly deselect the conflicting fix before selecting another
+
+This ensures behavior is deterministic and user explicitly chooses which fix to apply.
 
 
 ## 7) Filtering behavior (Issues Panel)

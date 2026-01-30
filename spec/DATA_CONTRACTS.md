@@ -174,14 +174,19 @@ To ensure stable results, fixes MUST be applied in a deterministic order. v1 req
 This order must be consistent every run.
 
 ### 4.5 Conflicts (required behavior)
-If two selected fixes modify overlapping ranges (conflict), the system must behave deterministically and visibly. v1 acceptable options:
+If two selected fixes modify overlapping ranges (conflict), the system must behave deterministically and visibly.
 
-- **Option A (preferred)**: prevent selecting both and show a conflict notice
-- **Option B**: allow selection but apply a deterministic resolution and show a conflict notice
+**v1 Decision:** Use Option A — prevent selecting both conflicting fixes.
 
-In both cases:
-- behavior must be deterministic
-- user must be able to understand which fix is blocked/overridden
+When a user attempts to select a fix that conflicts with an already-selected fix:
+1. The selection is blocked (second fix cannot be selected)
+2. UI shows a conflict notice explaining which fixes conflict
+3. User must deselect the first fix before selecting the second
+
+This ensures:
+- Behavior is deterministic
+- User explicitly chooses which fix to apply
+- No ambiguity about conflict resolution
 
 ---
 

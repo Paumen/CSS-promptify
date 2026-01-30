@@ -1,3 +1,9 @@
+<!--
+STATUS: Authoritative reference for this topic
+SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
+LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
+-->
+
 # Data Contracts (v1)
 
 This file defines the **canonical data shapes** used by the CSS Review Tool (analyzer output, fix patches, applied-fix tracking) and the **invariants** that must always hold.

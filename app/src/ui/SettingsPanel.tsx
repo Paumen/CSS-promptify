@@ -1,7 +1,7 @@
 import { useAppStore } from '../state';
 import { getAllRules } from '../rules';
 import type { Rule, RuleGroup, Severity } from '../types';
-import './SettingsPanel.css';
+import styles from './SettingsPanel.module.css';
 
 // All rule groups in display order
 const RULE_GROUPS: { id: RuleGroup; label: string; description: string }[] = [
@@ -13,7 +13,6 @@ const RULE_GROUPS: { id: RuleGroup; label: string; description: string }[] = [
   { id: 'education', label: 'Education', description: 'Educational warnings about CSS usage' },
 ];
 
-// Severity cycle: off -> info -> warning -> error -> off
 const SEVERITY_CYCLE: (Severity | 'off')[] = ['off', 'info', 'warning', 'error'];
 
 function getNextSeverity(current: Severity | 'off'): Severity | 'off' {
@@ -30,9 +29,16 @@ function SeverityButton({
   onClick: () => void;
   title: string;
 }) {
+  const variantClass = {
+    off: styles.severityBtnOff,
+    info: styles.severityBtnInfo,
+    warning: styles.severityBtnWarning,
+    error: styles.severityBtnError,
+  }[severity];
+
   return (
     <button
-      className={`severity-btn severity-btn-${severity}`}
+      className={`${styles.severityBtn} ${variantClass}`}
       onClick={onClick}
       title={title}
     >
@@ -54,19 +60,18 @@ function RuleItem({
   onToggle: () => void;
   onCycleSeverity: () => void;
 }) {
-  // Extract rule name from rule_id (e.g., "format/no-tabs" -> "no-tabs")
   const ruleName = rule.meta.rule_id.split('/').pop() || rule.meta.rule_id;
 
   return (
-    <div className={`rule-item ${!isEnabled ? 'rule-disabled' : ''}`}>
-      <div className="rule-main">
-        <label className="rule-toggle">
+    <div className={`${styles.ruleItem} ${!isEnabled ? styles.ruleDisabled : ''}`}>
+      <div className={styles.ruleMain}>
+        <label className={styles.ruleToggle}>
           <input
             type="checkbox"
             checked={isEnabled}
             onChange={onToggle}
           />
-          <span className="rule-name">{ruleName}</span>
+          <span className={styles.ruleName}>{ruleName}</span>
         </label>
         <SeverityButton
           severity={currentSeverity}
@@ -74,9 +79,9 @@ function RuleItem({
           title={`Click to cycle: off -> info -> warning -> error (current: ${currentSeverity})`}
         />
       </div>
-      <div className="rule-meta">
-        <span className="rule-fixability">{rule.meta.fixability}</span>
-        <span className="rule-applies">{rule.meta.applies_to}</span>
+      <div className={styles.ruleMeta}>
+        <span className={styles.ruleFixability}>{rule.meta.fixability}</span>
+        <span className={styles.ruleApplies}>{rule.meta.applies_to}</span>
       </div>
     </div>
   );
@@ -97,7 +102,6 @@ function GroupSection({
   const groupConfig = config.groups[group.id];
   const isGroupEnabled = groupConfig?.enabled ?? true;
 
-  // Count enabled rules in group
   const enabledCount = rules.filter((rule) => {
     const ruleConfig = config.rules[rule.meta.rule_id];
     if (ruleConfig) {
@@ -123,7 +127,6 @@ function GroupSection({
     const isEnabled = ruleConfig?.enabled ?? rule?.meta.enabled_by_default ?? true;
     const currentSeverity = ruleConfig?.severity ?? rule?.meta.severity ?? 'warning';
 
-    // Determine current state for cycling
     const currentState: Severity | 'off' = isEnabled ? currentSeverity : 'off';
     const nextState = getNextSeverity(currentState);
 
@@ -140,7 +143,6 @@ function GroupSection({
     const isEnabled = ruleConfig?.enabled ?? rule.meta.enabled_by_default;
     const severity = ruleConfig?.severity ?? rule.meta.severity;
 
-    // If group is disabled, show as off
     if (!isGroupEnabled) {
       return { isEnabled: false, severity: 'off' };
     }
@@ -152,9 +154,9 @@ function GroupSection({
   };
 
   return (
-    <details className="group-section" open>
-      <summary className="group-header">
-        <div className="group-toggle">
+    <details className={styles.groupSection} open>
+      <summary className={styles.groupHeader}>
+        <div className={styles.groupToggle}>
           <input
             type="checkbox"
             checked={isGroupEnabled}
@@ -162,15 +164,15 @@ function GroupSection({
             onClick={(e) => e.stopPropagation()}
           />
         </div>
-        <div className="group-info">
-          <span className="group-label">{group.label}</span>
-          <span className="group-count">
+        <div className={styles.groupInfo}>
+          <span className={styles.groupLabel}>{group.label}</span>
+          <span className={styles.groupCount}>
             {enabledCount}/{rules.length} rules
           </span>
         </div>
-        <span className="group-description">{group.description}</span>
+        <span className={styles.groupDescription}>{group.description}</span>
       </summary>
-      <div className="group-rules">
+      <div className={styles.groupRules}>
         {rules.map((rule) => {
           const state = getRuleState(rule);
           return (
@@ -198,17 +200,14 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
   const allRules = getAllRules();
   const config = useAppStore((state) => state.config);
 
-  // Group rules by their group
   const rulesByGroup = RULE_GROUPS.map((group) => ({
     group,
     rules: allRules.filter((rule) => rule.meta.group === group.id),
   })).filter(({ rules }) => rules.length > 0);
 
-  // Also include any rules in groups not in RULE_GROUPS (like 'style')
   const knownGroupIds = new Set(RULE_GROUPS.map((g) => g.id));
   const otherRules = allRules.filter((rule) => !knownGroupIds.has(rule.meta.group as RuleGroup));
 
-  // Calculate total enabled rules
   const totalRules = allRules.length;
   const enabledRules = allRules.filter((rule) => {
     const groupEnabled = config.groups[rule.meta.group as RuleGroup]?.enabled ?? true;
@@ -220,20 +219,20 @@ export function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="settings-overlay" onClick={onClose}>
-      <div className="settings-panel" onClick={(e) => e.stopPropagation()}>
-        <div className="settings-header">
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.panel} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.header}>
           <h2>Rule Settings</h2>
-          <div className="settings-summary">
+          <div className={styles.summary}>
             {enabledRules}/{totalRules} rules enabled
           </div>
-          <button className="settings-close" onClick={onClose} aria-label="Close settings">
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close settings">
             &times;
           </button>
         </div>
 
-        <div className="settings-content">
-          <div className="settings-help">
+        <div className={styles.content}>
+          <div className={styles.help}>
             <p>
               <strong>Group toggle:</strong> Enable/disable all rules in a group
             </p>

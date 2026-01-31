@@ -1,0 +1,134 @@
+.issuesPanel {
+  min-width: 350px;
+}
+
+.issueCounts {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.panelActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.selectedCount {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.issuesList {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.issueItem {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-surface);
+}
+
+.issueItem:hover {
+  background: var(--color-surface-raised);
+}
+
+.issueItemSelected {
+  background: var(--color-accent-bg);
+  border-left: 3px solid var(--color-accent);
+}
+
+.issueHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.issueCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+}
+
+.issueRule {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.issueMessage {
+  font-size: var(--text-base);
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.issueLocation {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.issuePreview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm);
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.previewLabel {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.previewCode {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-accent-text);
+  background: var(--color-accent-bg);
+  padding: 2px var(--space-xs);
+  border-radius: 2px;
+}
+
+.issueLogic {
+  margin-top: var(--space-sm);
+}
+
+.issueLogic summary {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.issueLogic summary:hover {
+  color: var(--color-text);
+}
+
+.logicContent {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.logicContent p {
+  margin: var(--space-xs) 0;
+}
+
+.logicContent strong {
+  color: var(--color-text);
+}
+
+.noIssues {
+  padding: 40px var(--space-xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+}

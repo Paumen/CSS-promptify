@@ -14,13 +14,14 @@ See `spec/AUTHORITY.md` for the full hierarchy. Summary:
 3) spec/PRD_BUILD_SPEC.md (requirements)
 4) spec/DATA_CONTRACTS.md (data shapes)
 5) spec/UI_BEHAVIOR.md (UI spec)
-6) spec/RULEBOOK_INDEX.md (rules)
-7) spec/EXAMPLES.md (test cases)
-8) spec/TYPES.md (TypeScript)
-9) spec/TERMINOLOGY.md (terms)
-10) spec/GLOSSARY.md (definitions)
-11) spec/DECISIONS.md (read-only)
-12) spec/OPEN_QUESTIONS.md (pending)
+6) spec/UI_STYLE_GUIDE.md 
+7) spec/RULEBOOK_INDEX.md (rules)
+8) spec/EXAMPLES.md (test cases)
+9) spec/TYPES.md (TypeScript)
+10) spec/TERMINOLOGY.md (terms)
+11) spec/GLOSSARY.md (definitions)
+12) spec/DECISIONS.md (read-only)
+13) spec/OPEN_QUESTIONS.md (pending)
 
 ## Implementation phases
 See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for the full phased breakdown.

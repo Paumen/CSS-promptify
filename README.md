@@ -11,13 +11,14 @@ For document hierarchy and conflict resolution, see: `spec/AUTHORITY.md`
 3. `spec/PRD_BUILD_SPEC.md` — Primary requirements
 4. `spec/DATA_CONTRACTS.md` — Data shapes & invariants
 5. `spec/UI_BEHAVIOR.md` — UI state & interactions
-6. `spec/RULEBOOK_INDEX.md` — Rule catalog
-7. `spec/EXAMPLES.md` — Before/after test cases
-8. `spec/TYPES.md` — TypeScript interfaces
-9. `spec/TERMINOLOGY.md` — Standardized terms
-10. `spec/GLOSSARY.md` — Definitions
-11. `spec/DECISIONS.md` — Decision log (read-only)
-12. `spec/OPEN_QUESTIONS.md` — Unresolved decisions
+6. 'spec/UI_STYLE_GUIDE.md' UI design & style guide
+7. `spec/RULEBOOK_INDEX.md` — Rule catalog
+8. `spec/EXAMPLES.md` — Before/after test cases
+9. `spec/TYPES.md` — TypeScript interfaces
+10. `spec/TERMINOLOGY.md` — Standardized terms
+11. `spec/GLOSSARY.md` — Definitions
+12. `spec/DECISIONS.md` — Decision log (read-only)
+13. `spec/OPEN_QUESTIONS.md` — Unresolved decisions
 
 # CSS Promptify (working name)
 

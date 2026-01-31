@@ -103,6 +103,7 @@ CSS-promptify/
 │   ├── PRD_BUILD_SPEC.md             # PRIMARY SOURCE OF TRUTH
 │   ├── DATA_CONTRACTS.md             # Data shapes & invariants
 │   ├── UI_BEHAVIOR.md                # UI state & interactions
+│   ├── UI_STYLE_GUIDE.md             # UI design & style guide
 │   ├── RULEBOOK_INDEX.md             # Rule catalog (20+ rules)
 │   ├── EXAMPLES.md                   # Before/after test cases
 │   ├── TYPES.md                      # TypeScript interfaces

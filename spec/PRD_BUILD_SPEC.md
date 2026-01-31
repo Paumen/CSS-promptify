@@ -225,17 +225,17 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 
 ### 9.7 Copy output (with/without comments)
 
-FR-OUT-01: One-click copy to clipboard:
+**FR-OUT-01:** One-click copy to clipboard:
 
 “Copy output (no comments)”
 “Copy output (with comments)”
 
-FR-OUT-02: Copy shows confirmation (toast/snackbar).
+**FR-OUT-02:** Copy shows confirmation (toast/snackbar).
 
 ### 9.8 Filtering + logic panel
 
-FR-ISSUE-01: Issue list grouped by severity with counts.
-FR-ISSUE-02: Filters:
+**FR-ISSUE-01: **Issue list grouped by severity with counts.
+**FR-ISSUE-02:** Filters:
 
 severity
 group/category
@@ -243,20 +243,20 @@ fixable vs non-fixable
 search by rule_id/text
 
 
-FR-ISSUE-03: Selecting an issue highlights code + opens Rule logic panel with:
+**FR-ISSUE-03:** Selecting an issue highlights code + opens Rule logic panel with:
 
 WHAT (what detected)
 WHY (why it matters: modernity/consolidation/LLM clarity/tokens)
 WHEN SAFE (constraints/caveats)
 
 
-FR-ISSUE-04: No generic examples required if the UI can clearly show the relevant part of the user’s code + the proposed output/diff.
+**FR-ISSUE-04:** No generic examples required if the UI can clearly show the relevant part of the user’s code + the proposed output/diff.
 
 ### 9.9 LLM prompt generation (for hard rules)
 
-FR-LLMP-01: Some rules are marked “not safe to auto-fix”.
-FR-LLMP-02: For those, UI offers Generate LLM prompt.
-FR-LLMP-03: Prompt must include:
+**FR-LLMP-01:** Some rules are marked “not safe to auto-fix”.
+**FR-LLMP-02:** For those, UI offers Generate LLM prompt.
+**FR-LLMP-03:** Prompt must include:
 
 task statement
 constraints (preserve cascade/order)
@@ -267,35 +267,34 @@ expected output formatting (LLM-friendly structure)
 
 ### 9.10 Stats (tokens, lines, chars)
 
-FR-STAT-01: Show before/after:
+**FR-STAT-01:** Show before/after:
 
-token estimate
 line count
 character count
+Token estimate
 
-
-FR-STAT-02: Token estimate is consistent and repeatable (exact tokenizer not required in v1).
+**FR-STAT-02:** Token estimate. Is consistent and repeatable (exact tokenizer not required in v1).
 
 
 ## 10) Non-negotiable constraints (hard rules)
 ### 10.1 Safety
 
-C-SAFE-01: Auto-fixes must not change selector specificity or rule order.
-C-SAFE-02: If deterministic semantic equivalence cannot be guaranteed, do not auto-fix.
+**C-SAFE-01:** Auto-fixes must not change selector specificity or rule order.
+**C-SAFE-02:** If deterministic semantic equivalence cannot be guaranteed, do not auto-fix.
 
 ### 10.2 Modern CSS recognition & “unrecognized property”
 
-C-MODERN-01: The tool must not treat valid modern syntax as invalid.
-C-MODERN-02: If a property is not recognized by the tool, emit info only:
+**C-MODERN-01:** The tool must not treat valid modern syntax as invalid.
+**C-MODERN-02:** If a property is not recognized by the tool, emit info only:
 
 “Info: property not recognized (may be new/experimental).”
 
-C-MODERN-03: Rules must explicitly state which properties/contexts they apply to, to avoid accidental application.
+**C-MODERN-03:** Rules must explicitly state which properties/contexts they apply to, to avoid accidental application.
 
 ### 10.3 Formatting philosophy
 
-C-LLM-01: Default formatting is structured for LLM comprehension, not minified.
-C-LLM-02: Token improvements come from explicit rules (e.g., tabs→spaces, whitespace normalization, shorthands) rather than blanket minification.
+**C-LLM-01:** Default formatting is structured for LLM comprehension, not minified.
+**C-LLM-02:** Token improvements come from explicit rules (e.g., tabs→spaces, whitespace normalization, shorthands) rather than blanket minification.
 
 ## 11) Rulebook design (authoring model = Hybrid “C”)
 ### 11.1 Rule structure

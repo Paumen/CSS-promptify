@@ -1,5 +1,5 @@
 <!--
-STATUS: Authoritative reference for this topic
+STATUS: Authoritative reference for data shapes, enums, invariants, recompute model, and conflict handling
 SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
 LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
 -->
@@ -8,11 +8,20 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 
 This file defines the **canonical data shapes** used by the CSS Review Tool (analyzer output, fix patches, applied-fix tracking) and the **invariants** that must always hold.
 
-> Source of truth: If anything conflicts, `spec/PRD_BUILD_SPEC.md` wins.
+> **This is the single source of truth for:**
+> - Enum definitions (§1)
+> - Invariants (§6)
+> - Recompute model (§4.3)
+> - Conflict handling (§4.5)
+>
+> For TypeScript type definitions, see `spec/TYPES.md`.
+> If anything conflicts, `spec/PRD_BUILD_SPEC.md` wins.
 
 ---
 
 ## 1) Canonical enums
+
+> **Note:** These are the authoritative enum definitions. Other documents should reference this section.
 
 ### 1.1 Severity
 Allowed values: `error | warning | info`
@@ -58,7 +67,7 @@ Positions are **1-based**.
 ```json
 {
   "id": "iss_000123",
-  "rule_id": "format/property-per-line",
+  "rule_id": "format/multiple-declarations-per-line",
   "group": "format",
   "severity": "warning",
   "message": "Put each property on a new line.",
@@ -89,7 +98,7 @@ Positions are **1-based**.
     "comment": {
       "enabled_by_ui": true,
       "style": "end_of_line",
-      "text": "/* cssreview: format/property-per-line: split declarations */"
+      "text": "/* cssreview: format/multiple-declarations-per-line: split declarations */"
     }
   }
 }
@@ -136,7 +145,7 @@ To support "apply selected fixes" AND "deselect to revert", the session tracks s
 ```json
 {
   "fix_id": "fix_000123",
-  "rule_id": "consolidation/shorthand-margin-padding",
+  "rule_id": "consolidate/shorthand-margin-padding",
   "patches": [
     {
       "op": "replace_range",
@@ -144,7 +153,7 @@ To support "apply selected fixes" AND "deselect to revert", the session tracks s
         "start": { "line": 14, "column": 3 },
         "end": { "line": 18, "column": 1 }
       },
-      "text": "  margin: 4px 8px; /* cssreview: consolidation/shorthand: was margin-top/right/bottom/left */\n"
+      "text": "  margin: 4px 8px; /* cssreview: consolidate/shorthand: was margin-top/right/bottom/left */\n"
     }
   ],
   "comment": {

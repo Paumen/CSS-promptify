@@ -165,4 +165,24 @@ refactor: rename appliedFixes to selectedFixIds
 
 ---
 
+## Quick Reference Glossary
+
+> Merged from GLOSSARY.md — Use for quick lookup of core concepts.
+
+| Term | Definition |
+|------|------------|
+| **Rule** | Deterministic check on the CSS AST. Emits zero or more issues. |
+| **Issue** | Finding with severity (error/warning/info), rule_id, message, and location. |
+| **Fix** | Deterministic transformation that preserves semantics (safe) and is user-selectable. |
+| **Safe fix** | A fix the tool can apply *only* when the user selects it. |
+| **Tool comment** | Tool-added comment `/* cssreview: ... */` describing what changed. |
+| **Rule group** | Logical grouping of rules (modern/consolidation/format/tokens/safety/education). |
+| **Session config** | Rule toggles, severities, and parameters that reset on refresh (v1). |
+| **LLM prompt** | Copy-ready prompt generated for complex fixes that are not safe to automate. |
+| **Selected fix** | A fix the user has chosen to include in the output. |
+| **Recompute** | Regenerating output CSS from original input + currently selected fixes. |
+| **Conflict** | When two fixes modify overlapping ranges; must be handled deterministically. |
+
+---
+
 END

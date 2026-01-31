@@ -1,10 +1,15 @@
 <!--
-STATUS: Spec review document - requires human decisions
+STATUS: RESOLVED - All decisions made and implemented (2026-01-31)
 GENERATED: 2026-01-31
-LLM_POLICY: Human review required for all items marked [DECISION NEEDED]
+LLM_POLICY: This document is now historical reference only. All issues have been resolved.
 -->
 
 # Spec Review: Duplicates, Conflicts, and Simplifications
+
+> **STATUS: ALL RESOLVED** (2026-01-31)
+>
+> All issues identified in this review have been addressed. Decisions are recorded in `spec/DECISIONS.md`.
+> This document is kept for historical reference.
 
 This document summarizes findings from a comprehensive review of all specification documents.
 
@@ -12,12 +17,12 @@ This document summarizes findings from a comprehensive review of all specificati
 
 ## Executive Summary
 
-| Category | Count | Action Required |
-|----------|-------|-----------------|
-| Duplicates | 12 | Consolidate to single source |
-| Conflicts | 14 | Human decision needed |
-| Simplification opportunities | 6 | Streamline docs |
-| New open questions | 5 | Human decision needed |
+| Category | Count | Status |
+|----------|-------|--------|
+| Duplicates | 12 | ✅ Consolidated |
+| Conflicts | 14 | ✅ Resolved |
+| Simplification opportunities | 6 | ✅ Applied |
+| New open questions | 5 | ✅ Decided |
 
 ---
 

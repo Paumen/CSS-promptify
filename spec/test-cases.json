@@ -11,11 +11,11 @@
       "expected_issues": [
         {
           "rule_id": "format/normalize-spaces",
-          "severity": "warning",
+          "severity": "info",
           "fixability": "safe"
         },
         {
-          "rule_id": "format/property-per-line",
+          "rule_id": "format/multiple-declarations-per-line",
           "severity": "warning",
           "fixability": "safe"
         },
@@ -30,13 +30,19 @@
     },
     {
       "id": "example-2",
-      "name": "Single-property selector stays one line",
-      "description": "Single declaration blocks should stay on one line",
+      "name": "Single-property selector collapses to one line",
+      "description": "Multi-line single-prop blocks can be collapsed to one line",
       "input": ".sr-only {\n  position: absolute;\n}",
-      "expected_issues": [],
+      "expected_issues": [
+        {
+          "rule_id": "format/single-prop-single-line",
+          "severity": "info",
+          "fixability": "safe"
+        }
+      ],
       "expected_output_no_comments": ".sr-only { position: absolute; }\n",
       "expected_output_with_comments": ".sr-only { position: absolute; }\n",
-      "notes": "format/single-prop-single-line transforms this"
+      "notes": "format/single-prop-single-line fires when multi-line single-prop block could be collapsed"
     },
     {
       "id": "example-3",
@@ -65,13 +71,13 @@
       "input": ".box {\n  margin-top: 4px;\n  margin-right: 8px;\n  margin-bottom: 4px;\n  margin-left: 8px;\n}",
       "expected_issues": [
         {
-          "rule_id": "consolidation/shorthand-margin-padding",
+          "rule_id": "consolidate/shorthand-margin-padding",
           "severity": "warning",
           "fixability": "safe"
         }
       ],
       "expected_output_no_comments": ".box {\n  margin: 4px 8px;\n}\n",
-      "expected_output_with_comments": ".box {\n  margin: 4px 8px; /* cssreview: consolidation/shorthand: was margin-top/right/bottom/left */\n}\n"
+      "expected_output_with_comments": ".box {\n  margin: 4px 8px; /* cssreview: consolidate/shorthand: was margin-top/right/bottom/left */\n}\n"
     },
     {
       "id": "example-5",
@@ -80,13 +86,13 @@
       "input": ".text {\n  color: red;\n  font-size: 14px;\n  color: blue;\n}",
       "expected_issues": [
         {
-          "rule_id": "consolidation/deduplicate-last-wins",
+          "rule_id": "consolidate/deduplicate-last-wins",
           "severity": "warning",
           "fixability": "safe"
         }
       ],
       "expected_output_no_comments": ".text {\n  font-size: 14px;\n  color: blue;\n}\n",
-      "expected_output_with_comments": ".text {\n  font-size: 14px;\n  color: blue; /* cssreview: consolidation/deduplicate: removed earlier color: red */\n}\n"
+      "expected_output_with_comments": ".text {\n  font-size: 14px;\n  color: blue; /* cssreview: consolidate/deduplicate: removed earlier color: red */\n}\n"
     },
     {
       "id": "example-6",
@@ -204,13 +210,13 @@
       "input": ".btn {\n  color: red;\n}\n.btn {\n  background: blue;\n}",
       "expected_issues": [
         {
-          "rule_id": "consolidation/merge-adjacent-identical-selectors",
+          "rule_id": "consolidate/merge-adjacent-identical-selectors",
           "severity": "warning",
           "fixability": "safe"
         }
       ],
       "expected_output_no_comments": ".btn {\n  color: red;\n  background: blue;\n}\n",
-      "expected_output_with_comments": ".btn {\n  color: red;\n  background: blue; /* cssreview: consolidation/merge: merged adjacent .btn rules */\n}\n"
+      "expected_output_with_comments": ".btn {\n  color: red;\n  background: blue; /* cssreview: consolidate/merge: merged adjacent .btn rules */\n}\n"
     },
     {
       "id": "example-12",

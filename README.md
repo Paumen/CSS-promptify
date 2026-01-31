@@ -9,16 +9,14 @@ For document hierarchy and conflict resolution, see: `spec/AUTHORITY.md`
 1. `CLAUDE.md` — Quick orientation
 2. `spec/AUTHORITY.md` — Document hierarchy
 3. `spec/PRD_BUILD_SPEC.md` — Primary requirements
-4. `spec/DATA_CONTRACTS.md` — Data shapes & invariants
+4. `spec/DATA_CONTRACTS.md` — Data shapes, enums & invariants
 5. `spec/UI_BEHAVIOR.md` — UI state & interactions
-6. 'spec/UI_STYLE_GUIDE.md' UI design & style guide
+6. `spec/UI_STYLE_GUIDE.md` — UI design & style guide
 7. `spec/RULEBOOK_INDEX.md` — Rule catalog
 8. `spec/EXAMPLES.md` — Before/after test cases
 9. `spec/TYPES.md` — TypeScript interfaces
-10. `spec/TERMINOLOGY.md` — Standardized terms
-11. `spec/GLOSSARY.md` — Definitions
-12. `spec/DECISIONS.md` — Decision log (read-only)
-13. `spec/OPEN_QUESTIONS.md` — Unresolved decisions
+10. `spec/TERMINOLOGY.md` — Standardized terms + glossary
+11. `spec/DECISIONS.md` — Decision log (read-only)
 
 # CSS Promptify (working name)
 
@@ -61,15 +59,13 @@ CSS-promptify/
 ├── spec/                              # Authoritative specifications
 │   ├── AUTHORITY.md                  # Document hierarchy
 │   ├── PRD_BUILD_SPEC.md             # PRIMARY SOURCE OF TRUTH
-│   ├── DATA_CONTRACTS.md             # Data shapes & invariants
+│   ├── DATA_CONTRACTS.md             # Data shapes, enums & invariants
 │   ├── UI_BEHAVIOR.md                # UI state & interactions
-│   ├── RULEBOOK_INDEX.md             # Rule catalog (20+ rules)
+│   ├── RULEBOOK_INDEX.md             # Rule catalog (19 rules in v1)
 │   ├── EXAMPLES.md                   # Before/after test cases
 │   ├── TYPES.md                      # TypeScript interfaces
 │   ├── PROPERTY_SORT_ORDER.md        # Property sorting spec
-│   ├── TERMINOLOGY.md                # Standardized terms
-│   ├── OPEN_QUESTIONS.md             # Unresolved decisions
-│   ├── GLOSSARY.md                   # Definitions
+│   ├── TERMINOLOGY.md                # Standardized terms + glossary
 │   ├── DECISIONS.md                  # Decision log (read-only)
 │   └── test-cases.json               # Machine-readable tests
 │
@@ -100,7 +96,7 @@ Feed files in order from `spec/AUTHORITY.md` (see "Canonical Reading Order").
 If documents conflict, higher-ranked document wins. See `spec/AUTHORITY.md` for the full hierarchy.
 
 ### Before Implementation
-All open questions have been decided. See `spec/OPEN_QUESTIONS.md` for resolved decisions and `spec/DECISIONS.md` for the full decision log.
+All open questions have been decided. See `spec/DECISIONS.md` for the full decision log.
 
 ---
 

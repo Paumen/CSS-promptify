@@ -84,10 +84,16 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 ---
 
 ## 6) Definitions (controlled vocabulary)
+
+> For canonical data shapes and TypeScript types, see:
+> - `spec/DATA_CONTRACTS.md` — enums, invariants, data shapes
+> - `spec/TYPES.md` — TypeScript interfaces
+> - `spec/TERMINOLOGY.md` — preferred terms and naming conventions
+
 - **Rule:** deterministic check on the CSS AST. Emits zero or more issues.
 - **Issue:** finding with `severity`, `rule_id`, `category`, `message`, `location`, `logic`, optional `fix`.
 - **Fix:** deterministic transformation that preserves semantics within defined safety constraints.
-- **Auto-fix:** a fix the tool can apply, but only if the user selects it.
+- **Safe fix:** a fix the tool can apply, but only if the user selects it.
 - **Inline explanation comments:** brief comments inserted to document applied fixes using dedicated syntax.
 - **Rule group:** a logical grouping of rules (e.g., modern / consolidation / format / tokens / safety / education).
 - **Session config:** current UI settings (rule toggles, severities, rule params) that reset on refresh.
@@ -108,6 +114,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 - Property sorting (safe fix; info-only; enabled by default)
 
 ### 7.2 Later (v1.1 / v2)
+- File upload input (`.css` files) (v1.1)
 - CLI + JSON output for CI (v1.1)
 - Profiles + parameter sliders (v2):
   - modern vs compatibility
@@ -150,7 +157,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 
 ### 9.1 Editor & input
 - **FR-IN-01:** Provide a syntax-highlighted CSS input/output view with line numbers. (No manual editing workflow beyond paste.)
-- **FR-IN-02:** Paste input and file upload (`.css`).
+- **FR-IN-02:** Paste input (copy-paste only; file upload deferred to v1.1).
 - **FR-IN-03:** “Analyze” runs the rule engine and returns issues + stats.
 - **FR-IN-04:** No automatic formatting on paste; changes occur only when user selects/apply fixes.
 
@@ -315,7 +322,7 @@ Format (LLM-structure rules)
 
 format/indent-2-spaces (warning/error depending on strictness)
 format/no-tabs (warning)
-format/property-per-line (warning)
+format/multiple-declarations-per-line (warning)
 format/single-prop-single-line (configurable):
 
 if selector has only one property, allow one-line formatting
@@ -362,7 +369,7 @@ property sorting (deterministic; info-only; user-selectable)
 ### 13.1 Issue object
 ```json
 {
-  "rule_id": "format/property-per-line",
+  "rule_id": "format/multiple-declarations-per-line",
   "group": "format",
   "severity": "warning",
   "message": "Put each property on a new line.",

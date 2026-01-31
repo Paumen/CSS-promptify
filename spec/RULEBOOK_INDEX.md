@@ -37,9 +37,9 @@ Every rule MUST be explicit about where it applies (properties + context) to avo
 
 ## 0.4 v1 Rule Selection (Implementation Tiers)
 
-Rules are organized into implementation tiers. **v1.0 first release includes Tier 1 + Tier 2 (20 rules)**.
+Rules are organized into implementation tiers. **v1.0 first release includes Tier 1 + Tier 2 (19 rules)**.
 
-### Tier 1: Core Rules (Must Have) — 15 rules
+### Tier 1: Core Rules (Must Have) — 14 rules
 
 | rule_id | group | fixability | rationale |
 |---------|-------|------------|-----------|
@@ -54,7 +54,6 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 | `tokens/shorten-hex-colors` | tokens | safe | Simple, high-value |
 | `consolidate/shorthand-margin-padding` | consolidation | safe | High-impact consolidation |
 | `consolidate/deduplicate-last-wins` | consolidation | safe | Remove redundant declarations |
-| `education/explain-rule-logic` | education | none | UI feature (WHAT/WHY/WHEN) |
 | `style/important-used` | education | none | Basic awareness |
 | `layout/flex-properties-require-flex` | education | none | Common mistake detection |
 | `layout/grid-properties-require-grid` | education | none | Common mistake detection |
@@ -79,12 +78,16 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 | `format/max-nesting-depth` | Disabled by default |
 | `format/max-nesting-lines` | Disabled by default |
 | `tokens/remove-leading-zero` | Lower priority |
-| `tokens/remove-redundant-whitespace-in-values` | Edge cases |
+| `tokens/remove-redundant-whitespace` | Edge cases |
 | `consolidate/shorthand-full-values` | May conflict with shorthand collapse |
 | `consolidate/duplicate-selectors` | Cascade-affecting; risky |
+| `consolidate/merge-adjacent-identical-selectors` | Added 2026-01-31; safe merge of adjacent identical selectors |
 | `modern/prefer-dvh-over-vh` | Browser support varies |
 | `modern/prefer-individual-transform-properties` | Complex analysis |
 | `modern/suggest-place-shorthand` | Prompt-only; lower priority |
+| `modern/suggest-logical-properties` | Added 2026-01-31; suggest logical properties |
+| `modern/container-queries-guidance` | Added 2026-01-31; container query patterns |
+| `modern/light-dark-guidance` | Added 2026-01-31; light-dark() function guidance |
 | `modern/avoid-px-except-approved-contexts` | Disabled by default; complex |
 | `style/important-requires-comment` | Can add in v1.1 |
 | `info/universal-selector-used` | Lower priority |
@@ -341,7 +344,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 - **autofix_notes:**
   - Shorten only when equivalent.
 
-### tokens/remove-redundant-whitespace-in-values
+### tokens/remove-redundant-whitespace
 - **group:** tokens
 - **default_severity:** info
 - **fixability:** safe
@@ -502,15 +505,9 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 
 ## 6) Education / Style policy
 
-### education/explain-rule-logic
-- **group:** education
-- **default_severity:** info
-- **fixability:** none
-- **enabled_by_default:** true
-- **applies_to:**
-  - context: issue detail panel
-- **notes:**
-  - UI shows WHAT / WHY / WHEN SAFE for any issue.
+> **Note:** `education/explain-rule-logic` was removed from this rulebook.
+> It is a UI behavior (show WHAT/WHY/WHEN SAFE for all issues), not a rule that emits issues.
+> See `spec/UI_BEHAVIOR.md` for the UI behavior specification.
 
 ### style/important-used
 - **group:** education

@@ -16,14 +16,15 @@ This file defines the **single source of truth** for document hierarchy and conf
 | 1 | `spec/PRD_BUILD_SPEC.md` | **Primary source of truth** - requirements, constraints, acceptance criteria | Read + follow strictly |
 | 2 | `spec/DATA_CONTRACTS.md` | Data shapes, invariants, validation rules | Read + match exactly |
 | 3 | `spec/UI_BEHAVIOR.md` | UI state, interactions, user flows | Read + implement as specified |
-| 4 | `spec/RULEBOOK_INDEX.md` | Rule catalog with metadata | Read + implement each rule |
-| 5 | `spec/EXAMPLES.md` | Before/after test cases | Read + validate against |
-| 6 | `spec/TYPES.md` | TypeScript interfaces | Read + use for type safety |
-| 7 | `spec/PROPERTY_SORT_ORDER.md` | Property sorting specification | Read + implement order |
-| 8 | `spec/TERMINOLOGY.md` | Standardized terms | Read + use consistently |
-| 9 | `spec/GLOSSARY.md` | Definitions | Read + reference |
-| 10 | `spec/DECISIONS.md` | Decision log | **Read-only** - never modify |
-| 11 | `spec/OPEN_QUESTIONS.md` | Unresolved questions | Read + await human decision |
+| 4 | `spec/UI_STYLE_GUIDE.md` | Visual styling rules, tokens, CSS maintainability constraints | Read + follow for UI styling |
+| 5 | `spec/RULEBOOK_INDEX.md` | Rule catalog with metadata | Read + implement each rule |
+| 6 | `spec/EXAMPLES.md` | Before/after test cases | Read + validate against |
+| 7 | `spec/TYPES.md` | TypeScript interfaces | Read + use for type safety |
+| 8 | `spec/PROPERTY_SORT_ORDER.md` | Property sorting specification | Read + implement order |
+| 9 | `spec/TERMINOLOGY.md` | Standardized terms | Read + use consistently |
+| 10 | `spec/GLOSSARY.md` | Definitions | Read + reference |
+| 11 | `spec/DECISIONS.md` | Decision log | **Read-only** - never modify |
+| 12 | `spec/OPEN_QUESTIONS.md` | Unresolved questions | Read + await human decision |
 
 ---
 

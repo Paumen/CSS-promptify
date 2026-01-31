@@ -46,6 +46,7 @@ and explain which invariant would be violated and why.
 - Copy output supports with/without tool comments. “Remove tool comments” removes only tool comments.
 - Unrecognized properties are info-only and never block other fixes.
 - Property sorting exists in v1: enabled by default, severity info-only, user-selectable to apply.
+- UI styling MUST follow `spec/UI_STYLE_GUIDE.md` (tokens, light-dark(), grid, container queries, reusable primitives, CSS Modules).
 
 ## Output expectations
 - Work in small increments (one slice at a time).

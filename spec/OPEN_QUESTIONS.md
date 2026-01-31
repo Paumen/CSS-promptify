@@ -158,9 +158,94 @@ See: `spec/DECISIONS.md` — 2026-01-30 — Fix selection updates output immedia
 
 ---
 
-## All Questions Resolved
+---
 
-All open questions have been decided. Implementation can proceed following `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md`.
+# New Questions (2026-01-31 Spec Review)
+
+The following questions were identified during a comprehensive spec review.
+See `spec/SPEC_REVIEW.md` for full context.
+
+---
+
+## Q10: Rule ID Naming Convention
+
+**Status:** OPEN
+**Blocking:** Phase 1 (all rule implementations)
+**Context:** Inconsistent prefix usage across documents
+
+**Question:** Which naming pattern is canonical?
+
+| Pattern | Examples | Used By |
+|---------|----------|---------|
+| Verb prefix | `consolidate/shorthand-*` | RULEBOOK_INDEX |
+| Noun prefix | `consolidation/shorthand-*` | test-cases.json |
+
+**Options:**
+- A: Verb form consistently (`consolidate/`, `format/`)
+- B: Noun form consistently (`consolidation/`, `format/`, `tokens/`)
+- C: Keep current mixed approach
+
+---
+
+## Q11: format/single-prop-single-line Trigger Condition
+
+**Status:** OPEN
+**Blocking:** Phase 1.4 (Format Rules)
+**Context:** EXAMPLES.md Example 2 and test-cases.json example-2 conflict
+
+**Question:** When does this rule fire?
+
+**Options:**
+- A: Fire when a multi-line single-prop block COULD be collapsed (suggests change)
+- B: Fire to confirm a single-prop block IS correctly formatted (informational)
+- C: Always fire for single-prop blocks regardless of current format
+
+---
+
+## Q12: File Upload in v1
+
+**Status:** OPEN
+**Blocking:** Phase 3.2 (Input View)
+**Context:** PRD FR-IN-02 says "file upload" but DECISIONS.md says "copy-paste primary"
+
+**Question:** Include file upload in v1?
+
+**Options:**
+- A: Yes, as secondary input method
+- B: No, defer to v1.1 (update PRD FR-IN-02)
+
+---
+
+## Q13: Missing Rules - Add or Remove?
+
+**Status:** OPEN
+**Blocking:** Phase 1 (Rule implementations)
+**Context:** These rules appear in docs but not RULEBOOK_INDEX.md
+
+Rules in question:
+1. `consolidation/merge-adjacent-identical-selectors`
+2. `modern/container-queries-guidance`
+3. `modern/light-dark-guidance`
+4. `modern/suggest-logical-properties`
+
+**Question:** For each rule:
+- A: Add to RULEBOOK_INDEX.md (Tier 1 or 2)
+- B: Add to RULEBOOK_INDEX.md (Tier 3 - deferred)
+- C: Remove from other documents
+
+---
+
+## Q14: education/explain-rule-logic Classification
+
+**Status:** OPEN
+**Blocking:** Phase 1.2 (Rule Engine)
+**Context:** Listed as rule in RULEBOOK_INDEX but described as UI feature in EXAMPLES.md
+
+**Question:** Is this a rule or a UI feature?
+
+**Options:**
+- A: Remove from RULEBOOK_INDEX (UI feature, not a rule)
+- B: Keep in RULEBOOK_INDEX as meta-rule
 
 ---
 

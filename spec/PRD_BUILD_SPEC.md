@@ -429,9 +429,14 @@ CLI wrapper + JSON output for CI.
 v2
 Switchable profiles/parameters (modern vs compatibility, token vs context, compact vs structured), saved profiles, richer compatibility model.
 
-16) Open questions (optional)
+16) Open questions (resolved)
 
-Should default severity for format rules be warning or error?
-Should “single-prop single-line” be ON by default?
+> **RESOLVED** — See `spec/DECISIONS.md` for answers.
+
+1. ~~Should default severity for format rules be warning or error?~~
+   → **Warning** (2026-01-30 decision)
+
+2. ~~Should "single-prop single-line" be ON by default?~~
+   → **Yes, as info-only** (2026-01-30 decision)
 
 END

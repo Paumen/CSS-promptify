@@ -13,15 +13,13 @@ Read `CLAUDE.md` first for orientation, then `spec/AUTHORITY.md` for the full do
 ## Source of truth
 See `spec/AUTHORITY.md` for full hierarchy. If requirements conflict:
 1) spec/PRD_BUILD_SPEC.md (wins)
-2) spec/DATA_CONTRACTS.md
+2) spec/DATA_CONTRACTS.md (data shapes, enums, invariants)
 3) spec/UI_BEHAVIOR.md
 4) spec/RULEBOOK_INDEX.md
 5) spec/EXAMPLES.md
 6) spec/TYPES.md
-7) spec/TERMINOLOGY.md
-8) spec/GLOSSARY.md
-9) spec/DECISIONS.md (read-only decision log)
-10) spec/OPEN_QUESTIONS.md (await human decision)
+7) spec/TERMINOLOGY.md (includes glossary)
+8) spec/DECISIONS.md (read-only decision log)
 
 ## Beginner mode
 The human has no experience at coding and tooling.
@@ -58,7 +56,7 @@ and explain which invariant would be violated and why.
   - how it maps to acceptance criteria and examples
 
 ## Before implementation
-Check `spec/OPEN_QUESTIONS.md` for unresolved decisions that may block your work.
+All open questions have been resolved. See `spec/DECISIONS.md` for the decision log.
 
 ## Questions
 Ask clarifying questions if needed to avoid building the wrong behavior.

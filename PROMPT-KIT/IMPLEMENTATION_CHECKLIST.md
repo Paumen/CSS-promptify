@@ -17,7 +17,7 @@ Complete each phase before moving to the next.
 - [x] Create CLAUDE.md
 - [x] Create AUTHORITY.md
 - [x] Create supporting docs (TYPES.md, TERMINOLOGY.md, etc.)
-- [ ] Review and resolve OPEN_QUESTIONS.md
+- [x] All open questions resolved (see spec/DECISIONS.md)
 
 ### 0.2 Application Scaffolding
 - [ ] Initialize React + TypeScript project (Vite recommended)
@@ -67,7 +67,7 @@ Complete each phase before moving to the next.
 ### 1.4 Format Rules (Safe Fixes)
 - [ ] Implement `format/no-tabs` (tabs → 2 spaces)
 - [ ] Implement `format/indent-2-spaces`
-- [ ] Implement `format/property-per-line`
+- [ ] Implement `format/multiple-declarations-per-line`
 - [ ] Implement `format/single-prop-single-line`
 - [ ] Implement `format/normalize-spaces`
 - [ ] Implement `format/sort-properties` (use PROPERTY_SORT_ORDER.md)
@@ -81,16 +81,19 @@ Complete each phase before moving to the next.
 - [ ] Write tests matching spec/EXAMPLES.md
 
 ### 1.6 Consolidation Rules (Safe Fixes)
-- [ ] Implement `consolidation/shorthand-margin-padding`
-- [ ] Implement `consolidation/deduplicate-last-wins`
-- [ ] Implement `consolidation/merge-adjacent-identical-selectors`
+- [ ] Implement `consolidate/shorthand-margin-padding`
+- [ ] Implement `consolidate/deduplicate-last-wins`
 - [ ] Write tests matching spec/EXAMPLES.md
 
-### 1.7 Modern CSS Rules (Prompt-Based)
-- [ ] Implement `modern/suggest-place-properties` (fixability: prompt)
-- [ ] Implement `modern/container-queries-guidance` (fixability: none)
-- [ ] Implement `modern/light-dark-guidance` (fixability: none)
-- [ ] Implement `modern/suggest-logical-properties` (fixability: prompt)
+> **Note:** These rules are Tier 3 (deferred to v1.1+):
+> - `consolidate/merge-adjacent-identical-selectors`
+> - `modern/container-queries-guidance`
+> - `modern/light-dark-guidance`
+> - `modern/suggest-logical-properties`
+> See `spec/RULEBOOK_INDEX.md` §0.4 for tier assignments.
+
+### 1.7 Modern CSS Rules (Tier 2)
+- [ ] Implement `modern/prefer-hex-colors` (fixability: safe)
 - [ ] Generate LLM prompts per DATA_CONTRACTS spec
 - [ ] Write tests
 

@@ -177,4 +177,55 @@ Format:
 **Rationale:** More interactive and responsive UX; users see changes instantly.
 **Consequences:** Output pane must recompute on every selection change; may need debouncing for performance.
 
+---
+
+## 2026-01-31 — Rule ID naming uses verb prefix
+**Decision:** Rule IDs use verb prefix consistently: `consolidate/`, `format/`, `tokenize/` (not noun form like `consolidation/`).
+**Rationale:** Consistent naming convention; verb form describes the action being taken.
+**Consequences:** Update all docs to use `consolidate/` instead of `consolidation/`.
+
+---
+
+## 2026-01-31 — format/single-prop-single-line fires for collapsible blocks
+**Decision:** The `format/single-prop-single-line` rule fires when a multi-line single-prop block COULD be collapsed to one line.
+**Rationale:** The rule suggests a change, not just confirms correct formatting.
+**Consequences:** Rule fires on multi-line single-prop blocks, suggesting conversion to single-line.
+
+---
+
+## 2026-01-31 — No file upload in v1
+**Decision:** v1 is copy-paste only. File upload is deferred to v1.1.
+**Rationale:** Keeps v1 scope minimal; copy-paste is sufficient for primary use cases.
+**Consequences:** Remove file upload from PRD FR-IN-02.
+
+---
+
+## 2026-01-31 — Missing rules added as Tier 3 (deferred)
+**Decision:** Add these rules to RULEBOOK_INDEX.md as Tier 3 (deferred, not in v1):
+- `consolidate/merge-adjacent-identical-selectors`
+- `modern/container-queries-guidance`
+- `modern/light-dark-guidance`
+- `modern/suggest-logical-properties`
+**Rationale:** They exist in docs but need explicit tracking; defer to post-v1.
+**Consequences:** These rules are documented but not implemented in v1.
+
+---
+
+## 2026-01-31 — education/explain-rule-logic is UI feature, not rule
+**Decision:** Remove `education/explain-rule-logic` from RULEBOOK_INDEX.md. It's a UI behavior, not a rule.
+**Rationale:** This is a UI guarantee (show WHAT/WHY/WHEN SAFE), not a rule that emits issues.
+**Consequences:** Remove from rulebook; document as UI behavior in UI_BEHAVIOR.md.
+
+---
+
+## 2026-01-31 — Consolidate specs to reduce duplication
+**Decision:** Apply these simplifications:
+- TYPES.md is single source for type/enum definitions
+- DATA_CONTRACTS.md is single source for invariants, recompute model, conflict handling
+- Merge GLOSSARY.md into TERMINOLOGY.md
+- Delete OPEN_QUESTIONS.md (all resolved)
+- PRD references other docs instead of duplicating
+**Rationale:** Reduces maintenance burden and prevents drift between duplicated content.
+**Consequences:** Other docs reference authoritative sources instead of duplicating.
+
 END

@@ -79,7 +79,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected issues (summary)
 - format/no-tabs (warning)
 - format/normalize-spaces (info)
-- format/property-per-line (warning)
+- format/multiple-declarations-per-line (warning)
 - tokens/zero-units (warning)
 
 ### Expected output (no comments)
@@ -284,7 +284,7 @@ This example locks the v1 behavior that output is derived from **original input 
 ### Expected issues (summary)
 - consolidate/shorthand-margin-padding (warning)
 - format/normalize-spaces (info)
-- format/property-per-line (warning)
+- format/multiple-declarations-per-line (warning)
 - format/indent-2-spaces (warning)
 - tokens/shorten-hex-colors (warning)
 
@@ -424,7 +424,7 @@ Covers: `tokens/remove-leading-zero` (safe), `tokens/remove-trailing-zeros` (saf
 
 ## Example 13 — Remove redundant whitespace in values
 
-Covers: `tokens/remove-redundant-whitespace-in-values` (safe)
+Covers: `tokens/remove-redundant-whitespace` (safe)
 
 ### Input
 ```css
@@ -435,7 +435,7 @@ Covers: `tokens/remove-redundant-whitespace-in-values` (safe)
 ```
 
 ### Expected issues (summary)
-- tokens/remove-redundant-whitespace-in-values (info)
+- tokens/remove-redundant-whitespace (info)
 
 ### Expected output (no comments)
 ```css
@@ -448,8 +448,8 @@ Covers: `tokens/remove-redundant-whitespace-in-values` (safe)
 ### Expected output (with comments)
 ```css
 .spaced {
-  margin: 10px 20px; /* cssreview: tokens/remove-redundant-whitespace-in-values: normalized spacing */
-  padding: 5px 0; /* cssreview: tokens/remove-redundant-whitespace-in-values: normalized spacing */
+  margin: 10px 20px; /* cssreview: tokens/remove-redundant-whitespace: normalized spacing */
+  padding: 5px 0; /* cssreview: tokens/remove-redundant-whitespace: normalized spacing */
 }
 ```
 
@@ -847,7 +847,8 @@ Covers: `format/max-nesting-depth` (warning, none), `format/max-nesting-lines` (
 ---
 ## Example 25 — Rule logic is always shown (WHAT / WHY / WHEN SAFE)
 
-Covers: `education/explain-rule-logic` (info, none)
+> **Note:** This is a UI behavior guarantee, not a rule that emits issues.
+> See `spec/UI_BEHAVIOR.md` for the specification.
 
 ### Scenario
 User selects any issue in the Issues Panel.
@@ -859,7 +860,8 @@ User selects any issue in the Issues Panel.
   - WHEN SAFE (constraints/caveats)
 
 ### Notes
-- This is a UI behavior guarantee, not a code transformation rule.
-
+- Every issue includes rule logic in its `logic` field.
+- The UI must display this for all issues.
+- This is enforced by the Issue data contract, not by a separate rule.
 
 END

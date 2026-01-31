@@ -9,11 +9,11 @@ You are helping me update this repository. Follow these rules strictly:
 
 ## Authority order (must follow)
 1) spec/PRD_BUILD_SPEC.md (wins)
-2) spec/DATA_CONTRACTS.md
+2) spec/DATA_CONTRACTS.md (data shapes, enums, invariants)
 3) spec/UI_BEHAVIOR.md
 4) spec/RULEBOOK_INDEX.md
 5) spec/EXAMPLES.md
-6) spec/GLOSSARY.md
+6) spec/TERMINOLOGY.md (includes glossary)
 7) spec/DECISIONS.md (read-only; only humans edit decisions)
 
 ## Hard constraints

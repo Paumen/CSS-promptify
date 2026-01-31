@@ -9,6 +9,10 @@ LLM_POLICY: Use these exact interfaces when implementing. Types must match DATA_
 This file provides TypeScript interfaces matching the canonical data contracts.
 Use these types for type-safe implementation.
 
+> **This is the single source of truth for TypeScript type definitions.**
+> Enum values are defined in `spec/DATA_CONTRACTS.md` §1.
+> Other documents should reference this file for TypeScript types.
+
 ---
 
 ## Enums

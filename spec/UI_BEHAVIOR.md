@@ -6,10 +6,14 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 
 # UI Behavior (v1)
 
-This document defines **UI behavior and state**, not visual design.  
+This document defines **UI behavior and state**, not visual design.
 It is written to prevent ambiguity and to keep LLM-assisted implementation consistent.
 
 > Source of truth: If anything conflicts, `spec/PRD_BUILD_SPEC.md` wins.
+>
+> **Related specifications:**
+> - `spec/DATA_CONTRACTS.md` — canonical definitions for recompute model (§4.3), conflict handling (§4.5), deterministic ordering (§4.4), and invariants (§6)
+> - `spec/TYPES.md` — TypeScript interfaces
 
 ---
 
@@ -49,18 +53,23 @@ Notes:
 - Issue list items are clickable and show selection state
 
 ### 2.3 Issue Detail + Rule Logic Panel
+
+> **Important:** Every issue MUST display rule logic (WHAT/WHY/WHEN SAFE).
+> This is a UI behavior guarantee, not a separate rule.
+> The `logic` field is required in every Issue object (see `spec/DATA_CONTRACTS.md` §3).
+
 When an issue is selected, show:
 - rule_id, group, severity
 - message
-- **Rule logic**:
+- **Rule logic** (required for all issues):
   - WHAT: what was detected
   - WHY: why it matters (LLM clarity / tokens / consolidation / modernity)
   - WHEN SAFE: constraints / caveats
 - If fixability = safe:
   - show fix preview/diff
-  - show “Select fix” checkbox (or equivalent action)
+  - show "Select fix" checkbox (or equivalent action)
 - If fixability = prompt:
-  - show “Copy LLM prompt” action
+  - show "Copy LLM prompt" action
 
 ### 2.4 Fix Preview / Diff Panel
 - Before/after diff preview for:

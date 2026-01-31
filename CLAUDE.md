@@ -68,6 +68,8 @@ npm run lint
 
 ## Critical Invariants (MUST follow)
 
+> **Canonical source:** `spec/DATA_CONTRACTS.md` §6
+
 These invariants must NEVER be violated. If a request would violate any, refuse and explain which one.
 
 1. **Determinism**: Same input + config + selected fixes = same output, always
@@ -101,16 +103,14 @@ CSS-promptify/
 ├── spec/                              # Authoritative specifications
 │   ├── AUTHORITY.md                  # Document hierarchy
 │   ├── PRD_BUILD_SPEC.md             # PRIMARY SOURCE OF TRUTH
-│   ├── DATA_CONTRACTS.md             # Data shapes & invariants
+│   ├── DATA_CONTRACTS.md             # Data shapes, enums, invariants (single source)
 │   ├── UI_BEHAVIOR.md                # UI state & interactions
 │   ├── UI_STYLE_GUIDE.md             # UI design & style guide
-│   ├── RULEBOOK_INDEX.md             # Rule catalog (20+ rules)
+│   ├── RULEBOOK_INDEX.md             # Rule catalog (19 rules in v1)
 │   ├── EXAMPLES.md                   # Before/after test cases
-│   ├── TYPES.md                      # TypeScript interfaces
+│   ├── TYPES.md                      # TypeScript interfaces (single source)
 │   ├── PROPERTY_SORT_ORDER.md        # Property sort order spec
-│   ├── TERMINOLOGY.md                # Standardized terms
-│   ├── OPEN_QUESTIONS.md             # Resolved decisions (all decided)
-│   ├── GLOSSARY.md                   # Definitions
+│   ├── TERMINOLOGY.md                # Standardized terms + glossary
 │   ├── DECISIONS.md                  # Decision log (read-only)
 │   └── test-cases.json               # Machine-readable tests
 │

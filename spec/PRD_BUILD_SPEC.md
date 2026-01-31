@@ -5,10 +5,10 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 -->
 
 # CSS Review Tool — PRD / POD / Build Spec (v1)
-Version: 1.2 (v1.1 + clarified “no editing”, recompute apply/revert, “Not planned”, property sorting in v1 as info-only)  
+Version: 1.2 
 Owner: (human)  
 Primary interface: Web UI (mobile-friendly)  
-Config scope in v1: **Session only** (no project persistence)
+Config scope in v1-v3: 
 
 ---
 
@@ -38,36 +38,14 @@ This product optimizes for **LLM context first**, then applies **rule-driven tok
 ## 3) Goals & non-goals
 
 ### 3.1 Goals 
-**Version 1 (v1)**
-- Correctly parse and understand **modern CSS**, including newer properties/functions.
-- Show issues as **error/warning/info**, with clear logic and “why it matters”.
-- Let users **toggle rules**, change severity, and **toggle whole groups** (session only).
-- Let users **select exactly which fixes to apply**.
-- Show **inline explanation comments** describing applied fixes (brief + clear), and allow:
-  - toggle comments on/off,
-  - copy output **with** or **without** comments,
-  - remove comments in one action.
-- Allow users to **revert** previously applied fixes (deselect) even after seeing output/comments.
-- Mobile-friendly UI and interactions.
-- Show stats: **lines, characters** (before/after).
-- Include **property sorting** in v1 as a **safe selectable fix** with **default severity = info**.
-- At least "tier 1" rules and minimum of 15 rules.
-
-**Version 2 (v2)**
-  - Includes all v1 goals and below.
-  - Provide LLM-friendly prompts for tricky fixes that shouldn’t be automated.
-  - “paste from clipboard” button for input.
-  - This scope and list is not yet complete.
-
-**Version 3 (v3)**
-  - Includes all v1 and v2 goals and below.
-  - Show stats: **tokens** accurate estimate or exact, not just heuristic rule of thumb (before/after).
-  - Optional: User severity settings saved across sessions.
-  - This scope and list is not yet complete.
-
-**Version 4 (v4)**
-  - Includes all goals all previous versions and below.
-  - This scope and list is not yet complete.
+- Accept pasted CSS and analyze modern CSS correctly (no false “invalid” for new syntax).
+- Flag issues as error / warning / info with clear WHAT / WHY / WHEN SAFE explanations.
+- Offer selective, safe, reversible fixes with diff preview (no silent changes).
+- Output LLM-friendly structured CSS by default, with rule-driven token reductions that keep structure.
+- Provide deterministic results (same input + same session config → same issues/output).
+- Support inline explanation comments for applied fixes (toggle on/off, removable).
+- Enable fast review workflow: paste → analyze → filter → apply/revert → copy (mobile-friendly).
+- For non-safe fixes, generate copy-ready LLM prompts with constraints + relevant snippets.
 
 ### 3.2 Not planned (explicit)
 These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIONS):

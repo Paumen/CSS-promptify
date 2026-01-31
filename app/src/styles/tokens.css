@@ -1,0 +1,139 @@
+/* Design Tokens for CSS Promptify */
+/* Global tokens using light-dark() for theme support */
+
+:root {
+  /* Enable light-dark() function */
+  color-scheme: light dark;
+
+  /* ===== Colors ===== */
+
+  /* Background & Surface */
+  --color-bg: light-dark(#f5f5f5, #1a1a1a);
+  --color-surface: light-dark(#fff, #2a2a2a);
+  --color-surface-raised: light-dark(#f8f9fa, #333);
+  --color-surface-sunken: light-dark(#fafafa, #222);
+
+  /* Text */
+  --color-text: light-dark(#333, #e5e5e5);
+  --color-text-secondary: light-dark(#666, #999);
+  --color-text-muted: light-dark(#999, #666);
+
+  /* Borders */
+  --color-border: light-dark(#ddd, #444);
+  --color-border-light: light-dark(#eee, #333);
+  --color-border-focus: light-dark(#0066cc, #4d9fff);
+
+  /* Accent/Primary */
+  --color-accent: light-dark(#0066cc, #4d9fff);
+  --color-accent-hover: light-dark(#0055aa, #6db3ff);
+  --color-accent-bg: light-dark(#e7f3ff, #1a3a5c);
+  --color-accent-text: light-dark(#0066cc, #6db3ff);
+
+  /* Severity: Error */
+  --color-error-bg: light-dark(#fee, #3d1a1a);
+  --color-error-text: light-dark(#c00, #ff6b6b);
+  --color-error-border: light-dark(#fcc, #5c2a2a);
+
+  /* Severity: Warning */
+  --color-warning-bg: light-dark(#fff3cd, #4a3d1a);
+  --color-warning-text: light-dark(#856404, #ffc107);
+  --color-warning-border: light-dark(#ffe69c, #5c4d2a);
+
+  /* Severity: Info */
+  --color-info-bg: light-dark(#e7f3ff, #1a3a5c);
+  --color-info-text: light-dark(#0066cc, #6db3ff);
+  --color-info-border: light-dark(#d0e5f9, #2a4a6c);
+
+  /* Success */
+  --color-success: light-dark(#28a745, #4ade80);
+
+  /* Secondary button */
+  --color-btn-secondary: light-dark(#f0f0f0, #3a3a3a);
+  --color-btn-secondary-hover: light-dark(#e0e0e0, #4a4a4a);
+  --color-btn-secondary-text: light-dark(#333, #e5e5e5);
+
+  /* Code block */
+  --color-code-bg: light-dark(#1e1e1e, #0d0d0d);
+  --color-code-text: light-dark(#d4d4d4, #d4d4d4);
+
+  /* Overlay */
+  --color-overlay: light-dark(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+
+  /* ===== Spacing ===== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+
+  /* ===== Border Radius ===== */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* ===== Typography ===== */
+  --font-sans: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+
+  --text-xs: 10px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 28px;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* ===== Shadows ===== */
+  --shadow-sm: 0 1px 2px light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
+  --shadow-md: 0 4px 6px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+  --shadow-lg: 0 4px 24px light-dark(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.4));
+
+  /* ===== Focus Ring ===== */
+  --focus-ring: 0 0 0 2px light-dark(rgba(0, 102, 204, 0.3), rgba(77, 159, 255, 0.4));
+
+  /* ===== Layout ===== */
+  --max-width-app: 1400px;
+  --panel-gap: var(--space-xl);
+}
+
+/* Base reset and global styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}

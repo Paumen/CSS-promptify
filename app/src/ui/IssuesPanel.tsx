@@ -1,17 +1,10 @@
 import { useAppStore } from '../state';
 import { hasSafeFix } from '../types';
-import type { Issue } from '../types';
-import './IssuesPanel.css';
+import type { Issue, Severity } from '../types';
+import { Panel, PanelHeader, PanelContent, Badge, Button, Row } from './primitives';
+import styles from './IssuesPanel.module.css';
 
 const EMPTY_ISSUES: Issue[] = [];
-
-function SeverityBadge({ severity }: { severity: string }) {
-  return (
-    <span className={`severity-badge severity-${severity}`}>
-      {severity}
-    </span>
-  );
-}
 
 function IssueItem({ issue, isSelected, onToggle }: {
   issue: Issue;
@@ -19,34 +12,35 @@ function IssueItem({ issue, isSelected, onToggle }: {
   onToggle: () => void;
 }) {
   const canFix = hasSafeFix(issue);
+  const severityVariant = issue.severity as Severity;
 
   return (
-    <div className={`issue-item ${isSelected ? 'selected' : ''}`}>
-      <div className="issue-header">
+    <div className={`${styles.issueItem} ${isSelected ? styles.issueItemSelected : ''}`}>
+      <div className={styles.issueHeader}>
         {canFix && (
           <input
             type="checkbox"
             checked={isSelected}
             onChange={onToggle}
-            className="issue-checkbox"
+            className={styles.issueCheckbox}
           />
         )}
-        <SeverityBadge severity={issue.severity} />
-        <span className="issue-rule">{issue.rule_id}</span>
+        <Badge variant={severityVariant}>{issue.severity}</Badge>
+        <span className={styles.issueRule}>{issue.rule_id}</span>
       </div>
-      <div className="issue-message">{issue.message}</div>
-      <div className="issue-location">
+      <div className={styles.issueMessage}>{issue.message}</div>
+      <div className={styles.issueLocation}>
         Line {issue.location.start.line}, col {issue.location.start.column}
       </div>
       {canFix && issue.fix && (
-        <div className="issue-preview">
-          <span className="preview-label">Fix:</span>
-          <code className="preview-code">{issue.fix.preview || '(remove)'}</code>
+        <div className={styles.issuePreview}>
+          <span className={styles.previewLabel}>Fix:</span>
+          <code className={styles.previewCode}>{issue.fix.preview || '(remove)'}</code>
         </div>
       )}
-      <details className="issue-logic">
+      <details className={styles.issueLogic}>
         <summary>Rule Logic</summary>
-        <div className="logic-content">
+        <div className={styles.logicContent}>
           <p><strong>WHAT:</strong> {issue.logic.what}</p>
           <p><strong>WHY:</strong> {issue.logic.why}</p>
           <p><strong>WHEN SAFE:</strong> {issue.logic.when_safe}</p>
@@ -57,7 +51,6 @@ function IssueItem({ issue, isSelected, onToggle }: {
 }
 
 export function IssuesPanel() {
-  // Use individual selectors to avoid infinite re-renders
   const toggleFix = useAppStore((state) => state.toggleFix);
   const selectAllFixes = useAppStore((state) => state.selectAllFixes);
   const unselectAllFixes = useAppStore((state) => state.unselectAllFixes);
@@ -83,30 +76,30 @@ export function IssuesPanel() {
   const infoCount = issues.filter((i) => i.severity === 'info').length;
 
   return (
-    <div className="panel issues-panel">
-      <div className="panel-header">
+    <Panel className={styles.issuesPanel}>
+      <PanelHeader>
         <h2>Issues ({issues.length})</h2>
-        <div className="issue-counts">
-          {errorCount > 0 && <span className="count count-error">{errorCount} errors</span>}
-          {warningCount > 0 && <span className="count count-warning">{warningCount} warnings</span>}
-          {infoCount > 0 && <span className="count count-info">{infoCount} info</span>}
-        </div>
-      </div>
+        <Row gap="sm" className={styles.issueCounts}>
+          {errorCount > 0 && <Badge variant="error">{errorCount} errors</Badge>}
+          {warningCount > 0 && <Badge variant="warning">{warningCount} warnings</Badge>}
+          {infoCount > 0 && <Badge variant="info">{infoCount} info</Badge>}
+        </Row>
+      </PanelHeader>
 
       {fixableIssues.length > 0 && (
-        <div className="panel-actions">
-          <button className="btn btn-small" onClick={handleToggleAll}>
+        <div className={styles.panelActions}>
+          <Button size="small" onClick={handleToggleAll}>
             {allSelected ? 'Unselect All' : 'Select All Fixes'}
-          </button>
-          <span className="selected-count">
+          </Button>
+          <span className={styles.selectedCount}>
             {selectedFixIds.length} / {fixableIssues.length} selected
           </span>
         </div>
       )}
 
-      <div className="panel-content issues-list">
+      <PanelContent scrollable className={styles.issuesList}>
         {issues.length === 0 ? (
-          <div className="no-issues">No issues found!</div>
+          <div className={styles.noIssues}>No issues found!</div>
         ) : (
           issues.map((issue) => (
             <IssueItem
@@ -117,7 +110,7 @@ export function IssuesPanel() {
             />
           ))
         )}
-      </div>
-    </div>
+      </PanelContent>
+    </Panel>
   );
 }

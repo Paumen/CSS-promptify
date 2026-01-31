@@ -1,0 +1,20 @@
+.codeBlock {
+  width: 100%;
+  min-height: 300px;
+  max-height: 400px;
+  overflow: auto;
+  padding: var(--space-md);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: var(--leading-normal);
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  border-radius: var(--radius-sm);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.codeBlock code {
+  font-family: inherit;
+}

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAppStore } from '../state';
-import './OutputPanel.css';
+import { Panel, PanelHeader, PanelContent, PanelFooter, Button, CodeBlock, Row } from './primitives';
+import styles from './OutputPanel.module.css';
 
 export function OutputPanel() {
-  // Use individual selectors to avoid infinite re-renders
   const outputCss = useAppStore((state) => state.outputCss);
   const commentsEnabled = useAppStore((state) => state.session.comments_enabled);
   const toggleComments = useAppStore((state) => state.toggleComments);
@@ -20,7 +20,6 @@ export function OutputPanel() {
   };
 
   const handleCopyWithoutComments = async () => {
-    // Remove cssreview: comments
     const cleaned = outputCss.replace(/\s*\/\*\s*cssreview:[^*]*\*\//g, '');
     try {
       await navigator.clipboard.writeText(cleaned);
@@ -32,43 +31,41 @@ export function OutputPanel() {
   };
 
   return (
-    <div className="panel output-panel">
-      <div className="panel-header">
+    <Panel className={styles.outputPanel}>
+      <PanelHeader>
         <h2>Output CSS</h2>
-        <div className="output-controls">
-          <label className="toggle-label">
-            <input
-              type="checkbox"
-              checked={commentsEnabled}
-              onChange={toggleComments}
-            />
-            Show comments
-          </label>
-        </div>
-      </div>
+        <label className={styles.toggleLabel}>
+          <input
+            type="checkbox"
+            checked={commentsEnabled}
+            onChange={toggleComments}
+          />
+          Show comments
+        </label>
+      </PanelHeader>
 
-      <div className="panel-content">
-        <pre className="css-output">
-          <code>{outputCss || '(No output yet)'}</code>
-        </pre>
-      </div>
+      <PanelContent>
+        <CodeBlock>{outputCss || '(No output yet)'}</CodeBlock>
+      </PanelContent>
 
-      <div className="panel-footer">
-        <button
-          className="btn btn-primary"
-          onClick={handleCopy}
-          disabled={!outputCss}
-        >
-          {copied ? 'Copied!' : 'Copy Output'}
-        </button>
-        <button
-          className="btn btn-secondary"
-          onClick={handleCopyWithoutComments}
-          disabled={!outputCss}
-        >
-          Copy (no comments)
-        </button>
-      </div>
-    </div>
+      <PanelFooter>
+        <Row gap="sm">
+          <Button
+            variant="primary"
+            onClick={handleCopy}
+            disabled={!outputCss}
+          >
+            {copied ? 'Copied!' : 'Copy Output'}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleCopyWithoutComments}
+            disabled={!outputCss}
+          >
+            Copy (no comments)
+          </Button>
+        </Row>
+      </PanelFooter>
+    </Panel>
   );
 }

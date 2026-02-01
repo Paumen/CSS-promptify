@@ -18,7 +18,7 @@ Complete each phase before moving to the next.
 | Phase 0: Project Setup | ✅ Complete | 100% |
 | Phase 1: Core Engine | ✅ Complete | 100% (21 rules implemented) |
 | Phase 2: Fix Application Engine | ✅ Complete | 100% |
-| Phase 3: UI Implementation | ✅ Complete | 100% |
+| Phase 3: UI Implementation |  🔄 In Progress | ~80% |
 | Phase 4: Testing & Polish | 🔄 In Progress | ~40% |
 | Phase 5: Future (v1.1+) | ⏳ Not Started | 0% |
 
@@ -185,13 +185,13 @@ Complete each phase before moving to the next.
 
 ### 3.3 Output View (OutputPanel)
 - [x] Create CSS output display (read-only CodeBlock)
-- [x] Add syntax highlighting (best-effort)
+- [ ]  Add syntax highlighting 
 - [x] Show before/after stats in header
 
 ### 3.4 Issues Panel (IssuesPanel)
 - [x] List issues grouped by severity
 - [x] Show counts per severity (badges)
-- [x] Implement filters (severity, group, fixability, search) per FR-ISSUE-02
+- [ ] Implement filters (severity, group, fixability, search) per FR-ISSUE-02
 - [x] Make issues clickable
 - [x] Show location (line/column) for each issue
 
@@ -200,13 +200,13 @@ Complete each phase before moving to the next.
 - [x] Show message
 - [x] Show rule logic (WHAT / WHY / WHEN SAFE) per FR-ISSUE-03
 - [x] Show fix preview for safe fixes
-- [x] Show "Copy LLM prompt" for prompt fixes (v2 enhancement)
+- [ ] Show "Copy LLM prompt" for prompt fixes (v2 enhancement)
 
 ### 3.6 Fix Selection (PRD FR-FIX-01, FR-FIX-02)
 - [x] Add checkboxes for fix selection (user control, never auto-apply)
 - [x] Support issue-level selection
-- [x] Support rule-level batch selection
-- [x] Support group-level batch selection
+- [ ] Support rule-level batch selection
+- [ ] Support group-level batch selection
 - [x] Support severity-level batch selection (FR-FIX-02)
 - [x] Implement immediate update (Variant A per DECISIONS.md)
 - [x] Select all / Unselect all controls
@@ -215,19 +215,19 @@ Complete each phase before moving to the next.
 - [x] Track selected fixes in state
 - [x] Allow unselecting (revert) per FR-FIX-04
 - [x] Maintain deterministic order
-- [x] Show conflicts if any (prevent conflicting selection)
+- [ ] Show conflicts if any (prevent conflicting selection)
 
 ### 3.8 Copy & Export Controls (PRD FR-OUT-01, FR-OUT-02)
 - [x] "Copy output (no comments)" button
 - [x] "Copy output (with comments)" button
 - [x] Copy shows confirmation toast/snackbar (FR-OUT-02)
 - [x] Comment toggle switch
-- [x] "Reset" button to clear session
+- [ ] "Reset" button to clear session
 
 ### 3.9 Settings View (SettingsPanel Modal)
 - [x] Rule toggles grouped by category (FR-RCONF-01)
 - [x] Severity cycle (off → info → warning → error → off) per FR-RCONF-03
-- [x] Group-level toggles (FR-RCONF-04)
+- [ ] Group-level toggles (FR-RCONF-04)
 - [x] Rule count per group displayed
 - [x] Session-only (no persistence) per FR-RCONF-05
 

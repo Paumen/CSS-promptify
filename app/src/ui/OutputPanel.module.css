@@ -14,5 +14,14 @@
 .toggleLabel input {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-accent);
+  accent-color: var(--syntax-comment-tool);
+}
+
+/* Match toggle text color to tool comment syntax highlighting when checked */
+.toggleLabel input:checked + .toggleText {
+  color: var(--syntax-comment-tool);
+}
+
+.toggleText {
+  transition: color 0.15s ease;
 }

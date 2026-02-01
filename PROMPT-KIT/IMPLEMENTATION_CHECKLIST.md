@@ -18,11 +18,11 @@ Complete each phase before moving to the next.
 | Phase 0: Project Setup | ✅ Complete | 100% |
 | Phase 1: Core Engine | ✅ Complete | 100% (21 rules implemented) |
 | Phase 2: Fix Application Engine | ✅ Complete | 100% |
-| Phase 3: UI Implementation |  🔄 In Progress | ~80% |
+| Phase 3: UI Implementation |  🔄 In Progress | ~85% |
 | Phase 4: Testing & Polish | 🔄 In Progress | ~40% |
 | Phase 5: Future (v1.1+) | ⏳ Not Started | 0% |
 
-**v1.0 Release Status:** Core functionality complete. Testing and polish remaining.
+**v1.0 Release Status:** Core functionality complete. Syntax highlighting added. Testing and polish remaining.
 
 ---
 
@@ -182,10 +182,19 @@ Complete each phase before moving to the next.
 - [x] Character count display
 - [x] Ctrl+Enter keyboard shortcut for analysis
 - [x] Mobile-friendly design
+- [x] Syntax-highlighted preview toggle (after analysis)
 
 ### 3.3 Output View (OutputPanel)
 - [x] Create CSS output display (read-only CodeBlock)
-- [ ]  Add syntax highlighting 
+- [x] Add syntax highlighting with modern CSS support
+  - [x] Custom CSS tokenizer supporting modern features (@layer, @container, light-dark(), is(), has(), etc.)
+  - [x] Modern units support (cqi, dvh, fr, svw, lvh, etc.)
+  - [x] Line numbers (not copied with output)
+  - [x] Nesting depth colors for braces (6 levels)
+  - [x] Tool comments vs user comments differentiation
+  - [x] Severity highlighting for issue locations (fill color + scrollbar markers)
+  - [x] Toggle color matches tool comment syntax color
+  - [x] Colors defined as CSS custom properties for easy adjustment
 - [x] Show before/after stats in header
 
 ### 3.4 Issues Panel (IssuesPanel)

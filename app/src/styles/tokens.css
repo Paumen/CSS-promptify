@@ -56,6 +56,48 @@
   --color-code-bg: light-dark(#1e1e1e, #0d0d0d);
   --color-code-text: light-dark(#d4d4d4, #d4d4d4);
 
+  /* ===== Syntax Highlighting Colors ===== */
+  /* These tokens are designed to be easily adjustable for future customization */
+
+  /* Base syntax colors */
+  --syntax-selector: light-dark(#d7ba7d, #dcdcaa);           /* CSS selectors (.class, #id, element) */
+  --syntax-property: light-dark(#9cdcfe, #9cdcfe);           /* CSS properties */
+  --syntax-value: light-dark(#ce9178, #ce9178);              /* CSS values */
+  --syntax-unit: light-dark(#b5cea8, #b5cea8);               /* Units (px, em, %, fr, dvh, cqi) */
+  --syntax-number: light-dark(#b5cea8, #b5cea8);             /* Numbers */
+  --syntax-color-hex: light-dark(#ce9178, #ce9178);          /* Hex colors */
+  --syntax-string: light-dark(#ce9178, #ce9178);             /* Quoted strings */
+  --syntax-keyword: light-dark(#c586c0, #c586c0);            /* Keywords (!important) */
+  --syntax-function: light-dark(#dcdcaa, #dcdcaa);           /* Functions (light-dark, is, has, calc) */
+  --syntax-atrule: light-dark(#c586c0, #c586c0);             /* At-rules (@layer, @container, @media) */
+  --syntax-atrule-name: light-dark(#4ec9b0, #4ec9b0);        /* At-rule names/identifiers */
+  --syntax-punctuation: light-dark(#d4d4d4, #d4d4d4);        /* Punctuation (: ; ,) */
+  --syntax-operator: light-dark(#d4d4d4, #d4d4d4);           /* Operators */
+
+  /* Comments */
+  --syntax-comment-user: light-dark(#6a9955, #6a9955);       /* User comments */
+  --syntax-comment-tool: light-dark(#569cd6, #569cd6);       /* Tool comments (cssreview:) */
+
+  /* Nesting depth brace colors (6 levels, then repeats) */
+  --syntax-brace-1: light-dark(#ffd700, #ffd700);            /* Depth 1: Gold */
+  --syntax-brace-2: light-dark(#da70d6, #da70d6);            /* Depth 2: Orchid */
+  --syntax-brace-3: light-dark(#179fff, #179fff);            /* Depth 3: Blue */
+  --syntax-brace-4: light-dark(#f5a623, #f5a623);            /* Depth 4: Orange */
+  --syntax-brace-5: light-dark(#7bd88f, #7bd88f);            /* Depth 5: Green */
+  --syntax-brace-6: light-dark(#fc618d, #fc618d);            /* Depth 6: Pink */
+
+  /* Line numbers */
+  --syntax-line-number: light-dark(#858585, #858585);
+  --syntax-line-number-bg: light-dark(#252526, #1a1a1a);
+
+  /* Severity highlighting (for issue markers in scrollbar/gutter) */
+  --syntax-highlight-error: light-dark(rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.25));
+  --syntax-highlight-warning: light-dark(rgba(255, 193, 7, 0.3), rgba(255, 193, 7, 0.25));
+  --syntax-highlight-info: light-dark(rgba(0, 102, 204, 0.2), rgba(77, 159, 255, 0.2));
+  --syntax-highlight-error-border: light-dark(#c00, #ff6b6b);
+  --syntax-highlight-warning-border: light-dark(#ffc107, #ffc107);
+  --syntax-highlight-info-border: light-dark(#0066cc, #6db3ff);
+
   /* Overlay */
   --color-overlay: light-dark(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
 

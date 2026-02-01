@@ -12,17 +12,7 @@ This file provides quick-start guidance for Claude Code when working on this rep
 - Exports LLM prompts for complex refactors
 
 ## Quick Start Reading Order
-
-Read files in this order for fastest context building:
-
-1. `CLAUDE.md` (this file) - Quick orientation
-2. `spec/AUTHORITY.md` - Document hierarchy and conflict resolution
-3. `spec/PRD_BUILD_SPEC.md` - Primary requirements (source of truth)
-4. `spec/DATA_CONTRACTS.md` - Data shapes and invariants
-5. `spec/UI_BEHAVIOR.md` - UI state and interactions
-6. `spec/RULEBOOK_INDEX.md` - All rules with metadata
-7. `spec/EXAMPLES.md` - Before/after test cases
-8. `spec/TYPES.md` - TypeScript interfaces
+The canonical reading order for the project is defined in `spec/AUTHORITY.md`. For the quickest orientation, start with this file (`CLAUDE.md`) and then follow the order specified in `spec/AUTHORITY.md`.
 
 ## Commands (when implementation exists)
 

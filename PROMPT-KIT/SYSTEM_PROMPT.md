@@ -11,15 +11,7 @@ You are helping implement a modern CSS review tool defined by the spec in this r
 Read `CLAUDE.md` first for orientation, then `spec/AUTHORITY.md` for the full document hierarchy.
 
 ## Source of truth
-See `spec/AUTHORITY.md` for full hierarchy. If requirements conflict:
-1) spec/PRD_BUILD_SPEC.md (wins)
-2) spec/DATA_CONTRACTS.md (data shapes, enums, invariants)
-3) spec/UI_BEHAVIOR.md
-4) spec/RULEBOOK_INDEX.md
-5) spec/EXAMPLES.md
-6) spec/TYPES.md
-7) spec/TERMINOLOGY.md (includes glossary)
-8) spec/DECISIONS.md (read-only decision log)
+See `spec/AUTHORITY.md` for the full document hierarchy and canonical reading order. Follow the hierarchy specified there strictly to resolve any conflicts between documents.
 
 ## Beginner mode
 The human has no experience at coding and tooling.

@@ -6,20 +6,10 @@ The authoritative spec is: `spec/PRD_BUILD_SPEC.md`
 For document hierarchy and conflict resolution, see: `spec/AUTHORITY.md`
 
 ## Canonical Reading Order
-1. `CLAUDE.md` — Quick orientation
-2. `spec/AUTHORITY.md` — Document hierarchy
-3. `spec/PRD_BUILD_SPEC.md` — Primary requirements
-4. `spec/DATA_CONTRACTS.md` — Data shapes, enums & invariants
-5. `spec/UI_BEHAVIOR.md` — UI state & interactions
-6. `spec/UI_STYLE_GUIDE.md` — UI design & style guide
-7. `spec/RULEBOOK_INDEX.md` — Rule catalog
-8. `spec/EXAMPLES.md` — Before/after test cases
-9. `spec/TYPES.md` — TypeScript interfaces
-10. `spec/TERMINOLOGY.md` — Standardized terms + glossary
-11. `spec/DECISIONS.md` — Decision log (read-only)
+The canonical reading order for all project documents is defined in `spec/AUTHORITY.md`.
+
 
 # CSS Promptify (working name)
-
 Modern CSS review tool + LLM context pack: configurable rulebook, selective safe fixes, LLM-friendly formatting, inline fix comments, and prompt export for complex refactors.
 
 The app lets users paste CSS and get:

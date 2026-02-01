@@ -1,0 +1,210 @@
+/* CSSHighlighter component styles */
+/* Uses design tokens for easy color customization */
+
+.highlighter {
+  position: relative;
+  width: 100%;
+  overflow: auto;
+  background: var(--color-code-bg);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: var(--leading-normal);
+}
+
+.code {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-code-text);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.code code {
+  display: block;
+  font-family: inherit;
+}
+
+.emptyMessage {
+  display: block;
+  padding: var(--space-md);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Line layout */
+.line {
+  display: flex;
+  min-height: 1.5em;
+}
+
+.lineNumber {
+  flex-shrink: 0;
+  width: 3.5em;
+  padding: 0 var(--space-sm);
+  text-align: right;
+  color: var(--syntax-line-number);
+  background: var(--syntax-line-number-bg);
+  user-select: none;
+  border-right: 1px solid var(--color-border);
+}
+
+.lineContent {
+  flex: 1;
+  padding: 0 var(--space-md);
+  white-space: pre;
+}
+
+/* Severity highlighting for lines */
+.line-error {
+  background: var(--syntax-highlight-error);
+  border-left: 3px solid var(--syntax-highlight-error-border);
+}
+
+.line-warning {
+  background: var(--syntax-highlight-warning);
+  border-left: 3px solid var(--syntax-highlight-warning-border);
+}
+
+.line-info {
+  background: var(--syntax-highlight-info);
+  border-left: 3px solid var(--syntax-highlight-info-border);
+}
+
+/* Scrollbar severity markers */
+.scrollbarMarkers {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scrollbarMarker {
+  position: absolute;
+  right: 2px;
+  width: 4px;
+  min-height: 3px;
+  border-radius: 2px;
+}
+
+.severity-error {
+  background: var(--color-error-text);
+}
+
+.severity-warning {
+  background: var(--color-warning-text);
+}
+
+.severity-info {
+  background: var(--color-info-text);
+}
+
+/* ===== Syntax Highlighting Classes ===== */
+/* Each class maps to a token from tokens.css */
+
+.syntax_selector {
+  color: var(--syntax-selector);
+}
+
+.syntax_property {
+  color: var(--syntax-property);
+}
+
+.syntax_value {
+  color: var(--syntax-value);
+}
+
+.syntax_unit {
+  color: var(--syntax-unit);
+}
+
+.syntax_number {
+  color: var(--syntax-number);
+}
+
+.syntax_color_hex {
+  color: var(--syntax-color-hex);
+}
+
+.syntax_string {
+  color: var(--syntax-string);
+}
+
+.syntax_keyword {
+  color: var(--syntax-keyword);
+  font-weight: 600;
+}
+
+.syntax_function {
+  color: var(--syntax-function);
+}
+
+.syntax_atrule {
+  color: var(--syntax-atrule);
+  font-weight: 600;
+}
+
+.syntax_atrule_name {
+  color: var(--syntax-atrule-name);
+}
+
+.syntax_punctuation {
+  color: var(--syntax-punctuation);
+}
+
+.syntax_operator {
+  color: var(--syntax-operator);
+}
+
+/* Comments */
+.syntax_comment_user {
+  color: var(--syntax-comment-user);
+  font-style: italic;
+}
+
+.syntax_comment_tool {
+  color: var(--syntax-comment-tool);
+  font-style: italic;
+}
+
+/* Whitespace and text (default color) */
+.syntax_whitespace {
+  color: inherit;
+}
+
+.syntax_text {
+  color: inherit;
+}
+
+/* Brace nesting depth colors */
+.syntax_brace {
+  font-weight: 600;
+}
+
+.syntax_brace_1 {
+  color: var(--syntax-brace-1);
+}
+
+.syntax_brace_2 {
+  color: var(--syntax-brace-2);
+}
+
+.syntax_brace_3 {
+  color: var(--syntax-brace-3);
+}
+
+.syntax_brace_4 {
+  color: var(--syntax-brace-4);
+}
+
+.syntax_brace_5 {
+  color: var(--syntax-brace-5);
+}
+
+.syntax_brace_6 {
+  color: var(--syntax-brace-6);
+}

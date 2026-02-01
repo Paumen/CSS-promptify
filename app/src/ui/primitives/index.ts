@@ -4,3 +4,5 @@ export { Badge } from './Badge/Badge';
 export { CodeBlock } from './CodeBlock/CodeBlock';
 export { Stack } from './Stack/Stack';
 export { Row } from './Row/Row';
+export { CSSHighlighter, type CSSHighlighterProps } from './CSSHighlighter';
+export type { Token, TokenType, IssueMarker } from './CSSHighlighter';

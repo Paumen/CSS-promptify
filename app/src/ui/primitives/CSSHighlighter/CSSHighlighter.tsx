@@ -158,7 +158,7 @@ export function CSSHighlighter({
                     lineTokens.map((token, tokenIndex) => (
                       <span
                         key={tokenIndex}
-                        className={styles[getTokenClassName(token).replace(/-/g, '_').replace(/ /g, ' ' + styles[''] || '')]}
+                        className={getTokenClassName(token).replace(/-/g, '_').split(' ').map(cls => styles[cls]).join(' ')}
                         data-token-type={token.type}
                       >
                         {token.value}

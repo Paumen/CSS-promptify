@@ -62,7 +62,7 @@
   /* Base syntax colors */
   --syntax-selector: light-dark(#d7ba7d, #dcdcaa);           /* CSS selectors (.class, #id, element) */
   --syntax-property: light-dark(#9cdcfe, #9cdcfe);           /* CSS properties */
-  --syntax-custom-property: light-dark(#9cdcfe, #9cdcfe);    /* CSS custom properties (--var-name) - same as property */
+  --syntax-custom-property: light-dark(red, red);    /* CSS custom properties (--var-name) */
   --syntax-value: light-dark(#ce9178, #ce9178);              /* CSS values */
   --syntax-unit: light-dark(#b5cea8, #b5cea8);               /* Units (px, em, %, fr, dvh, cqi) */
   --syntax-number: light-dark(#b5cea8, #b5cea8);             /* Numbers */

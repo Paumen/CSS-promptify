@@ -67,6 +67,22 @@ function getHighestSeverity(markers: IssueMarker[]): 'error' | 'warning' | 'info
 }
 
 /**
+ * Convert token class name(s) to CSS module class string
+ * Handles multiple class names (e.g., "syntax-brace syntax-brace-1")
+ */
+function getTokenStyles(token: Token): string {
+  const classNames = getTokenClassName(token).split(' ');
+  return classNames
+    .map(name => {
+      // Convert syntax-brace-1 to syntax_brace_1 for CSS modules
+      const moduleKey = name.replace(/-/g, '_');
+      return styles[moduleKey] || '';
+    })
+    .filter(Boolean)
+    .join(' ');
+}
+
+/**
  * CSSHighlighter component
  *
  * Renders CSS code with:
@@ -74,7 +90,7 @@ function getHighestSeverity(markers: IssueMarker[]): 'error' | 'warning' | 'info
  * - Line numbers (optional)
  * - Nesting depth colors for braces
  * - Distinction between tool comments and user comments
- * - Severity highlighting for issues
+ * - Severity highlighting for issues (in line numbers only to preserve code readability)
  */
 export function CSSHighlighter({
   code,
@@ -129,7 +145,7 @@ export function CSSHighlighter({
             return (
               <div
                 key={idx}
-                className={`${styles.scrollbarMarker} ${styles[`severity-${marker.severity}`]}`}
+                className={`${styles.scrollbarMarker} ${styles[`severity_${marker.severity}`]}`}
                 style={{ top: `${top}%`, height: `${height}%` }}
                 title={`${marker.severity}: Line ${marker.startLine}${marker.endLine !== marker.startLine ? `-${marker.endLine}` : ''}`}
               />
@@ -148,17 +164,19 @@ export function CSSHighlighter({
             return (
               <div
                 key={lineIndex}
-                className={`${styles.line} ${severity ? styles[`line-${severity}`] : ''}`}
+                className={styles.line}
               >
                 {showLineNumbers && (
-                  <span className={styles.lineNumber}>{lineNumber}</span>
+                  <span className={`${styles.lineNumber} ${severity ? styles[`lineNumber_${severity}`] : ''}`}>
+                    {lineNumber}
+                  </span>
                 )}
                 <span className={styles.lineContent}>
                   {lineTokens.length > 0 ? (
                     lineTokens.map((token, tokenIndex) => (
                       <span
                         key={tokenIndex}
-                        className={getTokenClassName(token).replace(/-/g, '_').split(' ').map(cls => styles[cls]).join(' ')}
+                        className={getTokenStyles(token)}
                         data-token-type={token.type}
                       >
                         {token.value}

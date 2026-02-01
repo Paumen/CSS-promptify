@@ -56,20 +56,20 @@
   white-space: pre;
 }
 
-/* Severity highlighting for lines */
-.line-error {
-  background: var(--syntax-highlight-error);
-  border-left: 3px solid var(--syntax-highlight-error-border);
+/* Severity highlighting on line numbers (preserves code readability per issue #15) */
+.lineNumber_error {
+  background: var(--color-error-text);
+  color: #fff;
 }
 
-.line-warning {
-  background: var(--syntax-highlight-warning);
-  border-left: 3px solid var(--syntax-highlight-warning-border);
+.lineNumber_warning {
+  background: var(--color-warning-text);
+  color: #000;
 }
 
-.line-info {
-  background: var(--syntax-highlight-info);
-  border-left: 3px solid var(--syntax-highlight-info-border);
+.lineNumber_info {
+  background: var(--color-info-text);
+  color: #fff;
 }
 
 /* Scrollbar severity markers */
@@ -91,15 +91,15 @@
   border-radius: 2px;
 }
 
-.severity-error {
+.severity_error {
   background: var(--color-error-text);
 }
 
-.severity-warning {
+.severity_warning {
   background: var(--color-warning-text);
 }
 
-.severity-info {
+.severity_info {
   background: var(--color-info-text);
 }
 
@@ -112,6 +112,11 @@
 
 .syntax_property {
   color: var(--syntax-property);
+}
+
+/* CSS custom properties (--var-name) - consistent color everywhere */
+.syntax_custom_property {
+  color: var(--syntax-custom-property);
 }
 
 .syntax_value {

@@ -12,26 +12,24 @@ export function OutputPanel() {
   const selectedFixIds = useAppStore((state) => state.session.selected_fix_ids);
   const [copied, setCopied] = useState(false);
 
-  // Convert unresolved issues to issue markers for highlighting
-  // Only show issues that haven't been fixed
+  // Convert issues to issue markers for highlighting
+  // Only show markers when NO fixes have been applied (issue #18)
+  // When fixes are applied, line positions change and markers would be incorrect
   const issueMarkers = useMemo((): IssueMarker[] => {
     if (!analysisResult?.issues) return [];
 
-    return analysisResult.issues
-      .filter(issue => {
-        // Don't highlight issues that have been fixed
-        if (issue.fix && selectedFixIds.includes(issue.fix.id)) {
-          return false;
-        }
-        return true;
-      })
-      .map(issue => ({
-        startLine: issue.location.start.line,
-        startColumn: issue.location.start.column,
-        endLine: issue.location.end.line,
-        endColumn: issue.location.end.column,
-        severity: issue.severity
-      }));
+    // Don't show markers if any fixes are selected - positions would be wrong
+    if (selectedFixIds.length > 0) {
+      return [];
+    }
+
+    return analysisResult.issues.map(issue => ({
+      startLine: issue.location.start.line,
+      startColumn: issue.location.start.column,
+      endLine: issue.location.end.line,
+      endColumn: issue.location.end.column,
+      severity: issue.severity
+    }));
   }, [analysisResult?.issues, selectedFixIds]);
 
   const handleCopy = async () => {

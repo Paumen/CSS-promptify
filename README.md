@@ -69,7 +69,7 @@ CSS-promptify/
 │   ├── DECISIONS.md                  # Decision log (read-only)
 │   └── test-cases.json               # Machine-readable tests
 │
-└── app/                               # React app (to be created)
+└── app/                               # React app 
 ```
 
 ---
@@ -105,8 +105,8 @@ All open questions have been decided. See `spec/DECISIONS.md` for the full decis
 - ✅ Spec v1.2 complete
 - ✅ Documentation and LLM guidance complete
 - ✅ All open questions resolved (2026-01-30)
-- ⏳ App scaffolding not created yet
-- ⏳ Rule engine + UI implementation pending
+- ✅ App scaffolding not created yet
+- ✅ Rule engine + UI implementation pending
 
 See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased implementation plan.
 

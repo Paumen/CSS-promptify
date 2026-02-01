@@ -62,7 +62,7 @@
   /* Base syntax colors */
   --syntax-selector: light-dark(#d7ba7d, #dcdcaa);           /* CSS selectors (.class, #id, element) */
   --syntax-property: light-dark(#9cdcfe, #9cdcfe);           /* CSS properties */
-  --syntax-custom-property: light-dark(red, red);    /* CSS custom properties (--var-name) */
+  --syntax-custom-property: light-dark(red, red);            /* CSS custom properties (--var-name) */
   --syntax-value: light-dark(#ce9178, #ce9178);              /* CSS values */
   --syntax-unit: light-dark(#b5cea8, #b5cea8);               /* Units (px, em, %, fr, dvh, cqi) */
   --syntax-number: light-dark(#b5cea8, #b5cea8);             /* Numbers */
@@ -76,7 +76,7 @@
   --syntax-operator: light-dark(#d4d4d4, #d4d4d4);           /* Operators */
 
   /* Comments */
-  --syntax-comment-user: light-dark(#6a9955, #6a9955);       /* User comments */
+  --syntax-comment-user: light-dark(gray, gray);             /* User comments */
   --syntax-comment-tool: light-dark(#569cd6, #569cd6);       /* Tool comments (cssreview:) */
 
   /* Nesting depth brace colors (6 levels, then repeats) */

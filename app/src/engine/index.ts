@@ -4,6 +4,7 @@
  */
 
 const x: number = "this is wrong"
+const x: number = "this is wrong"
 
 import { parse } from '../parser';
 import { getAllRules, createParseErrorIssues } from '../rules';

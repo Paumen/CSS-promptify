@@ -151,7 +151,7 @@ This action must be idempotent.
 ### 4.4 Copy modes
 
 Copy output (no comments): copies CSS after stripping tool comments only
-Copy output (with comments): copies CSS including tool comments if comments are ON; if comments are OFF, this copies the same as “no comments"
+Copy output (with comments): copies CSS including tool comments if comments are ON; if comments are OFF, this copies the same as “no comments”.
 
 
 ## 5) Analysis + issue navigation behavior

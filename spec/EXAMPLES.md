@@ -188,7 +188,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 
 ---
 
-## Example 7 — Prompt-only rule for tricky modernization (no auto-fix)
+## Example 7 — Place-* shorthand modernization (safe auto-fix when deterministic)
 
 ### Input
 ```css
@@ -199,36 +199,20 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ```
 
 ### Expected issues (summary)
-- modern/suggest-place-shorthand (info, prompt)
+- modern/suggest-place-shorthand (info, safe (auto))
 
-### Expected “LLM prompt” output (concept)
-```text
-TASK:
-Modernize the alignment properties using place-* where safe.
-
-CONSTRAINTS:
-- Do not change layout behavior.
-- Keep selector specificity and rule order unchanged.
-- Output must be structured (two spaces indent, one property per line, no minification).
-
-TARGET:
-- If align-items and justify-items can be replaced safely, use place-items.
-
-INPUT CSS:
+### Expected output (no comments)
 ```css
 .layout {
-  align-items: center;
-  justify-items: center;
+  place-items: center;
 }
 ```
 
-EXPECTED OUTPUT FORMAT:
-- Two spaces indentation
-- One property per line
-
-CHECKLIST:
-- Behavior unchanged
-- Output formatting matches requirements
+### Expected output (with comments)
+```css
+.layout {
+  place-items: center; /* cssreview: modern/suggest-place-shorthand: replaced align-items + justify-items */
+}
 ```
 
 ---
@@ -485,9 +469,9 @@ Covers: `consolidate/shorthand-full-values` (safe)
 
 ---
 
-## Example 15 — !important policy (info + prompt requirement)
+## Example 15 — !important policy (info + safe comment marker insertion)
 
-Covers: `style/important-used` (info, none), `style/important-requires-comment` (warning, prompt)
+Covers: `style/important-used` (info, none), `style/important-requires-comment` (warning, safe (force user to choose))
 
 ### Input
 ```css
@@ -498,7 +482,7 @@ Covers: `style/important-used` (info, none), `style/important-requires-comment` 
 
 ### Expected issues (summary)
 - style/important-used (info)
-- style/important-requires-comment (warning, prompt)
+- style/important-requires-comment (warning, safe (force user to choose))
 
 ### Expected output (no comments)
 ```css
@@ -508,13 +492,13 @@ Covers: `style/important-used` (info, none), `style/important-requires-comment` 
 ```
 
 ### Notes
-- `style/important-requires-comment` is prompt-only: user should be guided to add a same-line approval comment marker.
+- Default requires a user choice; max can auto-insert a same-line approval marker comment (placeholder reason allowed).
 
 ---
 
 ## Example 16 — Property typos (prompt) + suspicious tokens (error)
 
-Covers: `safety/misspelled-property` (warning, prompt), `safety/typo-suspicious-units-and-tokens` (error, none)
+Covers: `safety/misspelled-property` (warning, prompt), `safety/typo-suspicious-units-and-tokens` (error, safe (force user to choose))
 
 ### Input
 ```css
@@ -526,7 +510,7 @@ Covers: `safety/misspelled-property` (warning, prompt), `safety/typo-suspicious-
 
 ### Expected issues (summary)
 - safety/misspelled-property (warning, prompt) for `widht`
-- safety/typo-suspicious-units-and-tokens (error) for `2xp`
+- safety/typo-suspicious-units-and-tokens (error, safe (force user to choose)) for `2xp`
 
 ### Expected output (no comments)
 ```css
@@ -538,9 +522,9 @@ Covers: `safety/misspelled-property` (warning, prompt), `safety/typo-suspicious-
 
 ---
 
-## Example 17 — Duplicate property in block (prompt-only)
+## Example 17 — Duplicate property in block (safe, requires choice by default)
 
-Covers: `safety/duplicate-property-in-block` (error, prompt)
+Covers: `safety/duplicate-property-in-block` (error, safe (force user to choose))
 
 ### Input
 ```css
@@ -551,7 +535,7 @@ Covers: `safety/duplicate-property-in-block` (error, prompt)
 ```
 
 ### Expected issues (summary)
-- safety/duplicate-property-in-block (error, prompt)
+- safety/duplicate-property-in-block (error, safe (force user to choose))
 
 ### Expected output (no comments)
 ```css
@@ -562,18 +546,18 @@ Covers: `safety/duplicate-property-in-block` (error, prompt)
 ```
 
 ### Notes
-- Prompt-only because duplicates may be intentional fallbacks.
+- Default forces a choice (or configuration) before removing earlier duplicates; max can auto-apply “always keep last”.
 
 ---
 
 ## Example 18 — Layout checks (warnings + infos)
 
 Covers:
-- `info/universal-selector-used` (info, none)
-- `layout/warn-float-or-clear` (warning, none)
-- `layout/warn-display-table-layout` (warning, none)
-- `layout/flex-properties-require-flex` (info, none)
-- `layout/grid-properties-require-grid` (info, none)
+- `info/universal-selector-used` (info, prompt)
+- `layout/warn-float-or-clear` (warning, prompt)
+- `layout/warn-display-table-layout` (warning, prompt)
+- `layout/flex-properties-require-flex` (info, safe (force user to choose))
+- `layout/grid-properties-require-grid` (info, safe (force user to choose))
 
 ### Input
 ```css
@@ -626,10 +610,10 @@ gridy {
 ## Example 19 — Debug + stylesheet-wide signals
 
 Covers:
-- `debug/suspicious-debug-styles` (warning, none)
-- `info/weird-z-index-usage` (info, none)
-- `vars/unused-custom-properties` (info, none)
-- `info/too-many-colors` (info, none — only when threshold exceeded)
+- `debug/suspicious-debug-styles` (warning, safe (force user to choose))
+- `info/weird-z-index-usage` (info, prompt)
+- `vars/unused-custom-properties` (info, safe (force user to choose))
+- `info/too-many-colors` (info, prompt — only when threshold exceeded)
 
 ### Input
 ```css
@@ -665,12 +649,12 @@ Covers:
 
 ---
 
-## Example 20 — Modern guidance (prompt) + prefer hex (safe)
+## Example 20 — Modern guidance + prefer hex (safe)
 
 Covers:
-- `modern/prefer-dvh-over-vh` (info, prompt)
-- `modern/prefer-individual-transform-properties` (info, prompt)
-- `modern/avoid-px-except-approved-contexts` (warning, prompt — typically disabled by default)
+- `modern/prefer-dvh-over-vh` (info, safe (force user to choose))
+- `modern/prefer-individual-transform-properties` (info, safe (auto))
+- `modern/avoid-px-except-approved-contexts` (warning, safe (force user to choose) — typically disabled by default)
 - `modern/prefer-hex-colors` (info, safe)
 
 ### Input
@@ -684,9 +668,9 @@ Covers:
 ```
 
 ### Expected issues (summary)
-- modern/prefer-dvh-over-vh (info, prompt)
-- modern/prefer-individual-transform-properties (info, prompt)
-- modern/avoid-px-except-approved-contexts (warning, prompt) ONLY if enabled in session
+- modern/prefer-dvh-over-vh (info, safe (force user to choose))
+- modern/prefer-individual-transform-properties (info, safe (auto))
+- modern/avoid-px-except-approved-contexts (warning, safe (force user to choose)) ONLY if enabled in session
 - modern/prefer-hex-colors (info, safe)
 
 ### Expected output (no comments)
@@ -714,9 +698,9 @@ Covers:
 
 ---
 
-## Example 21 — Duplicate selectors (prompt-only merge guidance)
+## Example 21 — Duplicate selectors (safe, requires choice by default)
 
-Covers: `consolidate/duplicate-selectors` (warning, prompt)
+Covers: `consolidate/duplicate-selectors` (warning, safe (force user to choose))
 
 ### Input
 ```css
@@ -734,7 +718,7 @@ Covers: `consolidate/duplicate-selectors` (warning, prompt)
 ```
 
 ### Expected issues (summary)
-- consolidate/duplicate-selectors (warning, prompt)
+- consolidate/duplicate-selectors (warning, safe (force user to choose))
 
 ### Expected output (no comments)
 ```css
@@ -752,15 +736,15 @@ Covers: `consolidate/duplicate-selectors` (warning, prompt)
 ```
 
 ### Notes
-- Prompt-only because merging can affect cascade / rule order.
+- Default requires a choice; max can auto-merge when configured.
 
 ---
 
 ## Example 22 — Parse errors (classified)
 
 Covers:
-- `safety/invalid-syntax` (error, none)
-- `safety/parse-error-unclosed-block` (error, none)
+- `safety/invalid-syntax` (error, prompt)
+- `safety/parse-error-unclosed-block` (error, safe (force user to choose))
 
 ### Input
 ```css
@@ -785,9 +769,9 @@ Covers:
 
 ---
 
-## Example 23 — Design step values (prompt-only)
+## Example 23 — Design step values (safe, requires choice by default)
 
-Covers: `design/step-values` (warning, prompt)
+Covers: `design/step-values` (warning, safe (force user to choose))
 
 ### Input
 ```css
@@ -798,7 +782,7 @@ Covers: `design/step-values` (warning, prompt)
 ```
 
 ### Expected issues (summary)
-- design/step-values (warning, prompt)
+- design/step-values (warning, safe (force user to choose))
 
 ### Expected output (no comments)
 ```css
@@ -812,14 +796,14 @@ Covers: `design/step-values` (warning, prompt)
 
 ## Example 24 — Nesting limits (only when enabled)
 
-Covers: `format/max-nesting-depth` (warning, none), `format/max-nesting-lines` (warning, none)
+Covers: `format/max-nesting-depth` (warning, prompt), `format/max-nesting-lines` (warning, prompt)
 
 ### Input
 ```css
 .a {
-  & .b {
-    & .c {
-      & .d {
+  &amp; .b {
+    &amp; .c {
+      &amp; .d {
         color: red;
       }
     }
@@ -834,9 +818,9 @@ Covers: `format/max-nesting-depth` (warning, none), `format/max-nesting-lines` (
 ### Expected output (no comments)
 ```css
 .a {
-  & .b {
-    & .c {
-      & .d {
+  &amp; .b {
+    &amp; .c {
+      &amp; .d {
         color: red;
       }
     }

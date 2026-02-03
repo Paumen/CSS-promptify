@@ -81,7 +81,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 > - `spec/TERMINOLOGY.md` — preferred terms and naming conventions
 
 - **Rule:** deterministic check on the CSS AST. Emits zero or more issues.
-- **Issue:** finding with `severity`, `rule_id`, `category`, `message`, `location`, `logic`, optional `fix`.
+- **Issue:** finding with `severity`, `rule_id`, `group`, `message`, `location`, `logic`, optional `fix`.
 - **Fix:** deterministic transformation that preserves semantics within defined safety constraints.
 - **Safe fix:** a fix the tool can apply, but only if the user selects it.
 - **Inline explanation comments:** brief comments inserted to document applied fixes using dedicated syntax.
@@ -171,7 +171,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 ### 9.3 Rule engine & issue model
 - **FR-RULE-01:** Deterministic output: same input + same session config → same issues and fixes.
 - **FR-RULE-02:** Each issue includes:
-  - `rule_id`, `severity`, `category`, `message`, `location`
+  - `rule_id`, `severity`, `group`, `message`, `location`
   - `logic`: **WHAT / WHY / WHEN SAFE**
   - `fixable`: yes/no
   - optional `fix` or `llm_prompt`
@@ -238,7 +238,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 **FR-ISSUE-02:** Filters:
 
 severity
-group/category
+group
 fixable vs non-fixable
 search by rule_id/text
 
@@ -328,34 +328,8 @@ property sorting (deterministic; info-only; user-selectable)
 
 ## 13) Data model (canonical)
 
-### 13.1 Issue object
-```json
-{
-  "rule_id": "format/multiple-declarations-per-line",
-  "group": "format",
-  "severity": "warning",
-  "message": "Put each property on a new line.",
-  "location": { "start": { "line": 10, "column": 1 }, "end": { "line": 10, "column": 60 } },
-  "logic": {
-    "what": "Multiple declarations detected on one line.",
-    "why": "Improves LLM parsing and keeps structure predictable.",
-    "when_safe": "Always safe; formatting only."
-  },
-  "fixable": true,
-  "fix": {
-    "kind": "patch",
-    "preview": "...\n"
-  }
-}
-```
-
-### 13.2 Fix selection tracking (session) — v1 model
-v1 may implement apply/revert via output recomputation from original input + selected fixes:
-
-selected fix IDs
-deterministic apply order
-conflict handling (prevent or deterministic resolution)
-
+See DATA_CONTRACTS.md for Issue/Fix model.
+See TYPES.md for TS types.
 
 ## 14) Acceptance criteria (testable)
 ### 14.1 Modern CSS

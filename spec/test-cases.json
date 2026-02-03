@@ -12,17 +12,17 @@
         {
           "rule_id": "format/normalize-spaces",
           "severity": "info",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         },
         {
           "rule_id": "format/multiple-declarations-per-line",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         },
         {
           "rule_id": "tokens/shorten-hex-colors",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".button {\n  display: flex;\n  color: #fff;\n}\n",
@@ -37,7 +37,7 @@
         {
           "rule_id": "format/single-prop-single-line",
           "severity": "info",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".sr-only { position: absolute; }\n",
@@ -53,12 +53,12 @@
         {
           "rule_id": "format/no-tabs",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         },
         {
           "rule_id": "tokens/zero-units",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".card {\n  margin: 0;\n  padding: 0 10px;\n}\n",
@@ -73,7 +73,7 @@
         {
           "rule_id": "consolidate/shorthand-margin-padding",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".box {\n  margin: 4px 8px;\n}\n",
@@ -88,7 +88,7 @@
         {
           "rule_id": "consolidate/deduplicate-last-wins",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".text {\n  font-size: 14px;\n  color: blue;\n}\n",
@@ -108,7 +108,7 @@
         {
           "rule_id": "tokens/shorten-hex-colors",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".future {\n  unknown-property: value;\n  color: #fff;\n}\n",
@@ -117,19 +117,19 @@
     },
     {
       "id": "example-7",
-      "name": "Prompt-only rule (place-properties)",
-      "description": "Modern CSS suggestion generates LLM prompt, not auto-fix",
+      "name": "Place-* shorthand modernization",
+      "description": "Deterministic modernization using place-self when values match",
       "input": ".grid-item {\n  align-self: center;\n  justify-self: center;\n}",
       "expected_issues": [
         {
-          "rule_id": "modern/suggest-place-properties",
+          "rule_id": "modern/suggest-place-shorthand",
           "severity": "info",
-          "fixability": "prompt"
+          "fixability": "safe (auto)"
         }
       ],
-      "expected_output_no_comments": ".grid-item {\n  align-self: center;\n  justify-self: center;\n}\n",
-      "expected_output_with_comments": ".grid-item {\n  align-self: center;\n  justify-self: center;\n}\n",
-      "notes": "No auto-fix; user must copy LLM prompt"
+      "expected_output_no_comments": ".grid-item {\n  place-self: center;\n}\n",
+      "expected_output_with_comments": ".grid-item {\n  place-self: center; /* cssreview: modern/suggest-place-shorthand: replaced align-self + justify-self */\n}\n",
+      "notes": "Auto-fix only when replacement is deterministic and behavior-preserving"
     },
     {
       "id": "example-8",
@@ -140,7 +140,7 @@
         {
           "rule_id": "format/sort-properties",
           "severity": "info",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".element {\n  position: relative;\n  display: flex;\n  margin: 10px;\n  color: blue;\n}\n",
@@ -156,12 +156,12 @@
         {
           "rule_id": "tokens/zero-units",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         },
         {
           "rule_id": "tokens/shorten-hex-colors",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "states": [
@@ -172,17 +172,24 @@
         },
         {
           "name": "after selecting zero-units fix",
-          "selected_fix_ids": ["fix_zero_units"],
+          "selected_fix_ids": [
+            "fix_zero_units"
+          ],
           "output": ".test {\n  margin: 0;\n  color: #ffffff;\n}\n"
         },
         {
           "name": "after selecting both fixes",
-          "selected_fix_ids": ["fix_zero_units", "fix_shorten_hex"],
+          "selected_fix_ids": [
+            "fix_zero_units",
+            "fix_shorten_hex"
+          ],
           "output": ".test {\n  margin: 0;\n  color: #fff;\n}\n"
         },
         {
           "name": "after unselecting zero-units (revert)",
-          "selected_fix_ids": ["fix_shorten_hex"],
+          "selected_fix_ids": [
+            "fix_shorten_hex"
+          ],
           "output": ".test {\n  margin: 0px;\n  color: #fff;\n}\n"
         }
       ],
@@ -197,7 +204,7 @@
         {
           "rule_id": "safety/invalid-syntax",
           "severity": "error",
-          "fixability": "none"
+          "fixability": "prompt"
         }
       ],
       "expected_output_no_comments": ".broken {\n  color: red\n  font-size: 14px;\n}\n",
@@ -212,7 +219,7 @@
         {
           "rule_id": "consolidate/merge-adjacent-identical-selectors",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".btn {\n  color: red;\n  background: blue;\n}\n",
@@ -227,7 +234,7 @@
         {
           "rule_id": "tokens/remove-redundant-whitespace",
           "severity": "warning",
-          "fixability": "safe"
+          "fixability": "safe (auto)"
         }
       ],
       "expected_output_no_comments": ".spaced {\n  margin: 10px 20px;\n  padding: 5px;\n}\n",

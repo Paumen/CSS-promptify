@@ -28,9 +28,12 @@ Use the **preferred terms** consistently. Avoid the **deprecated terms**.
 
 | Preferred Term | Definition | Deprecated/Avoid |
 |----------------|------------|------------------|
-| **Safe fix** | Deterministic, semantics-preserving transformation | "auto-fix", "automatic fix" |
-| **Prompt fix** | Generates LLM prompt (not safe to auto-fix) | "manual fix", "suggested fix" |
-| **fixability** | Enum: safe \| prompt \| none | "fixable" (boolean) |
+| **Safe fix (auto)** | Deterministic, semantics-preserving transformation that the tool can apply automatically once selected | "auto-fix", "automatic fix" |
+| **Safe fix (force user to choose)** | Safe transformation exists, but the tool must ask for a choice (or use session config) before applying | "semi-auto fix" |
+| **Prompt fix** | Not safe to change code automatically; provide guidance / copy-ready LLM prompt | "manual fix", "suggested fix" |
+| **No fix** | Detection only; no fix is offered | "not fixable" (ambiguous) |
+| **default_fixability** | Default behavior for a rule’s fix offering (auto vs needs choice vs prompt vs none) | "fixability" (legacy), "default fix" |
+| **max_fixability** | Maximum allowed fix level for a rule (caps what the tool may do) | "fixability" (legacy) |
 
 ---
 
@@ -100,7 +103,8 @@ Use the **preferred terms** consistently. Avoid the **deprecated terms**.
 ### Correct
 - "The user **selected** the `format/no-tabs` fix."
 - "After **unselecting** the fix, the output **reverts** via **recompute**."
-- "This is a **safe fix** with **fixability: safe**."
+- "This is a **safe fix (auto)** with **default_fixability: safe (auto)**."
+- "This is a **safe fix (force user to choose)** with **default_fixability: safe (force user to choose)**."
 - "**Tool comments** use the `cssreview:` **marker**."
 - "Check the **Issues Panel** for all findings."
 
@@ -130,12 +134,13 @@ const errors = [];        // Use issues
 ### Types
 ```typescript
 // Good
-type Fixability = 'safe' | 'prompt' | 'none';
+type DefaultFixability = 'safe (auto)' | 'safe (force user to choose)' | 'prompt' | 'none';
+type MaxFixability = 'safe (auto)' | 'safe (force user to choose)' | 'prompt' | 'none';
 interface Issue { ... }
 interface SessionState { ... }
 
 // Avoid
-type FixType = ...      // Use Fixability
+type FixType = ...      // Use DefaultFixability/MaxFixability
 interface Error { ... } // Use Issue
 interface State { ... } // Use SessionState
 ```
@@ -174,7 +179,9 @@ refactor: rename appliedFixes to selectedFixIds
 | **Rule** | Deterministic check on the CSS AST. Emits zero or more issues. |
 | **Issue** | Finding with severity (error/warning/info), rule_id, message, and location. |
 | **Fix** | Deterministic transformation that preserves semantics (safe) and is user-selectable. |
-| **Safe fix** | A fix the tool can apply *only* when the user selects it. |
+| **Safe fix** | Semantics-preserving fix. May be **safe (auto)** or **safe (force user to choose)**. |
+| **default_fixability** | Default fix offering level for a rule. |
+| **max_fixability** | Maximum fix offering level for a rule. |
 | **Tool comment** | Tool-added comment `/* cssreview: ... */` describing what changed. |
 | **Rule group** | Logical grouping of rules (modern/consolidation/format/tokens/safety/education). |
 | **Session config** | Rule toggles, severities, and parameters that reset on refresh (v1). |

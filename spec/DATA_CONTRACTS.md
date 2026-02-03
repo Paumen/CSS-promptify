@@ -34,11 +34,18 @@ Allowed values: `error | warning | info`
 Allowed values: `modern | consolidation | format | tokens | safety | education`
 
 ### 1.3 Fixability
-Allowed values: `safe | prompt | none`
+Allowed values: `safe (auto) | safe (force user to choose) | prompt | none`
 
-- `safe` = deterministic semantics-preserving auto-fix exists (user-selectable)
-- `prompt` = not safe to auto-fix; generate LLM prompt instead
+- `safe (auto)` = deterministic semantics-preserving fix exists and can be applied automatically once selected
+- `safe (force user to choose)` = safe fix exists, but requires an explicit user choice (or session config) before applying
+- `prompt` = not safe to auto-fix; provide guidance / copy-ready LLM prompt
 - `none` = no fix and no prompt
+
+
+### 1.4 Default/max fixability (rule-level)
+Both fields use the same value set as Fixability:
+- `default_fixability`: what the UI offers by default for a rule
+- `max_fixability`: upper bound for what the tool may do for that rule
 
 ---
 
@@ -80,7 +87,7 @@ Positions are **1-based**.
     "why": "Improves LLM parsing and keeps structure predictable.",
     "when_safe": "Always safe; formatting only."
   },
-  "fixability": "safe",
+  "fixability": "safe (auto)",
   "fix": {
     "id": "fix_000123",
     "kind": "patch_set",
@@ -105,7 +112,7 @@ Positions are **1-based**.
 ```
 
 ### 3.2 Rules for presence/absence
-- If `fixability` = `safe` → `fix` MUST be present and contain ≥ 1 patch.
+- If `fixability` starts with `safe` → `fix` MUST be present and contain ≥ 1 patch.
 - If `fixability` = `prompt` → `llm_prompt` MUST be present and `fix` MUST be absent.
 - If `fixability` = `none` → both `fix` and `llm_prompt` MUST be absent.
 
@@ -239,8 +246,8 @@ Unrecognized properties MUST produce `info` only and MUST NOT block other fixes.
 
 - `severity` ∈ `{error, warning, info}`
 - `group` ∈ `{modern, consolidation, format, tokens, safety, education}`
-- `fixability` ∈ `{safe, prompt, none}`
-- If `fixability = safe` ⇒ `fix` present and `patches.length ≥ 1`
+- `fixability` ∈ `{safe (auto), safe (force user to choose), prompt, none}`
+- If `fixability` starts with `safe` ⇒ `fix` present and `patches.length ≥ 1`
 - If `fixability = prompt` ⇒ `llm_prompt` present and `fix` absent
 - If `fixability = none` ⇒ both `fix` and `llm_prompt` absent
 - Deterministic apply order rule must be implemented

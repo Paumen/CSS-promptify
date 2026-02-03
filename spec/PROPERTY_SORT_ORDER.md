@@ -406,7 +406,7 @@ When `mode: alphabetical`:
 
 ## Implementation Notes
 
-- This rule has `fixability: safe` (sorting does not change semantics)
+- This rule has `default_fixability: safe (auto)` and `max_fixability: safe (auto)` (sorting does not change semantics)
 - Default severity: `info` (user can choose to apply)
 - Enabled by default: `true`
 - The fix is deterministic: same input always produces same order

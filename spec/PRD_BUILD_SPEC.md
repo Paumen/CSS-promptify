@@ -83,7 +83,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 - **Rule:** deterministic check on the CSS AST. Emits zero or more issues.
 - **Issue:** finding with `severity`, `rule_id`, `group`, `message`, `location`, `logic`, optional `fix`.
 - **Fix:** deterministic transformation that preserves semantics within defined safety constraints.
-- **Safe fix:** a fix the tool can apply, but only if the user selects it.
+- **Safe fix:** semantics-preserving fix. Can be **safe (auto)** or **safe (force user to choose)**, but is always user-selected.
 - **Inline explanation comments:** brief comments inserted to document applied fixes using dedicated syntax.
 - **Rule group:** a logical grouping of rules (e.g., modern / consolidation / format / tokens / safety / education).
 - **Session config:** current UI settings (rule toggles, severities, rule params) that reset on refresh.
@@ -143,7 +143,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 9. Copy output (with or without comments)
 
 ### 8.2 “Tricky fix” flow (LLM prompt)
-- For issues marked “not safe to auto-fix”:
+- For issues marked `prompt` (not safe to auto-fix):
   - user clicks **Generate LLM prompt**
   - user copies prompt + relevant CSS snippet
   - tool keeps output formatting requirements explicit in the prompt
@@ -173,8 +173,8 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 - **FR-RULE-02:** Each issue includes:
   - `rule_id`, `severity`, `group`, `message`, `location`
   - `logic`: **WHAT / WHY / WHEN SAFE**
-  - `fixable`: yes/no
-  - optional `fix` or `llm_prompt`
+  - `fixability`: `safe (auto)` | `safe (force user to choose)` | `prompt` | `none`
+  - optional `fix` (for safe*) or `llm_prompt` (for prompt)
 
 ### 9.4 Rule settings (session only) + groups
 - **FR-RCONF-01:** Rules are shown grouped logically (at minimum):
@@ -239,7 +239,7 @@ These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIO
 
 severity
 group
-fixable vs non-fixable
+fixability
 search by rule_id/text
 
 
@@ -300,7 +300,7 @@ Token estimate
 ### 11.1 Rule structure
 Rules are authored as a hybrid:
 
-Declarative metadata (simple file): rule_id, group, default severity, fixability, applicable contexts
+Declarative metadata (simple file): rule_id, group, default severity, default_fixability, max_fixability, applicable contexts
 Implementation logic (code): AST traversal, detection, patch creation
 
 ### 11.2 Rule must declare applicability

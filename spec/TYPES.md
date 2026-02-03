@@ -19,31 +19,27 @@ Use these types for type-safe implementation.
 
 ```typescript
 /**
- * Issue severity levels
- * - error: invalid CSS or must-fix
- * - warning: strong recommendation
- * - info: optional/educational
- */
-export type Severity = 'error' | 'warning' | 'info';
-
-/**
- * Rule groups for organization and filtering
- */
-export type RuleGroup =
-  | 'modern'
-  | 'consolidation'
-  | 'format'
-  | 'tokens'
-  | 'safety'
-  | 'education';
-
-/**
  * Fix availability for an issue
- * - safe: deterministic auto-fix available
- * - prompt: LLM prompt available (not safe to auto-fix)
+ * - safe (auto): deterministic fix exists and can be applied automatically once selected
+ * - safe (force user to choose): safe fix exists but requires a user choice or session config before applying
+ * - prompt: guidance / copy-ready LLM prompt (not safe to auto-fix)
  * - none: no fix available
  */
-export type Fixability = 'safe' | 'prompt' | 'none';
+export type Fixability =
+  | 'safe (auto)'
+  | 'safe (force user to choose)'
+  | 'prompt'
+  | 'none';
+
+/**
+ * Rule-level default fix offering (what the UI should offer by default)
+ */
+export type DefaultFixability = Fixability;
+
+/**
+ * Rule-level max fix offering (caps what the tool is allowed to do)
+ */
+export type MaxFixability = Fixability;
 
 /**
  * Patch operation types (v1 supports replace_range only)
@@ -170,9 +166,9 @@ export interface Issue {
   location: Range;
   /** Rule logic explanation */
   logic: RuleLogic;
-  /** Fix availability */
+  /** Fix availability for this issue */
   fixability: Fixability;
-  /** Fix object (present if fixability === 'safe') */
+  /** Fix object (present if fixability starts with 'safe') */
   fix?: Fix;
   /** LLM prompt (present if fixability === 'prompt') */
   llm_prompt?: LLMPrompt;
@@ -308,8 +304,10 @@ export interface RuleMeta {
   group: RuleGroup;
   /** Default severity */
   severity: Severity;
-  /** Fix availability */
-  fixability: Fixability;
+  /** Default fixability (rule-level) */
+  default_fixability: DefaultFixability;
+  /** Max fixability (rule-level) */
+  max_fixability: MaxFixability;
   /** Whether enabled by default */
   enabled_by_default: boolean;
   /** What this rule applies to */
@@ -430,7 +428,7 @@ export interface IssueFilters {
  * Check if issue has a safe fix
  */
 export function hasSafeFix(issue: Issue): issue is Issue & { fix: Fix } {
-  return issue.fixability === 'safe' && issue.fix !== undefined;
+  return (issue.fixability === 'safe (auto)' || issue.fixability === 'safe (force user to choose)') && issue.fix !== undefined;
 }
 
 /**
@@ -453,7 +451,7 @@ export function validateIssue(issue: Issue): string[] {
   const errors: string[] = [];
 
   // Check fixability constraints
-  if (issue.fixability === 'safe') {
+  if (issue.fixability === 'safe (auto)' || issue.fixability === 'safe (force user to choose)') {
     if (!issue.fix) {
       errors.push('fixability=safe requires fix to be present');
     } else if (issue.fix.patches.length === 0) {

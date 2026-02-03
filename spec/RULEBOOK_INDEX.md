@@ -21,10 +21,11 @@ Each rule entry contains:
 - **rule_id**: stable identifier (do not rename lightly)
 - **group**: `modern | consolidation | format | tokens | safety | education`
 - **default_severity**: `off | info | warning | error`
-- **fixability**: `safe | prompt | none`
+- **default_fixability**: `safe (auto) | safe (force user to choose) | prompt | none`
+- **max_fixability**: `safe (auto) | safe (force user to choose) | prompt | none`
 - **enabled_by_default**: `true | false` (v1: session-only toggles still start from this default)
 - **applies_to**: explicit applicability constraints (properties/contexts)
-- **autofix_notes**: conditions for safe auto-fix (if fixability = safe)
+- **autofix_notes**: conditions for safe auto-fix (if default_fixability starts with `safe`)
 - **params**: optional parameters that change behavior (v1 supports session-only)
 
 ### 0.2 Applicability rule (important)
@@ -41,62 +42,48 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 
 ### Tier 1: Core Rules (Must Have) — 14 rules
 
-| rule_id | group | fixability | rationale |
+| rule_id | group | default_fixability | rationale |
 |---------|-------|------------|-----------|
-| `safety/invalid-syntax` | safety | none | Fundamental parse error detection |
+| `safety/invalid-syntax` | safety | prompt | Fundamental parse error detection |
 | `safety/unrecognized-property` | safety | none | Core modern-CSS policy |
-| `format/no-tabs` | format | safe | Basic LLM-friendly formatting |
-| `format/indent-2-spaces` | format | safe | Basic LLM-friendly formatting |
-| `format/multiple-declarations-per-line` | format | safe | Core formatting rule |
-| `format/single-prop-single-line` | format | safe | Token optimization |
-| `format/normalize-spaces` | format | safe | Clean spacing |
-| `tokens/zero-units` | tokens | safe | Simple, high-value |
-| `tokens/shorten-hex-colors` | tokens | safe | Simple, high-value |
-| `consolidate/shorthand-margin-padding` | consolidation | safe | High-impact consolidation |
-| `consolidate/deduplicate-last-wins` | consolidation | safe | Remove redundant declarations |
+| `format/no-tabs` | format | safe (auto) | Basic LLM-friendly formatting |
+| `format/indent-2-spaces` | format | safe (auto) | Basic LLM-friendly formatting |
+| `format/multiple-declarations-per-line` | format | safe (auto) | Core formatting rule |
+| `format/single-prop-single-line` | format | safe (auto) | Token optimization |
+| `format/normalize-spaces` | format | safe (auto) | Clean spacing |
+| `tokens/zero-units` | tokens | safe (auto) | Simple, high-value |
+| `tokens/shorten-hex-colors` | tokens | safe (auto) | Simple, high-value |
+| `consolidate/shorthand-margin-padding` | consolidation | safe (auto) | High-impact consolidation |
+| `consolidate/deduplicate-last-wins` | consolidation | safe (auto) | Remove redundant declarations |
 | `style/important-used` | education | none | Basic awareness |
-| `layout/flex-properties-require-flex` | education | none | Common mistake detection |
-| `layout/grid-properties-require-grid` | education | none | Common mistake detection |
-
+| `layout/flex-properties-require-flex` | education | safe (force user to choose) | Common mistake detection |
+| `layout/grid-properties-require-grid` | education | safe (force user to choose) | Common mistake detection |
 ### Tier 2: Valuable Additions — 5 rules
 
-| rule_id | group | fixability | rationale |
+| rule_id | group | default_fixability | rationale |
 |---------|-------|------------|-----------|
 | `safety/misspelled-property` | safety | prompt | Catches typos |
-| `safety/typo-suspicious-units-and-tokens` | safety | none | Catches `2xp` etc. |
-| `format/sort-properties` | format | safe | Per spec requirement |
-| `tokens/remove-trailing-zeros` | tokens | safe | Clean numbers |
-| `modern/prefer-hex-colors` | modern | safe | Simple conversion |
-
+| `safety/typo-suspicious-units-and-tokens` | safety | safe (force user to choose) | Catches `2xp` etc. |
+| `format/sort-properties` | format | safe (auto) | Per spec requirement |
+| `tokens/remove-trailing-zeros` | tokens | safe (auto) | Clean numbers |
+| `modern/prefer-hex-colors` | modern | safe (auto) | Simple conversion |
 ### Tier 3: Defer to v1.1+ — remaining rules
 
 | rule_id | reason to defer |
 |---------|-----------------|
 | `safety/parse-error-*` (3 rules) | Subsume into invalid-syntax |
-| `safety/duplicate-property-in-block` | Complex; often intentional fallbacks |
-| `format/one-selector-per-line` | Lower priority formatting |
-| `format/max-nesting-depth` | Disabled by default |
-| `format/max-nesting-lines` | Disabled by default |
-| `tokens/remove-leading-zero` | Lower priority |
-| `tokens/remove-redundant-whitespace` | Edge cases |
-| `consolidate/shorthand-full-values` | May conflict with shorthand collapse |
-| `consolidate/duplicate-selectors` | Cascade-affecting; risky |
-| `consolidate/merge-adjacent-identical-selectors` | Added 2026-01-31; safe merge of adjacent identical selectors |
-| `modern/prefer-dvh-over-vh` | Browser support varies |
-| `modern/prefer-individual-transform-properties` | Complex analysis |
-| `modern/suggest-place-shorthand` | Prompt-only; lower priority |
-| `modern/suggest-logical-properties` | Added 2026-01-31; suggest logical properties |
-| `modern/container-queries-guidance` | Added 2026-01-31; container query patterns |
-| `modern/light-dark-guidance` | Added 2026-01-31; light-dark() function guidance |
-| `modern/avoid-px-except-approved-contexts` | Disabled by default; complex |
-| `style/important-requires-comment` | Can add in v1.1 |
-| `info/universal-selector-used` | Lower priority |
-| `info/too-many-colors` | Stylesheet-wide analysis |
-| `info/weird-z-index-usage` | Lower priority |
-| `layout/warn-float-or-clear` | Can add in v1.1 |
-| `layout/warn-display-table-layout` | Less common |
-| `debug/suspicious-debug-styles` | Can add in v1.1 |
-| `design/step-values` | Disabled by default; niche |
+| `safety/duplicate-property-in-block` | Complex; often intentional fallbacks | safe (force user to choose) | `format/one-selector-per-line` | Lower priority formatting |
+| `format/max-nesting-depth` | Disabled by default | prompt | `format/max-nesting-lines` | Disabled by default |
+| `tokens/remove-leading-zero` | Lower priority | safe (auto) | `tokens/remove-redundant-whitespace` | Edge cases |
+| `consolidate/shorthand-full-values` | May conflict with shorthand collapse | safe (auto) | `consolidate/duplicate-selectors` | Cascade-affecting; risky |
+| `consolidate/merge-adjacent-identical-selectors` | Added 2026-01-31; safe merge of adjacent identical selectors |  | `modern/prefer-dvh-over-vh` | Browser support varies |
+| `modern/prefer-individual-transform-properties` | Complex analysis | safe (auto) | `modern/suggest-place-shorthand` | Prompt-only; lower priority |
+| `modern/suggest-logical-properties` | Added 2026-01-31; suggest logical properties |  | `modern/container-queries-guidance` | Added 2026-01-31; container query patterns |
+| `modern/light-dark-guidance` | Added 2026-01-31; light-dark() function guidance |  | `modern/avoid-px-except-approved-contexts` | Disabled by default; complex |
+| `style/important-requires-comment` | Can add in v1.1 | safe (force user to choose) | `info/universal-selector-used` | Lower priority |
+| `info/too-many-colors` | Stylesheet-wide analysis | prompt | `info/weird-z-index-usage` | Lower priority |
+| `layout/warn-float-or-clear` | Can add in v1.1 | prompt | `layout/warn-display-table-layout` | Less common |
+| `debug/suspicious-debug-styles` | Can add in v1.1 | safe (force user to choose) | `design/step-values` | Disabled by default; niche |
 | `vars/unused-custom-properties` | Disabled by default |
 
 ---
@@ -106,7 +93,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/invalid-syntax
 - **group:** safety
 - **default_severity:** error
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: entire file parse result
@@ -116,7 +104,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/parse-error-unclosed-block
 - **group:** safety
 - **default_severity:** error
-- **fixability:** none
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: parser error subtype “unclosed block/braces”
@@ -126,7 +115,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/parse-error-unexpected-token
 - **group:** safety
 - **default_severity:** error
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: parser error subtype “unexpected token”
@@ -136,7 +126,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/parse-error-invalid-value
 - **group:** safety
 - **default_severity:** error
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: parser error subtype “invalid value”
@@ -146,7 +137,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/unrecognized-property
 - **group:** safety
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** none
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declaration property names
@@ -159,7 +151,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/misspelled-property
 - **group:** safety
 - **default_severity:** warning
-- **fixability:** prompt
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: unknown properties that are “close” to a known property (typo suggestion)
@@ -171,7 +164,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/typo-suspicious-units-and-tokens
 - **group:** safety
 - **default_severity:** error
-- **fixability:** none
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declaration values containing common typos
@@ -182,13 +176,16 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### safety/duplicate-property-in-block
 - **group:** safety
 - **default_severity:** error
-- **fixability:** prompt
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: duplicate property name inside the same `{ ... }` block
+- **params (session):**
+  - `resolution`: `forceUserChoice | alwaysKeepLast` (default `forceUserChoice`)
 - **notes:**
-  - You requested this as an error (strict).
-  - Prompt-only because duplicates may sometimes be intentional fallbacks.
+  - Strict duplicate detection.
+  - Default requires a user decision; max can auto-apply “alwaysKeepLast”.
 
 ---
 
@@ -197,7 +194,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### format/no-tabs
 - **group:** format
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: whitespace/indentation
@@ -207,41 +205,48 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### format/indent-2-spaces
 - **group:** format
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: indentation inside `{ ... }`
 - **params (session):**
   - `indentSize`: number (default 2)
+  - allowed: 1, 2, 3, 4, 5
 - **autofix_notes:**
   - Normalize indentation to indentSize spaces.
 
 ### format/multiple-declarations-per-line
 - **group:** format
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: more than one declaration on the same line
+- **params (session):**
+  - `maxDeclarationsPerLine`: `1|2|3|4|5|infinite` (default `1`)
 - **autofix_notes:**
-  - Split so each property starts on a new line.
+  - Split so each property starts on a new line until the configured max is satisfied.
 
 ### format/single-prop-single-line
 - **group:** format
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: selector blocks with exactly 1 declaration
+  - context: selector blocks with <= N declarations (N configurable)
 - **params (session):**
-  - `enabled`: boolean (default true)
+  - `maxDeclarationsOnSingleLine`: `1|2|3|4|5` (default `1`)
 - **autofix_notes:**
-  - If enabled, allow `.a { color: #fff; }`.
+  - If block size <= maxDeclarationsOnSingleLine, allow a compact one-line form.
 
 ### format/normalize-spaces
 - **group:** format
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: spacing around `:` `;` and after `,`
@@ -251,17 +256,21 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### format/one-selector-per-line
 - **group:** format
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: selector lists split by commas
+- **params (session):**
+  - `maxSelectorsPerLine`: `1|2|3|4|5|infinite` (default `1`)
 - **autofix_notes:**
-  - Put each selector (comma-separated) on its own line.
+  - Reflow selector lists so no line exceeds maxSelectorsPerLine selectors.
 
 ### format/sort-properties
 - **group:** format
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declarations inside a single block (do not cross blocks)
@@ -276,24 +285,28 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### format/max-nesting-depth
 - **group:** format
 - **default_severity:** warning
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** false
 - **applies_to:**
   - context: CSS nesting (native nesting blocks)
 - **params (session):**
   - `maxDepth`: number (default 3)
+  - allowed: 1..9
 - **notes:**
   - Warn if nesting depth exceeds maxDepth.
 
 ### format/max-nesting-lines
 - **group:** format
 - **default_severity:** warning
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** false
 - **applies_to:**
   - context: CSS nesting (nested block length)
 - **params (session):**
   - `maxLines`: number (default 30)
+  - allowed: 0..999
 - **notes:**
   - Warn if a single nested block exceeds maxLines.
 
@@ -304,17 +317,22 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### tokens/zero-units
 - **group:** tokens
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: numeric values
+- **params (session):**
+  - `properties`: `all | allowlist | denylist` (default `all`)
+  - `list`: list (default `[]`)
 - **autofix_notes:**
-  - Convert `0<unit>` → `0` when unit is redundant.
+  - Convert `0&lt;unit&gt;` → `0` when unit is redundant and allowed by config.
 
 ### tokens/remove-trailing-zeros
 - **group:** tokens
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: numeric values with decimals
@@ -325,7 +343,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### tokens/remove-leading-zero
 - **group:** tokens
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: decimals with leading zero
@@ -336,18 +355,23 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### tokens/shorten-hex-colors
 - **group:** tokens
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: hex colors
   - only: reducible 6-digit hex (`#ffffff` → `#fff`)
+- **params (session):**
+  - `expandToFullHex`: boolean (default false)
 - **autofix_notes:**
-  - Shorten only when equivalent.
+  - If expandToFullHex=false, shorten only when equivalent.
+  - If expandToFullHex=true, expand short hex to full hex.
 
 ### tokens/remove-redundant-whitespace
 - **group:** tokens
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: whitespace inside values where semantics unchanged
@@ -361,24 +385,29 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### consolidate/shorthand-margin-padding
 - **group:** consolidation
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: within a single declaration block
   - properties: `margin-*`, `padding-*`
+- **params (session):**
+  - `only`: `both | margin | padding` (default `both`)
 - **autofix_notes:**
-  - Combine longhands into shorthand when deterministic.
+  - Combine longhands into shorthand when deterministic and allowed by config.
 
 ### consolidate/shorthand-full-values
 - **group:** consolidation
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: shorthand properties using 1–3 values
   - properties: `margin`, `padding`, `inset`
 - **params (session):**
   - `expandTo`: number (default 4)
+  - `properties`: list (default `["margin","padding","inset"]`)
 - **autofix_notes:**
   - Expand shorthand so all values are explicit:
     - `margin: 1px 2px;` → `margin: 1px 2px 1px 2px;`
@@ -388,10 +417,13 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### consolidate/deduplicate-last-wins
 - **group:** consolidation
 - **default_severity:** warning
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declarations inside a single block where the same property appears multiple times
+- **params (session):**
+  - `resolution`: `forceUserChoice | alwaysKeepLast` (default `alwaysKeepLast`)
 - **autofix_notes:**
   - Remove earlier declarations of the same property, keeping only the last one.
   - Safe because CSS "last declaration wins" semantics are preserved.
@@ -402,12 +434,15 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### consolidate/duplicate-selectors
 - **group:** consolidation
 - **default_severity:** warning
-- **fixability:** prompt
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** false
 - **applies_to:**
   - context: stylesheet-level; same selector repeated in multiple blocks
+- **params (session):**
+  - `resolution`: `forceUserChoice | alwaysKeepLast` (default `forceUserChoice`)
 - **notes:**
-  - Warn for duplicate selectors. Prompt-only; merging may affect cascade/order.
+  - Merging selectors can affect cascade/order; default requires a user decision.
 
 ---
 
@@ -416,17 +451,21 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### modern/prefer-dvh-over-vh
 - **group:** modern
 - **default_severity:** info
-- **fixability:** prompt
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: values using `vh`
+- **params (session):**
+  - `mode`: `forceUserChoice | auto` (default `forceUserChoice`)
 - **notes:**
   - Prefer `dvh` over `vh`.
 
 ### modern/prefer-hex-colors
 - **group:** modern
 - **default_severity:** info
-- **fixability:** safe
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: color values not in hex
@@ -438,29 +477,36 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### modern/prefer-individual-transform-properties
 - **group:** modern
 - **default_severity:** info
-- **fixability:** prompt
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** false
 - **applies_to:**
   - context: `transform:` usage that could be expressed as individual properties
+- **params (session):**
+  - `onlyIfSingleFunction`: boolean (default true)
 - **notes:**
-  - Prefer `translate`, `rotate`, `scale` (prompt-only in v1).
+  - Prefer `translate`, `rotate`, `scale` when equivalent and allowed by config.
 
 ### modern/suggest-place-shorthand
 - **group:** modern
 - **default_severity:** info
-- **fixability:** prompt
+- **default_fixability:** safe (auto)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
-  - context: declaration blocks containing both `align-items` and `justify-items` (or `align-content` and `justify-content`, or `align-self` and `justify-self`)
+  - context: declaration blocks containing `align-*` + `justify-*` pairs
+- **params (session):**
+  - `requirePair`: boolean (default true)
+  - `allowedPlace`: `items | content | self | any` (default `any`)
 - **notes:**
-  - Suggest using `place-items`, `place-content`, or `place-self` shorthands.
-  - Prompt-only because values must match certain patterns for safe replacement.
-  - Example: `align-items: center; justify-items: center;` → suggest `place-items: center;`
+  - Use `place-items`, `place-content`, or `place-self` only when replacement is deterministic and behavior-preserving.
+  - Example: `align-items: center; justify-items: center;` → `place-items: center;`
 
 ### modern/avoid-px-except-approved-contexts
 - **group:** modern
 - **default_severity:** warning
-- **fixability:** prompt
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** false
 - **applies_to:**
   - context: values using `px`
@@ -512,7 +558,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### style/important-used
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** none
+- **max_fixability:** none
 - **enabled_by_default:** true
 - **applies_to:**
   - context: any declaration containing `!important`
@@ -522,7 +569,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### style/important-requires-comment
 - **group:** education
 - **default_severity:** warning
-- **fixability:** prompt
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: any declaration containing `!important`
@@ -531,6 +579,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - `requiredCommentMarker`: "cssreview: important-ok:"
   - `sameLineOnly`: true
   - `minReasonLength`: 3
+  - `autofixAddsPlaceholderReason`: boolean (default true)
 - **notes:**
   - Allowed example:
     - `color: red !important; /* cssreview: important-ok: override legacy */`
@@ -538,7 +587,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### info/universal-selector-used
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: selector contains universal selector `*`
@@ -548,25 +598,29 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### info/too-many-colors
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** false
 - **applies_to:**
   - context: entire stylesheet
 - **params (session):**
   - `maxDistinctColors`: number (default 20)
+  - allowed: 1..50
 - **notes:**
   - Emit info if more than maxDistinctColors distinct colors are detected.
 
 ### info/weird-z-index-usage
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: z-index usage
 - **params (session):**
   - `maxDistinctZIndex`: number (default 10)
   - `highValueThreshold`: number (default 999)
+  - allowed: 0..99999
 - **notes:**
   - Emit info if many distinct z-index values are used or very high values are used.
 
@@ -577,17 +631,21 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### layout/warn-float-or-clear
 - **group:** modern
 - **default_severity:** warning
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declarations using `float` or `clear`
+- **params (session):**
+  - `check`: `both | floatOnly | clearOnly` (default `both`)
 - **notes:**
   - Warn when float/clear are used.
 
 ### layout/warn-display-table-layout
 - **group:** modern
 - **default_severity:** warning
-- **fixability:** none
+- **default_fixability:** prompt
+- **max_fixability:** prompt
 - **enabled_by_default:** true
 - **applies_to:**
   - context: `display: table`, `display: table-cell`, etc.
@@ -597,7 +655,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### layout/flex-properties-require-flex
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: rule blocks that include flex-related properties
@@ -607,7 +666,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### layout/grid-properties-require-grid
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: rule blocks that include grid-related properties
@@ -621,13 +681,14 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### debug/suspicious-debug-styles
 - **group:** modern
 - **default_severity:** warning
-- **fixability:** none
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** true
 - **applies_to:**
   - context: declarations likely used as debugging
 - **params (session):**
-  - `suspiciousColors`: ["magenta", "lime"]
-  - `suspiciousPatterns`: ["outline: 1px solid red", "outline: 2px solid red"]
+  - `suspiciousColors`: ["magenta", "lime"] (to be extended)
+  - `suspiciousPatterns`: ["outline: 1px solid red", "outline: 2px solid red"] (to be extended)
 - **notes:**
   - Warn when debug-like styles appear (magenta/lime, red outline patterns, etc.).
 
@@ -638,7 +699,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### design/step-values
 - **group:** tokens
 - **default_severity:** warning
-- **fixability:** prompt
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** false
 - **applies_to:**
   - context: declaration values for properties:
@@ -658,7 +720,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - `largeStep`: 4
 - **notes:**
   - Logic per token:
-    - value <= 6 → allowed
+    - value &lt;= 6 → allowed
     - 7..20 → allowed only if even
     - 21+ → allowed only if divisible by 4
 
@@ -669,7 +731,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ### vars/unused-custom-properties
 - **group:** education
 - **default_severity:** info
-- **fixability:** none
+- **default_fixability:** safe (force user to choose)
+- **max_fixability:** safe (auto)
 - **enabled_by_default:** false
 - **applies_to:**
   - context: custom property definitions `--*` within the provided input
@@ -680,20 +743,21 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 
 ## 11) Template for adding new rules (copy/paste)
 
-### <rule_id>
-- **group:** <group>
-- **default_severity:** <off|info|warning|error>
-- **fixability:** <safe|prompt|none>
-- **enabled_by_default:** <true|false>
+### &lt;rule_id&gt;
+- **group:** &lt;group&gt;
+- **default_severity:** &lt;off|info|warning|error&gt;
+- **default_fixability:** &lt;safe (auto)|safe (force user to choose)|prompt|none&gt;
+- **max_fixability:** &lt;safe (auto)|safe (force user to choose)|prompt|none&gt;
+- **enabled_by_default:** &lt;true|false&gt;
 - **applies_to:**
-  - context: <where in CSS AST>
-  - properties/functions: <explicit list or pattern>
-  - excludes: <explicit list if needed>
+  - context: &lt;where in CSS AST&gt;
+  - properties/functions: &lt;explicit list or pattern&gt;
+  - excludes: &lt;explicit list if needed&gt;
 - **autofix_notes:** (only if safe)
-  - <conditions required to guarantee semantics-preserving transformation>
+  - &lt;conditions required to guarantee semantics-preserving transformation&gt;
 - **params (session):** (optional)
-  - <paramName>: <type> (default <value>)
+  - &lt;paramName&gt;: &lt;type&gt; (default &lt;value&gt;)
 - **notes:**
-  - <anything else the rule must guarantee>
+  - &lt;anything else the rule must guarantee&gt;
 
 END

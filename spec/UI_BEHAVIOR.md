@@ -65,9 +65,11 @@ When an issue is selected, show:
   - WHAT: what was detected
   - WHY: why it matters (LLM clarity / tokens / consolidation / modernity)
   - WHEN SAFE: constraints / caveats
-- If fixability = safe:
+- If fixability starts with `safe`:
   - show fix preview/diff
   - show "Select fix" checkbox (or equivalent action)
+- If fixability = `safe (force user to choose)`:
+  - require a user choice (or session config) before generating/applying patches
 - If fixability = prompt:
   - show "Copy LLM prompt" action
 
@@ -149,7 +151,7 @@ This action must be idempotent.
 ### 4.4 Copy modes
 
 Copy output (no comments): copies CSS after stripping tool comments only
-Copy output (with comments): copies CSS including tool comments if comments are ON; if comments are OFF, this copies the same as “no comments”
+Copy output (with comments): copies CSS including tool comments if comments are ON; if comments are OFF, this copies the same as “no comments"
 
 
 ## 5) Analysis + issue navigation behavior
@@ -226,7 +228,7 @@ Filters must include:
 
 severity: error / warning / info (multi-select)
 group: modern / consolidation / format / tokens / safety / education (multi-select)
-fixability: safe / prompt / none OR fixable/non-fixable
+fixability: safe (auto) / safe (force user to choose) / prompt / none
 search: matches rule_id and message text
 
 Filters apply instantly to the visible list.

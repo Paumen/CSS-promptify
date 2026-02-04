@@ -34,41 +34,7 @@ This repo contains both:
 **Source of truth:** `spec/PRD_BUILD_SPEC.md`
 
 ### Repository Structure
-```
-CSS-promptify/
-├── CLAUDE.md                          # This file (Claude Code instructions)
-├── README.md                          # Project overview
-├── .gitignore                         # Git exclusions
-│
-├── PROMPT-KIT/                        # LLM guidance
-│   ├── SYSTEM_PROMPT.md              # Working instructions
-│   ├── CHANGE_REQUEST_PROMPT.md      # Change request template
-│   ├── WORKFLOW.md                   # LLM workflow guide
-│   └── IMPLEMENTATION_CHECKLIST.md   # Implementation phases
-│
-├── spec/                              # Authoritative specifications
-│   ├── AUTHORITY.md                  # Document hierarchy
-│   ├── PRD_BUILD_SPEC.md             # PRIMARY SOURCE OF TRUTH
-│   ├── DATA_CONTRACTS.md             # Data shapes, enums, invariants (single source)
-│   ├── UI_BEHAVIOR.md                # UI state & interactions
-│   ├── UI_STYLE_GUIDE.md             # UI design & style guide
-│   ├── RULEBOOK_INDEX.md             # Rule catalog (19 rules in v1)
-│   ├── EXAMPLES.md                   # Before/after test cases
-│   ├── TYPES.md                      # TypeScript interfaces (single source)
-│   ├── PROPERTY_SORT_ORDER.md        # Property sort order spec
-│   ├── TERMINOLOGY.md                # Standardized terms + glossary
-│   ├── DECISIONS.md                  # Decision log (read-only)
-│   └── test-cases.json               # Machine-readable tests
-│
-└── app/                               # React app (to be created)
-    ├── src/
-    │   ├── parser/                   # CSS parsing
-    │   ├── rules/                    # Rule implementations
-    │   ├── engine/                   # Analysis engine
-    │   ├── ui/                       # React components
-    │   └── types/                    # TypeScript types
-    └── package.json
-```
+See `CLAUDE.md` for a detailed file structure overview.
 
 ---
 

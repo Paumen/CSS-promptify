@@ -1,7 +1,9 @@
+<llm_policy>
+You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review is required for any changes.
+</llm_policy>
 <!--
 STATUS: Authoritative reference for data shapes, enums, invariants, recompute model, and conflict handling
 SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
-LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
 -->
 
 # Data Contracts (v1)
@@ -9,6 +11,7 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 This file defines the **canonical data shapes** used by the CSS Review Tool (analyzer output, fix patches, applied-fix tracking) and the **invariants** that must always hold.
 
 > **This is the single source of truth for:**
+
 > - Enum definitions (§1)
 > - Invariants (§6)
 > - Recompute model (§4.3)
@@ -24,6 +27,7 @@ This file defines the **canonical data shapes** used by the CSS Review Tool (ana
 > **Note:** These are the authoritative enum definitions. Other documents should reference this section.
 
 ### 1.1 Severity
+
 Allowed values: `error | warning | info`
 
 - `error` = invalid CSS or must-fix to reach “clean”
@@ -31,9 +35,11 @@ Allowed values: `error | warning | info`
 - `info` = optional/educational; also used for “property not recognized”
 
 ### 1.2 Rule groups (minimum v1)
+
 Allowed values: `modern | consolidation | format | tokens | safety | education`
 
 ### 1.3 Fixability
+
 Allowed values: `safe (auto) | safe (force user to choose) | prompt | none`
 
 - `safe (auto)` = deterministic semantics-preserving fix exists and can be applied automatically once selected
@@ -41,9 +47,10 @@ Allowed values: `safe (auto) | safe (force user to choose) | prompt | none`
 - `prompt` = not safe to auto-fix; provide guidance / copy-ready LLM prompt
 - `none` = no fix and no prompt
 
-
 ### 1.4 Default/max fixability (rule-level)
+
 Both fields use the same value set as Fixability:
+
 - `default_fixability`: what the UI offers by default for a rule
 - `max_fixability`: upper bound for what the tool may do for that rule
 
@@ -52,13 +59,17 @@ Both fields use the same value set as Fixability:
 ## 2) Location model (used by Issues and Patches)
 
 ### 2.1 Position
+
 Positions are **1-based**.
+
 ```json
 { "line": 10, "column": 3 }
 ```
 
 ### 2.2 Range
+
 `start` inclusive, `end` exclusive (common editor model).
+
 ```json
 {
   "start": { "line": 10, "column": 3 },
@@ -71,6 +82,7 @@ Positions are **1-based**.
 ## 3) Issue contract (analyzer output)
 
 ### 3.1 Issue (canonical)
+
 ```json
 {
   "id": "iss_000123",
@@ -112,6 +124,7 @@ Positions are **1-based**.
 ```
 
 ### 3.2 Rules for presence/absence
+
 - If `fixability` starts with `safe` → `fix` MUST be present and contain ≥ 1 patch.
 - If `fixability` = `prompt` → `llm_prompt` MUST be present and `fix` MUST be absent.
 - If `fixability` = `none` → both `fix` and `llm_prompt` MUST be absent.
@@ -121,10 +134,13 @@ Positions are **1-based**.
 ## 4) Fix contract (patches + applied tracking + revert)
 
 ### 4.1 Patch operations (v1)
+
 v1 supports at least:
+
 - `replace_range` (required)
 
 Canonical patch:
+
 ```json
 {
   "op": "replace_range",
@@ -137,9 +153,11 @@ Canonical patch:
 ```
 
 ### 4.2 AppliedFix tracking (session)
+
 To support "apply selected fixes" AND "deselect to revert", the session tracks selected fix IDs.
 
 **SessionState (canonical)**:
+
 ```json
 {
   "original_css": "/* pasted css */",
@@ -149,6 +167,7 @@ To support "apply selected fixes" AND "deselect to revert", the session tracks s
 ```
 
 **AppliedFix record** (internal tracking per fix):
+
 ```json
 {
   "fix_id": "fix_000123",
@@ -172,6 +191,7 @@ To support "apply selected fixes" AND "deselect to revert", the session tracks s
 ```
 
 ### 4.3 Recompute rule (required)
+
 The output is derived, not mutated:
 
 ```
@@ -179,9 +199,11 @@ output_css = apply(selected_fix_ids, original_css, comments_enabled)
 ```
 
 Revert is automatic:
+
 - Unselect a fix ID → recompute output without that fix.
 
 ### 4.4 Deterministic apply order (required)
+
 To ensure stable results, fixes MUST be applied in a deterministic order. v1 requirement:
 
 1. **Primary sort key**: earliest patch start position (`range.start.line`, then `range.start.column`)
@@ -190,16 +212,19 @@ To ensure stable results, fixes MUST be applied in a deterministic order. v1 req
 This order must be consistent every run.
 
 ### 4.5 Conflicts (required behavior)
+
 If two selected fixes modify overlapping ranges (conflict), the system must behave deterministically and visibly.
 
 **v1 Decision:** Use Option A — prevent selecting both conflicting fixes.
 
 When a user attempts to select a fix that conflicts with an already-selected fix:
+
 1. The selection is blocked (second fix cannot be selected)
 2. UI shows a conflict notice explaining which fixes conflict
 3. User must deselect the first fix before selecting the second
 
 This ensures:
+
 - Behavior is deterministic
 - User explicitly chooses which fix to apply
 - No ambiguity about conflict resolution
@@ -226,18 +251,23 @@ If `fixability` = `prompt`, the Issue includes an `llm_prompt` object.
 ## 6) Invariants (must always be true)
 
 ### 6.1 Determinism
+
 Same CSS input + same session config + same selected fixes ⇒ same Issues, same severities, same output formatting.
 
 ### 6.2 Safety
+
 A safe fix MUST preserve selector specificity, rule order, and computed values (within deterministic equivalence like `0px → 0`). If equivalence cannot be guaranteed deterministically, fixability MUST be `prompt` or `none`.
 
 ### 6.3 User control
+
 No fixes are applied automatically; only via explicit user selection. Revert MUST be possible by unselecting fixes (output recomputation).
 
 ### 6.4 Tool comments only
+
 "Remove tool comments" MUST remove only comments that contain the marker prefix `cssreview:` and MUST NOT remove/alter user comments. Copy output must support both modes: with tool comments / without tool comments.
 
 ### 6.5 Modern CSS & unrecognized properties
+
 Unrecognized properties MUST produce `info` only and MUST NOT block other fixes. Rules MUST declare applicability to prevent firing on unintended properties/contexts.
 
 ---

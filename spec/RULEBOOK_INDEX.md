@@ -412,7 +412,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - Expand shorthand so all values are explicit:
     - `margin: 1px 2px;` → `margin: 1px 2px 1px 2px;`
 - **notes:**
-  - You requested explicit values for shorthands for clarity (LLM-friendly).
+  - Expands shorthand properties to their full, explicit form to improve clarity for LLM parsing.
 
 ### consolidate/deduplicate-last-wins
 - **group:** consolidation

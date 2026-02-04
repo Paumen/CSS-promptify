@@ -35,333 +35,238 @@ This product optimizes for **LLM context first**, then applies **rule-driven tok
 
 ---
 
-## 3) Goals & non-goals
+## 3) Goals & Non-Goals
 
-### 3.1 Goals 
-- Accept pasted CSS and analyze modern CSS correctly (no false “invalid” for new syntax).
-- Flag issues as error / warning / info with clear WHAT / WHY / WHEN SAFE explanations.
-- Offer selective, safe, reversible fixes with diff preview (no silent changes).
-- Output LLM-friendly structured CSS by default, with rule-driven token reductions that keep structure.
-- Provide deterministic results (same input + same session config → same issues/output).
-- Support inline explanation comments for applied fixes (toggle on/off, removable).
-- Enable fast review workflow: paste → analyze → filter → apply/revert → copy (mobile-friendly).
-- For non-safe fixes, generate copy-ready LLM prompts with constraints + relevant snippets.
+### 3.1 Goals (v1)
+- Implement a web-based, mobile-friendly CSS review tool.
+- Analyze pasted CSS, identifying issues and offering safe, selective fixes.
+- Output clean, structured CSS optimized for LLM comprehension.
+- For non-safe fixes, generate copy-ready LLM prompts.
+- Provide a fast, intuitive workflow: paste → analyze → select fixes → copy.
 
-### 3.2 Not planned (explicit)
-These are not planned for v1, v2, v3 (unless explicitly changed later in DECISIONS):
-- Auth/accounts (logins, user profiles)
-- Project-wide analysis (cross-file; CSS+HTML usage; unused selectors)
-- Server-side analysis / hosted API (sending CSS to a backend service)
-- No preprocessor support (SASS/LESS).
-- No CLI-first workflow (CLI may come later).
+### 3.2 Non-Goals (Out of Scope for v1-v3)
+- No user accounts or authentication.
+- No project-wide or cross-file analysis.
+- No server-side analysis or hosted API.
+- No preprocessor support (Sass/Less).
+- No CLI-first workflow.
 
 ---
 
-## 4) Target users
-- **Primary:** frontend devs + design system maintainers who want modern, clean, LLM-ready CSS.
-- **Secondary:** people **learning CSS** who need explainable feedback, not just red squiggles.
+## 4) Target Users
+- **Primary:** Frontend developers and design system maintainers who want modern, clean, LLM-ready CSS.
+- **Secondary:** Learners who need explainable feedback on their CSS.
 
 ---
 
-## 5) Product principles (non-negotiable)
-1. **Modern-first parsing:** do not treat new CSS as invalid just because it’s new.
-2. **Explainable rules:** every issue must explain “what”, “why”, and “when safe”.
-3. **User control:** no silent changes; every fix is opt-in and reversible.
-4. **Structure over minify:** keep CSS readable/structured for LLMs by default.
-5. **Rule-driven optimization:** token/format improvements come from explicit rules (not hidden magic).
-6. **Deterministic output:** same input + same session settings → same issues and same output.
+## 5) Product Principles (Non-Negotiable)
+1.  **Modern-First Parsing:** The parser must recognize modern CSS syntax (e.g., `container-*`, `light-dark()`) and not flag it as invalid.
+2.  **Explainable Rules:** Every issue must clearly explain the **What** (the finding), **Why** (the impact), and **When Safe** (the constraints for fixing).
+3.  **User Control & Reversibility:** No silent changes. Every fix is opt-in, previewable, and cleanly reversible by the user.
+4.  **Structure Over Minification:** The default output must be well-structured for LLM comprehension. Token reduction is a secondary goal, achieved via explicit, structure-preserving rules.
+5.  **Deterministic Output:** The tool must be idempotent. Given the same input CSS and the same session configuration, it will always produce the exact same set of issues and the same output CSS.
+6.  **Fast, Focused Workflow:** The core UX loop (paste, analyze, select, copy) must be fast and efficient, especially on mobile.
 
 ---
 
-## 6) Definitions (controlled vocabulary)
+## 6) Definitions & Data Contracts
 
-> For canonical data shapes and TypeScript types, see:
-> - `spec/DATA_CONTRACTS.md` — enums, invariants, data shapes
-> - `spec/TYPES.md` — TypeScript interfaces
-> - `spec/TERMINOLOGY.md` — preferred terms and naming conventions
-
-- **Rule:** deterministic check on the CSS AST. Emits zero or more issues.
-- **Issue:** finding with `severity`, `rule_id`, `group`, `message`, `location`, `logic`, optional `fix`.
-- **Fix:** deterministic transformation that preserves semantics within defined safety constraints.
-- **Safe fix:** semantics-preserving fix. Can be **safe (auto)** or **safe (force user to choose)**, but is always user-selected.
-- **Inline explanation comments:** brief comments inserted to document applied fixes using dedicated syntax.
-- **Rule group:** a logical grouping of rules (e.g., modern / consolidation / format / tokens / safety / education).
-- **Session config:** current UI settings (rule toggles, severities, rule params) that reset on refresh.
+> For all official definitions, terminology, and data contracts (e.g., `Issue`, `Rule`, `Fix`), refer to the following canonical sources:
+> - `spec/TERMINOLOGY.md` — Preferred terms and naming conventions.
+> - `spec/DATA_CONTRACTS.md` — Enums, invariants, and data shapes.
+> - `spec/TYPES.md` — TypeScript interfaces.
 
 ---
 
-## 7) Scope (v1 vs later)
+## 7) Scope & Versioning
 
-### 7.1 In scope (v1)
-- Web UI + mobile support
-- CSS input area with syntax highlighting (paste in / view out; no editing workflow beyond paste)
-- Analyzer (AST parse + rules)
-- Issue list with filtering and logic panel
-- Selective fixes + diff preview + revert
-- Inline comments: toggle, copy with/without, remove
-- Stats: lines, characters
-- Property sorting (safe fix; info-only; enabled by default)
-- At least "tier 1" rules and minimum of 15 rules.
+### 7.1 In Scope (v1)
+- Web UI with mobile support.
+- CSS input area (paste-only) and syntax-highlighted output view.
+- Core analyzer engine (AST parser + rule runner).
+- An initial set of at least 15 rules from "Tier 1."
+- Issues panel with filtering by severity, group, and fixability.
+- Selective fixes with diff preview and revert functionality.
+- A "Rule Logic" panel showing WHAT/WHY/WHEN SAFE for each issue.
+- Toggleable inline comments for applied fixes (e.g., `/* cssreview: ... */`).
+- Stats display (lines, characters, and a token estimate).
+- Property sorting rule (safe fix, info-level, on by default).
 
-### 7.2 Version 2 (v2)
-- Includes all v1 goals and below.
-- Provide LLM-friendly prompts for tricky fixes that shouldn’t be automated.
-- “paste from clipboard” button for input.
-- At least "tier 1" and "tier 2" rules and minimum of 25 rules.
-- This scope and list may not yet be complete.
+### 7.2 New in v2
+- Generate LLM-friendly prompts for complex fixes that cannot be safely automated.
+- "Paste from clipboard" button for faster input.
+- Expand rule set to at least 25 total rules (Tier 1 & 2).
 
-### Version 3 (v3)
-  - Includes all v1 and v2 goals and below.
-  - Show stats: **tokens** accurate estimate or exact, not just heuristic rule of thumb (before/after).
-  - Profiles + parameter sliders:
-    - modern vs compatibility
-    - context vs token focus
-    - structured vs compact formatting
-  - At least "tier 1" and "tier 2" rules and minimum of 35 rules.
-  - Optional: Persistance user severity settings across sessions.
-  - This scope and list is not yet complete.
-
-### Version 4 (v4)
-  - Includes all goals all previous versions and below.
-  - This scope and list is not yet complete.
+### 7.3 Potential Future Features (v3 and beyond)
+- **Accurate Token Counting:** Display exact token counts (before/after) using a precise tokenizer.
+- **Configuration Profiles:** Allow users to switch between presets (e.g., "Modern vs. Compatibility," "Max Context vs. Min Tokens").
+- **Persistence:** Optionally save user severity preferences across sessions.
+- **Expanded Rule Set:** Grow to 35+ rules.
 
 ---
 
-## 8) UX flows (what the user does)
+## 8) UX Flows (What the User Does)
 
-> UX clarification: v1 is paste → analyze → select fixes → copy. No “manual code editing” workflow.
+> UX clarification: v1 is paste → analyze → select fixes → copy. There is no manual code editing workflow.
 
-### 8.1 Main flow (review + selective fix)
-1. Paste CSS into input
-2. Click **Analyze**
-3. See issues grouped by severity, filter and sort as desired
-4. Click an issue → highlight code + show logic (“what/why/when safe”)
-5. Select fixes to apply (single / by rule / by group / by severity)
-6. Preview diff
-7. Apply (or instantly update output upon selection; see FR-FIX section)
-8. toggle inline comments ON
-9. Copy output (with or without comments)
+### 8.1 Main Flow (Review & Selective Fix)
+1.  Paste CSS into the input panel.
+2.  Click **Analyze**.
+3.  View issues, grouped by severity. Filter or sort them as needed.
+4.  Click an issue to highlight the relevant code and see its logic (What/Why/When Safe).
+5.  Select fixes to apply (individually, by rule, by group, or by severity).
+6.  Preview the diff of pending changes.
+7.  Apply the fixes to the output panel.
+8.  Toggle inline explanation comments ON to see what changed.
+9.  Copy the final CSS to the clipboard (with or without comments).
 
-### 8.2 “Tricky fix” flow (LLM prompt)
-- For issues marked `prompt` (not safe to auto-fix):
-  - user clicks **Generate LLM prompt**
-  - user copies prompt + relevant CSS snippet
-  - tool keeps output formatting requirements explicit in the prompt
+### 8.2 "Tricky Fix" Flow (LLM Prompt Generation)
+- For issues marked as not safe to automate (`prompt`):
+  - User clicks a **Generate LLM Prompt** button.
+  - The tool generates a prompt containing the task, constraints, and the relevant CSS snippet.
+  - User copies the complete prompt for use in an LLM.
 
-### 8.3 Revert flow (must support)
-- After applying fixes, user can:
-  - uncheck one fix → tool reverts it cleanly
-  - keep other applied fixes intact
-  - comments update accordingly
+### 8.3 Revert Flow
+- After applying fixes, the user can:
+  - Uncheck a single fix.
+  - The tool cleanly reverts that specific change, leaving other applied fixes intact.
+  - Inline comments are updated automatically.
 
 ---
 
-## 9) Functional requirements 
+## 9) Functional Requirements
 
-### 9.1 Editor & input
-- **FR-IN-01:** Provide a syntax-highlighted CSS input/output view with line numbers. (No manual editing workflow beyond paste.)
-- **FR-IN-02:** Paste input.
-- **FR-IN-03:** “Analyze” runs the rule engine and returns issues + stats.
-- **FR-IN-04:** No automatic formatting on paste; changes occur only when user selects/apply fixes.
+### 9.1 Editor & Input
+- **FR-IN-01:** Provide syntax-highlighted CSS input/output views with line numbers.
+- **FR-IN-02:** Support pasting CSS content into the input view.
+- **FR-IN-03:** An "Analyze" action runs the rule engine, populating the issues list and stats.
+- **FR-IN-04:** No automatic formatting on paste. Changes only occur when the user selects and applies fixes.
 
-### 9.2 Parsing (modern CSS)
-- **FR-PARSE-01:** Parser must support modern CSS constructs and keep accurate source locations.
-- **FR-PARSE-02:** Must preserve comments unless user explicitly removes tool-added comments.
+### 9.2 Parsing (Modern CSS)
+- **FR-PARSE-01:** The parser must correctly handle modern CSS constructs (e.g., nesting, `light-dark()`) and maintain accurate source locations.
+- **FR-PARSE-02:** The parser must preserve user comments. Tool-generated comments are handled separately.
 
-### 9.3 Rule engine & issue model
-- **FR-RULE-01:** Deterministic output: same input + same session config → same issues and fixes.
-- **FR-RULE-02:** Each issue includes:
-  - `rule_id`, `severity`, `group`, `message`, `location`
-  - `logic`: **WHAT / WHY / WHEN SAFE**
-  - `fixability`: `safe (auto)` | `safe (force user to choose)` | `prompt` | `none`
-  - optional `fix` (for safe*) or `llm_prompt` (for prompt)
+### 9.3 Rule Engine & Issue Model
+- **FR-RULE-01:** The engine must be deterministic, as defined in the Product Principles.
+- **FR-RULE-02:** Each issue must conform to the data contract in `spec/DATA_CONTRACTS.md`, including `rule_id`, `severity`, `group`, `message`, `location`, `logic`, and `fixability`.
 
-### 9.4 Rule settings (session only) + groups
-- **FR-RCONF-01:** Rules are shown grouped logically (at minimum):
-  - `modern`, `consolidation`, `format`, `tokens`, `safety`, `education`
-- **FR-RCONF-02:** User can toggle a rule ON/OFF.
-- **FR-RCONF-03:** User can cycle severity per rule via quick UI (e.g., click to cycle):
-  - `off → info → warning → error → off`
-- **FR-RCONF-04:** User can set severity/toggle for an entire group at once.
-- **FR-RCONF-05:** Session only in v1 (no saved project profile).
+### 9.4 Rule Settings (Session Only)
+- **FR-RCONF-01:** Rules must be displayed in logical groups (e.g., `modern`, `consolidation`, `format`).
+- **FR-RCONF-02:** The user can toggle individual rules ON or OFF for the current session.
+- **FR-RCONF-03:** The user can cycle the severity of a rule (`off → info → warning → error`).
+- **FR-RCONF-04:** The user can configure an entire group at once (e.g., set all "format" rules to "off").
+- **FR-RCONF-05:** All settings are session-only in v1 and reset on page refresh.
 
-### 9.5 Fix selection + apply + revert (core)
-- **FR-FIX-01:** Fixes are never auto-applied. User selects them.
-- **FR-FIX-02:** User can apply fixes:
-  - per issue
-  - per rule
-  - per group
-  - per severity
-- **FR-FIX-03:** Diff preview before apply (single fix or batch).
-- **FR-FIX-04 (updated model):** v1 may implement apply/revert by **recomputing output from original input + selected fixes**:
-  - Selecting a fix updates output draft (either immediately or via an “Apply” button).
-  - Unselecting a fix reverts it by recomputing output without that fix.
-  - Output must be deterministic with a stable fix-application order.
-- **FR-FIX-05:** Applying/reverting is idempotent and stable.
+### 9.5 Fix Selection, Apply, & Revert (Core)
+- **FR-FIX-01:** Fixes are never applied automatically. The user must select them.
+- **FR-FIX-02:** The user can select fixes per-issue, per-rule, per-group, or per-severity.
+- **FR-FIX-03:** A diff preview must be available for both single and batched fixes.
+- **FR-FIX-04 (Implementation Model):** The output is generated by recomputing from the original input plus the set of selected fixes. Unselecting a fix reverts it by recomputing the output without that fix. This ensures a stable and predictable process.
+- **FR-FIX-05:** Applying and reverting fixes must be idempotent and stable.
 
-### 9.6 Inline explanation comments (brief + clear + reversible)
-- **FR-COMMENT-01:** Inline comments are **toggled** by the user (ON/OFF) and are clearly visible in UI.
-- **FR-COMMENT-02:** Inline comments are inserted only for **selected/applied** fixes and only when toggle is ON.
-- **FR-COMMENT-03:** Comment syntax must be dedicated and easy to detect including highlight color:
-  - `/* cssreview: ... */`
-- **FR-COMMENT-04:** Comments must be max. 40 characters but include:
-  - what changed
-  - what the old property/value was (when applicable)
-  - rule_id (optional but useful)
-- **FR-COMMENT-05:** User can remove all tool comments in one action, without touching user comments.
-- **FR-COMMENT-06:** If the user reverts a fix, its related inline comment(s) are removed/updated accordingly.
+### 9.6 Inline Explanation Comments
+- **FR-COMMENT-01:** Inline comments can be toggled ON/OFF by the user.
+- **FR-COMMENT-02:** Comments are inserted only for applied fixes and only when the toggle is ON.
+- **FR-COMMENT-03:** Comment syntax must be unique and easily detectable: `/* cssreview: ... */`.
+- **FR-COMMENT-04:** Comments should be concise (target <80 characters) and explain the change, optionally including the `rule_id`.
+- **FR-COMMENT-05:** The user can remove all tool-generated comments in one action without affecting user comments.
+- **FR-COMMENT-06:** If a fix is reverted, its associated comment is automatically removed.
 
-**Example format (end-of-line):**
+**Example:**
 ```css
-.button { display: flex; } /* autofix: format/single-prop: kept prop on one line */
+/* cssreview: shorthand-margin: Collapsed margin: 0px 8px 0px 8px */
+margin: 0 8px;
 ```
 
-**Example format (multi-line):**
-```css
-.button {
-  margin: 8px; /* autofix: value/multiple4: was 7px */
-}
-```
+### 9.7 Copy Output
+- **FR-OUT-01:** Provide one-click "Copy" buttons for the output, both with and without comments.
+- **FR-OUT-02:** Show a confirmation (e.g., toast) after a successful copy.
 
-### 9.7 Copy output (with/without comments)
+### 9.8 Filtering & Logic Panel
+- **FR-ISSUE-01:** The issue list must be grouped by severity with counts for each group.
+- **FR-ISSUE-02:** Support filtering the issue list by `severity`, `group`, `fixability`, and free text search.
+- **FR-ISSUE-03:** Selecting an issue must highlight the corresponding code and display the rule's logic panel (WHAT/WHY/WHEN SAFE).
+- **FR-ISSUE-04:** The UI should clearly show the proposed change (diff), making generic examples in the logic panel unnecessary.
 
-**FR-OUT-01:** One-click copy to clipboard:
+### 9.9 LLM Prompt Generation
+- **FR-LLMP-01:** Rules that are not safe to automate are marked accordingly.
+- **FR-LLMP-02:** For these rules, the UI offers a "Generate LLM Prompt" action.
+- **FR-LLMP-03:** The generated prompt must include a clear task, constraints, the target improvement, the relevant CSS snippet, and expected output formatting.
 
-“Copy output (no comments)”
-“Copy output (with comments)”
+### 9.10 Stats
+- **FR-STAT-01:** Display "before" and "after" stats for line count and character count.
+- **FR-STAT-02:** Display a "before" and "after" token estimate. 
 
-**FR-OUT-02:** Copy shows confirmation (toast/snackbar).
+---
 
-### 9.8 Filtering + logic panel
-
-**FR-ISSUE-01: **Issue list grouped by severity with counts.
-**FR-ISSUE-02:** Filters:
-
-severity
-group
-fixability
-search by rule_id/text
-
-
-**FR-ISSUE-03:** Selecting an issue highlights code + opens Rule logic panel with:
-
-WHAT (what detected)
-WHY (why it matters: modernity/consolidation/LLM clarity/tokens)
-WHEN SAFE (constraints/caveats)
-
-
-**FR-ISSUE-04:** No generic examples required if the UI can clearly show the relevant part of the user’s code + the proposed output/diff.
-
-### 9.9 LLM prompt generation (for hard rules)
-
-**FR-LLMP-01:** Some rules are marked “not safe to auto-fix”.
-**FR-LLMP-02:** For those, UI offers Generate LLM prompt.
-**FR-LLMP-03:** Prompt must include:
-
-task statement
-constraints (preserve cascade/order)
-target improvements
-the relevant CSS snippet(s)
-expected output formatting (LLM-friendly structure)
-
-
-### 9.10 Stats (tokens, lines, chars)
-
-**FR-STAT-01:** Show before/after:
-
-line count
-character count
-Token estimate
-
-**FR-STAT-02:** Token estimate. Is consistent and repeatable (exact tokenizer not required in v1).
-
-
-## 10) Non-negotiable constraints (hard rules)
+## 10) Non-Negotiable Constraints (Hard Rules)
 ### 10.1 Safety
+- **C-SAFE-01:** Auto-fixes must not change selector specificity or CSS rule order.
+- **C-SAFE-02:** If deterministic semantic equivalence cannot be guaranteed, the fix must not be classified as safe.
 
-**C-SAFE-01:** Auto-fixes must not change selector specificity or rule order.
-**C-SAFE-02:** If deterministic semantic equivalence cannot be guaranteed, do not auto-fix.
+### 10.2 Modern CSS Recognition
+- **C-MODERN-01:** The tool must not treat valid, modern CSS syntax as an error.
+- **C-MODERN-02:** If a property is not recognized, it should emit an `info`-level issue at most (e.g., "Property not recognized; may be new or experimental.").
+- **C-MODERN-03:** Rules must explicitly declare the properties/contexts they apply to, preventing accidental application to unrelated syntax.
 
-### 10.2 Modern CSS recognition & “unrecognized property”
+### 10.3 Formatting Philosophy
+- **C-LLM-01:** The default output format is structured for LLM comprehension, not minified for size.
+- **C-LLM-02:** Token reduction is achieved through explicit, documented rules, not blanket minification.
 
-**C-MODERN-01:** The tool must not treat valid modern syntax as invalid.
-**C-MODERN-02:** If a property is not recognized by the tool, emit info only:
+---
 
-“Info: property not recognized (may be new/experimental).”
+## 11) Rulebook Design
+### 11.1 Rule Structure
+Rules are defined as a hybrid of:
+- **Declarative Metadata:** A simple structured data file (e.g., YAML, JSON) defining the `rule_id`, `group`, default `severity`, `fixability`, and applicable contexts.
+- **Implementation Logic:** Code (e.g., TypeScript) that performs the AST traversal, detection, and patch creation.
 
-**C-MODERN-03:** Rules must explicitly state which properties/contexts they apply to, to avoid accidental application.
+### 11.2 Rule Applicability
+- Each rule's metadata must declare its scope (e.g., properties, functions, at-rules it affects) to ensure it only runs where intended.
 
-### 10.3 Formatting philosophy
+---
 
-**C-LLM-01:** Default formatting is structured for LLM comprehension, not minified.
-**C-LLM-02:** Token improvements come from explicit rules (e.g., tabs→spaces, whitespace normalization, shorthands) rather than blanket minification.
+## 12) Formatting & Tokenization Rules (LLM-Friendly)
+- **Baseline Style:** 2-space indentation, no tabs, stable structure, and predictable line breaks.
+- **Token Reduction:** Achieved via specific, configurable rules, such as:
+  - `tabs-to-spaces`
+  - `normalize-whitespace`
+  - `zero-value-no-unit` (`0px` → `0`)
+  - `hex-shorthand` (`#ffffff` → `#fff`)
+  - `sort-properties` (deterministic order)
 
-## 11) Rulebook design (authoring model = Hybrid “C”)
-### 11.1 Rule structure
-Rules are authored as a hybrid:
+---
 
-Declarative metadata (simple file): rule_id, group, default severity, default_fixability, max_fixability, applicable contexts
-Implementation logic (code): AST traversal, detection, patch creation
+## 13) Data Model (Canonical)
 
-### 11.2 Rule must declare applicability
-Each rule must include an “applies_to” section:
+> See `spec/DATA_CONTRACTS.md` and `spec/TYPES.md` for all data model definitions.
 
-properties/functions/at-rules affected
-contexts (e.g., only inside declaration blocks, only for colors, only for layout)
+---
 
-## 12) Formatting rules (LLM-friendly, rule-driven)
-Baseline output style:
-
-2 spaces indentation
-no tabs
-stable structure
-predictable line breaks
-
-Token minimization is achieved by specific rules such as:
-
-tabs → spaces
-remove excessive spaces
-allow single-line for single-property selectors (configurable rule param)
-shorten values when safe (0px → 0, #ffffff → #fff)
-property sorting (deterministic; info-only; user-selectable)
-
-
-## 13) Data model (canonical)
-
-See DATA_CONTRACTS.md for Issue/Fix model.
-See TYPES.md for TS types.
-
-## 14) Acceptance criteria (testable)
+## 14) Acceptance Criteria (Testable)
 ### 14.1 Modern CSS
+- **AC-01:** Pasting CSS with `place-items`, `container-type`, or `light-dark()` does not produce "unknown property" errors.
+- **AC-02:** An unrecognized property (e.g., `--my-new-prop: oklch(50% 0.15 250)`) emits an `info`-level issue and does not block other fixes.
 
-AC-01: place-items, container-type, light-dark() are not flagged as unknown.
-AC-02: Unrecognized property emits info only and never blocks fixes.
+### 14.2 Rule Settings
+- **AC-03:** Toggling a rule off and re-analyzing removes its issues from the list.
+- **AC-04:** Setting a rule group to "off" and re-analyzing removes all issues from that group.
+- **AC-05:** Changing a rule's severity is reflected in the issue list upon re-analysis.
 
-### 14.2 Rule settings (session)
+### 14.3 Fixing & Revert
+- **AC-06:** A user can select a fix, see the output update, then unselect it, and the output correctly reverts to its previous state.
+- **AC-07:** Unselecting one fix does not affect other, unrelated selected fixes.
+- **AC-08:** After multiple select/unselect cycles, the output remains stable and correct.
 
-AC-03: User can toggle one rule off and rerun analysis; issues from that rule disappear.
-AC-04: User can set an entire rule group to “off”; all group issues disappear.
-AC-05: User can cycle severity per rule quickly (click/toggle) and rerun; severities update immediately.
-
-### 14.3 Fixing + revert
-
-AC-06: User can select a fix, see output updated, then unselect it and output returns accordingly.
-AC-07: Unselecting one fix does not remove other selected fixes.
-AC-08: After select/unselect cycles, output remains stable (no formatting drift).
-
-### 14.4 Inline comments
-
-AC-09: When comments toggle is ON, selected fixes add brief inline comments with old value/property reference.
-AC-10: Copy output supports both with and without comments.
-AC-11: “Remove tool comments” removes only /* cssreview: ... */, preserves user comments.
+### 14.4 Inline Comments
+- **AC-09:** When the comments toggle is ON, applying a fix adds a `/* cssreview: ... */` comment to the output.
+- **AC-10:** The "Copy" buttons work correctly for both with and without comments.
+- **AC-11:** A "Remove tool comments" action strips all `cssreview:` comments but preserves user-written comments.
 
 ### 14.5 Stats
-
-AC-12: UI shows tokens/lines/chars before and after. Values update after selecting/unselecting fixes.
+- **AC-12:** The stats panel (tokens/lines/chars) updates accurately as fixes are selected and unselected.
 
 ### 14.6 Mobile
-
-AC-13: On mobile, user can paste, analyze, filter, select/unselect fixes, and copy without UI blocking actions.
-
+- **AC-13:** The entire core workflow (paste, analyze, filter, select, copy) is usable on a standard mobile viewport without horizontal scrolling or blocked actions.
 
 END

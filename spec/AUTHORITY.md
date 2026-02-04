@@ -1,6 +1,8 @@
+<llm_policy>
+Follow this hierarchy strictly. If documents conflict, the higher-ranked document wins.
+</llm_policy>
 <!--
 STATUS: Authoritative reference for document hierarchy
-LLM_POLICY: Follow this hierarchy strictly. If documents conflict, higher-ranked document wins.
 -->
 
 # Document Authority
@@ -57,21 +59,25 @@ When starting work or building context, read files in this order:
 ## File Purposes
 
 ### Core Specifications
+
 - **PRD_BUILD_SPEC.md**: What to build, why, constraints, acceptance criteria
 - **DATA_CONTRACTS.md**: Exact data shapes, enums, invariants, recompute model, conflict handling (single source of truth for these)
 - **UI_BEHAVIOR.md**: How the UI behaves, user interactions
 - **RULEBOOK_INDEX.md**: Every rule with metadata (severity, fixability, applies_to)
 
 ### Supporting Documents
+
 - **EXAMPLES.md**: Concrete before/after cases (serve as tests)
 - **TYPES.md**: TypeScript interfaces matching DATA_CONTRACTS (single source for TypeScript types)
 - **PROPERTY_SORT_ORDER.md**: Canonical property ordering for sort rule
 - **TERMINOLOGY.md**: Which terms to use (and which to avoid) + glossary definitions
 
 ### Reference (Read-Only)
+
 - **DECISIONS.md**: Why decisions were made (human-edited only)
 
 ### Archived/Removed
+
 - ~~GLOSSARY.md~~: Merged into TERMINOLOGY.md (2026-01-31)
 - ~~OPEN_QUESTIONS.md~~: Deleted - all questions resolved, see DECISIONS.md (2026-01-31)
 
@@ -79,14 +85,16 @@ When starting work or building context, read files in this order:
 
 ## LLM Instructions
 
-### DO:
+### DO
+
 - Follow hierarchy strictly
 - Match data shapes exactly
 - Validate against examples
 - Ask if unclear
 - Update specs before changing behavior
 
-### DO NOT:
+### DO NOT
+
 - Invent features not in spec
 - Change DECISIONS.md
 - Resolve OPEN_QUESTIONS without human input

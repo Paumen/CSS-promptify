@@ -20,7 +20,7 @@ Complete each phase before moving to the next.
 | Phase 2: Fix Application Engine | ✅ Complete | 100% |
 | Phase 3: UI Implementation |  🔄 In Progress | ~85% |
 | Phase 4: Testing & Polish | 🔄 In Progress | ~40% |
-| Phase 5: Future (v1.1+) | ⏳ Not Started | 0% |
+| Phase 5: Future (v2) | ⏳ Not Started | 0% |
 
 **v1.0 Release Status:** Core functionality complete. Syntax highlighting added. Testing and polish remaining.
 
@@ -40,18 +40,6 @@ Complete each phase before moving to the next.
 - [x] Configure TypeScript with strict mode
 - [x] Set up ESLint
 - [x] Add basic folder structure:
-  ```
-  app/
-  ├── src/
-  │   ├── types/        # From spec/TYPES.md
-  │   ├── parser/       # CSS parsing
-  │   ├── rules/        # Rule implementations
-  │   ├── engine/       # Analysis engine
-  │   ├── state/        # Session state management
-  │   └── ui/           # React components
-  ├── package.json
-  └── vite.config.ts
-  ```
 - [x] Copy TypeScript types from spec/TYPES.md
 - [x] Verify build works
 
@@ -99,19 +87,11 @@ Complete each phase before moving to the next.
 - [x] Implement `tokens/remove-trailing-zeros` (1.0 → 1)
 - [x] Write tests matching spec/EXAMPLES.md
 
-> **Note:** `tokens/remove-redundant-whitespace` is Tier 3 (deferred to v1.1+).
 
 ### 1.6 Consolidation Rules (Safe Fixes)
 - [x] Implement `consolidate/shorthand-margin-padding`
 - [x] Implement `consolidate/deduplicate-last-wins`
 - [x] Write tests matching spec/EXAMPLES.md
-
-> **Note:** These rules are Tier 3 (deferred to v1.1+):
-> - `consolidate/merge-adjacent-identical-selectors`
-> - `modern/container-queries-guidance`
-> - `modern/light-dark-guidance`
-> - `modern/suggest-logical-properties`
-> See `spec/RULEBOOK_INDEX.md` §0.4 for tier assignments.
 
 ### 1.7 Modern CSS Rules (Tier 2)
 - [x] Implement `modern/prefer-hex-colors` (fixability: safe)
@@ -191,14 +171,14 @@ Complete each phase before moving to the next.
   - [x] Modern units support (cqi, dvh, fr, svw, lvh, etc.)
   - [x] Line numbers (not copied with output)
   - [x] Nesting depth colors for braces (6 levels)
-  - [x] Tool comments vs user comments differentiation
-  - [x] Severity highlighting for issue locations (fill color + scrollbar markers)
+  - [ ] Tool comments vs user comments differentiation
+  - [x] Severity highlighting for issue locations (fill color line number)
   - [x] Toggle color matches tool comment syntax color
   - [x] Colors defined as CSS custom properties for easy adjustment
 - [x] Show before/after stats in header
 
 ### 3.4 Issues Panel (IssuesPanel)
-- [x] List issues grouped by severity
+- [ ] List issues grouped by severity (grouping not yet fully working)
 - [x] Show counts per severity (badges)
 - [ ] Implement filters (severity, group, fixability, search) per FR-ISSUE-02
 - [x] Make issues clickable
@@ -230,7 +210,7 @@ Complete each phase before moving to the next.
 - [x] "Copy output (no comments)" button
 - [x] "Copy output (with comments)" button
 - [x] Copy shows confirmation toast/snackbar (FR-OUT-02)
-- [x] Comment toggle switch
+- [ ] Comment toggle switch (comments not yet showing)
 - [ ] "Reset" button to clear session
 
 ### 3.9 Settings View (SettingsPanel Modal)
@@ -284,16 +264,10 @@ Complete each phase before moving to the next.
 
 ---
 
-## Phase 5: Future (v1.1+)
+## Phase 5: Future (v2) - not yet complete
 
-### 5.1 CLI Support (v1.1)
-- [ ] CLI wrapper for engine
-- [ ] JSON output format
-- [ ] CI integration guide
-
-### 5.2 Saved Profiles (v2)
+### 5.1 Saved Settings across sessions
 - [ ] Profile persistence
-- [ ] Import/export configs
 - [ ] Preset profiles
 
 ---
@@ -321,7 +295,7 @@ A slice is complete when:
 
 ## PRD Alignment Notes
 
-This checklist aligns with `spec/PRD_BUILD_SPEC.md` v1.2. Key requirements mapped:
+This checklist aligns with `spec/PRD_BUILD_SPEC.md` v1. Key requirements mapped:
 
 | PRD Section | Checklist Coverage |
 |-------------|-------------------|
@@ -336,11 +310,6 @@ This checklist aligns with `spec/PRD_BUILD_SPEC.md` v1.2. Key requirements mappe
 | FR-LLMP-01 to FR-LLMP-03 | Phase 3.5 (v2 scope) |
 | FR-STAT-01, FR-STAT-02 | Phase 2.5 |
 | AC-01 to AC-13 | Phase 4 (Testing) |
-
-**Rules implemented:** 21 (exceeds v1 minimum of 15)
-- Tier 1: 14 rules ✅
-- Tier 2: 5 rules ✅
-- Bonus: 2 additional rules (format/one-selector-per-line, modern/prefer-hex-colors implemented early)
 
 ---
 

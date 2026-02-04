@@ -15,6 +15,7 @@
 export type TokenType =
   | 'selector'
   | 'property'
+  | 'custom-property'  // CSS custom properties (--var-name) - consistent color everywhere
   | 'value'
   | 'unit'
   | 'number'
@@ -390,9 +391,11 @@ export function tokenizeCSS(source: string): Token[] {
     const startLine = line;
     const startColumn = column;
     let value = '';
+    let isCustomProperty = false;
 
     // Handle custom properties (--var-name)
     if (peek() === '-' && peek(1) === '-') {
+      isCustomProperty = true;
       value += advance() + advance();
     }
 
@@ -401,7 +404,30 @@ export function tokenizeCSS(source: string): Token[] {
     }
 
     if (value) {
-      addToken('property', value, startPos, startLine, startColumn);
+      // Use 'custom-property' for CSS variables for consistent highlighting
+      addToken(isCustomProperty ? 'custom-property' : 'property', value, startPos, startLine, startColumn);
+    }
+  };
+
+  /**
+   * Consume a custom property (--var-name) - used inside functions like var()
+   */
+  const consumeCustomProperty = (): void => {
+    const startPos = pos;
+    const startLine = line;
+    const startColumn = column;
+    let value = '';
+
+    // Consume --
+    value += advance() + advance();
+
+    // Consume the rest of the identifier
+    while (isIdentChar(peek()) || peek() === '-') {
+      value += advance();
+    }
+
+    if (value) {
+      addToken('custom-property', value, startPos, startLine, startColumn);
     }
   };
 
@@ -480,6 +506,9 @@ export function tokenizeCSS(source: string): Token[] {
               consumeHexColor();
             } else if (c === ',') {
               addToken('punctuation', advance(), pos - 1, line, column - 1);
+            } else if (c === '-' && peek(1) === '-') {
+              // Custom property inside function (e.g., var(--my-var))
+              consumeCustomProperty();
             } else if (isDigit(c) || (c === '.' && isDigit(peek(1))) ||
                        ((c === '-' || c === '+') && (isDigit(peek(1)) || (peek(1) === '.' && isDigit(peek(2)))))) {
               consumeNumberWithUnit();

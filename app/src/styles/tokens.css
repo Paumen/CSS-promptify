@@ -33,16 +33,19 @@
   --color-error-bg: light-dark(#fee, #3d1a1a);
   --color-error-text: light-dark(#c00, #ff6b6b);
   --color-error-border: light-dark(#fcc, #5c2a2a);
+  --color-error-contrast: light-dark(#fff, #fff);      /* High contrast text on error bg */
 
   /* Severity: Warning */
   --color-warning-bg: light-dark(#fff3cd, #4a3d1a);
   --color-warning-text: light-dark(#856404, #ffc107);
   --color-warning-border: light-dark(#ffe69c, #5c4d2a);
+  --color-warning-contrast: light-dark(#000, #000);    /* High contrast text on warning bg */
 
   /* Severity: Info */
   --color-info-bg: light-dark(#e7f3ff, #1a3a5c);
   --color-info-text: light-dark(#0066cc, #6db3ff);
   --color-info-border: light-dark(#d0e5f9, #2a4a6c);
+  --color-info-contrast: light-dark(#fff, #fff);       /* High contrast text on info bg */
 
   /* Success */
   --color-success: light-dark(#28a745, #4ade80);
@@ -62,7 +65,7 @@
   /* Base syntax colors */
   --syntax-selector: light-dark(#d7ba7d, #dcdcaa);           /* CSS selectors (.class, #id, element) */
   --syntax-property: light-dark(#9cdcfe, #9cdcfe);           /* CSS properties */
-  --syntax-custom-property: light-dark(red, red);            /* CSS custom properties (--var-name) */
+  --syntax-custom-property: light-dark(#9cdcfe, #9cdcfe);    /* CSS custom properties (--var-name) */
   --syntax-value: light-dark(#ce9178, #ce9178);              /* CSS values */
   --syntax-unit: light-dark(#b5cea8, #b5cea8);               /* Units (px, em, %, fr, dvh, cqi) */
   --syntax-number: light-dark(#b5cea8, #b5cea8);             /* Numbers */
@@ -76,7 +79,7 @@
   --syntax-operator: light-dark(#d4d4d4, #d4d4d4);           /* Operators */
 
   /* Comments */
-  --syntax-comment-user: light-dark(gray, gray);             /* User comments */
+  --syntax-comment-user: light-dark(#6a9955, #6a9955);       /* User comments */
   --syntax-comment-tool: light-dark(#569cd6, #569cd6);       /* Tool comments (cssreview:) */
 
   /* Nesting depth brace colors (6 levels, then repeats) */

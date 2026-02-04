@@ -13,17 +13,20 @@ export function OutputPanel() {
   const [copied, setCopied] = useState(false);
 
   // Convert issues to issue markers for highlighting
-  // Only show markers when NO fixes have been applied (issue #18)
-  // When fixes are applied, line positions change and markers would be incorrect
+  // Filter out issues that have been fixed (issue #18)
+  // When fixes are applied, their positions change, so we only show unfixed issues
   const issueMarkers = useMemo((): IssueMarker[] => {
     if (!analysisResult?.issues) return [];
 
-    // Don't show markers if any fixes are selected - positions would be wrong
-    if (selectedFixIds.length > 0) {
-      return [];
-    }
+    // Filter out issues whose fixes have been selected
+    const unfixedIssues = analysisResult.issues.filter(issue => {
+      // If issue has no fix, always show it
+      if (!issue.fix) return true;
+      // If issue's fix is selected, don't show it (position may have changed)
+      return !selectedFixIds.includes(issue.fix.id);
+    });
 
-    return analysisResult.issues.map(issue => ({
+    return unfixedIssues.map(issue => ({
       startLine: issue.location.start.line,
       startColumn: issue.location.start.column,
       endLine: issue.location.end.line,

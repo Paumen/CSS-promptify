@@ -64,7 +64,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   session: {
     original_css: '',
     selected_fix_ids: [],
-    comments_enabled: true,  // Default to true so comments are shown by default
+    comments_enabled: false,
   },
   config: defaultConfig,
   analysisResult: null,
@@ -230,7 +230,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
       session: {
         original_css: '',
         selected_fix_ids: [],
-        comments_enabled: true,  // Default to true so comments are shown by default
+        comments_enabled: false,
       },
       config: defaultConfig,
       analysisResult: null,

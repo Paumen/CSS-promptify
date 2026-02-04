@@ -59,17 +59,17 @@
 /* Severity highlighting on line numbers (preserves code readability per issue #15) */
 .lineNumber_error {
   background: var(--color-error-text);
-  color: #fff;
+  color: var(--color-error-contrast);
 }
 
 .lineNumber_warning {
   background: var(--color-warning-text);
-  color: #000;
+  color: var(--color-warning-contrast);
 }
 
 .lineNumber_info {
   background: var(--color-info-text);
-  color: #fff;
+  color: var(--color-info-contrast);
 }
 
 /* Scrollbar severity markers */

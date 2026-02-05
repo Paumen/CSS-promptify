@@ -78,12 +78,10 @@ export const deduplicateLastWinsRule: Rule = {
             const lastDecl = decls[decls.length - 1];
 
             for (const dup of duplicates) {
-              // For removal, we want to remove the entire line if the declaration
-              // is the only thing on that line (besides whitespace)
-              const lineContent = lines[dup.startLine - 1] || '';
-              const isOnlyThingOnLine = lineContent.trim().match(
-                /^[a-z-]+\s*:\s*[^;]+;?\s*$/i
-              );
+// Instead of regex, check if the line contains ONLY this declaration (considering whitespace)
+const lineBeforeDecl = lineContent.substring(0, dup.startColumn - 1).trim();
+const lineAfterDecl = lineContent.substring(dup.endColumn).trim();
+const isOnlyThingOnLine = lineBeforeDecl === '' && lineAfterDecl === '';
 
               let location;
               let replacement = '';

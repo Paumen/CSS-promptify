@@ -237,9 +237,9 @@ Human adjusted testing data:
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
 | Is selecting the issue fixing the output panel | Yes | ✅ |
-| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ |
+| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ => ✅ (after phase 0 fixes) |
 | Is UX/UI easy to understand for the general user base | Best-in-class: selecting issue shows the fix and line number color change | ✅✅ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment is injected in front of `property: value;` on same line instead of after | ❌ |
+| Is UX/UI easy to understand if “show comments” is enabled | Comment is injected in front of `property: value;` on same line instead of after | ❌ => ✅ (after phase 0 fixes) |
 
 **Input**
 ```css
@@ -265,7 +265,7 @@ Human adjusted testing data:
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0 fixes)**
 
 **Human Decisions**
 - Inject comments after `property: value;` (same line), with exactly 1 space after `;`.
@@ -278,10 +278,10 @@ Human adjusted testing data:
 |-----------|-------------|---------|
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | Yes | ✅ |
-| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ |
+| Is selecting the issue fixing the output panel | Yes | ✅ => ⚠️ (after phase 0 fixes, should be 2 spaces for nesting level 1 deep) |
+| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ => ✅ (after phase 0 fixes) |
 | Is UX/UI easy to understand for the general user base | Best-in-class: selecting issue shows fix and line number color change | ✅✅ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `property: value;` instead of after | ❌ |
+| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `property: value;` instead of after | ❌ => ✅ (after phase 0 fixes) |
 
 **Input**
 ```css
@@ -307,7 +307,7 @@ Human adjusted testing data:
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0 fixes)**
 
 **Human Decisions**
 - Add best-in-class UX/UI example to `@spec/UI_style_guide.md`.
@@ -322,8 +322,8 @@ Human adjusted testing data:
 |-----------|-------------|---------|
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No — output is corrupted (extra `c`, spacing, brace placement) | ❌ |
-| Is (surrounding) syntax still correct after fixing | No | ❌ |
+| Is selecting the issue fixing the output panel | No — output is corrupted (extra `c`, spacing, brace placement) | ❌ => ⚠️ (after phase 0 fixes, the comment is two rows lower than expected, the } is on line too high) |
+| Is (surrounding) syntax still correct after fixing | No | ❌ => ⚠️ (after phase 0 fixes) |
 | Is UX/UI easy to understand for the general user base | Hard to judge due to incorrect fix | ⚠️ |
 | Is UX/UI easy to understand if “show comments” is enabled | Comment injection is correct in this case | ✅ |
 
@@ -344,7 +344,7 @@ Human adjusted testing data:
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0 fxes)**
 
 **Human Decisions**
 - Critical auto-fix: each property starts on a new line; do not inject random characters/spaces; closing `}` on a new line.
@@ -357,8 +357,8 @@ Human adjusted testing data:
 |-----------|-------------|---------|
 | Is rule detected exactly once | No — shown multiple times (test file intentionally short; overlaps with other triggers) | ⚠️ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No — output is corrupted (extra `.`; brace placement) | ❌ |
-| Is (surrounding) syntax still correct after fixing | No | ❌ |
+| Is selecting the issue fixing the output panel | No — output is corrupted (extra `.`; brace placement) | ❌ (also after phase 0 fixes, the } is shown after the comment instead of before) |
+| Is (surrounding) syntax still correct after fixing | No | ❌ => ⚠️ (technically yes after phase0 fixes) |
 | Is UX/UI easy to understand for the general user base | Hard to judge due to incorrect fix | ⚠️ |
 | Is UX/UI easy to understand if “show comments” is enabled | Comment injection is correct in this case | ✅ |
 
@@ -375,7 +375,7 @@ Human adjusted testing data:
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS **
 
 **Human Decisions**
 - Critical auto-fix: do not inject extra `.`; closing `}` must be on a new line and last (after comment).
@@ -389,9 +389,9 @@ Human adjusted testing data:
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
 | Is selecting the issue fixing the output panel | Yes | ✅ |
-| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ |
+| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ => ✅ (after phase 0 fixes) |
 | Is UX/UI easy to understand for the general user base | Probably OK | ✅ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment injected after property but before value | ❌ |
+| Is UX/UI easy to understand if “show comments” is enabled | Comment injected after property but before value | ❌  => ✅ (after phase 0 fixes) |
 
 **Observed output (wrong)**
 ```css
@@ -420,8 +420,8 @@ Human adjusted testing data:
 |-----------|-------------|---------|
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No — selector and `{}` removed | ❌ |
-| Is (surrounding) syntax still correct after fixing | No — selector and `{}` removed | ❌ |
+| Is selecting the issue fixing the output panel | No — selector and `{}` removed | ❌ (also after phase0 fixes, a ";" too many) |
+| Is (surrounding) syntax still correct after fixing | No — selector and `{}` removed | ❌  (also after phase0 fixes, a ";" too many) |
 | Is UX/UI easy to understand for the general user base | Hard to judge due to incorrect fix | ⚠️ |
 | Is UX/UI easy to understand if “show comments” is enabled | Hard to judge due to incorrect fix | ⚠️ |
 
@@ -452,12 +452,12 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 
 | Validation | Test result | Verdict |
 |-----------|-------------|---------|
-| Is rule detected exactly once | No — triggered 19 times; message says multiple comma-separated selectors but this is not true in most cases | ❌ |
+| Is rule detected exactly once | No — triggered 19 times; message says multiple comma-separated selectors but this is not true in most cases | ❌ => ✅ (after phase 0 fixes) |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No | ❌ |
-| Is (surrounding) syntax still correct after fixing | Possibly not | ⚠️ |
+| Is selecting the issue fixing the output panel | No | ❌ => ✅ (after phase 0 fixes) |
+| Is (surrounding) syntax still correct after fixing | Possibly not | ⚠️=> ✅ (after phase 0 fixes) |
 | Is UX/UI easy to understand for the general user base | Hard to judge due to incorrect fix | ⚠️ |
-| Is UX/UI easy to understand if “show comments” is enabled | No | ❌ |
+| Is UX/UI easy to understand if “show comments” is enabled | No | ❌ => ⚠️ (after phase 0 fixes) |
 
 **Observed output (wrong)**
 ```css
@@ -475,7 +475,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0) fixes **
 
 **Human Decisions**
 - Critical auto-fix: do not inject extra `.`; closing `}` must be on a new line and last.
@@ -489,11 +489,11 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
 | Is selecting the issue fixing the output panel | Yes | ✅ |
-| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ |
+| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ => ✅ (after phase 0 fixes) |
 | Is UX/UI easy to understand for the general user base | Excellent | ✅ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ |
+| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ => ✅ (after phase 0 fixes) |
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0 fixes)**
 
 **Human Decisions**
 - Inject comments after `property: value;` (same line), with exactly 1 space after `;`.
@@ -504,9 +504,9 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 
 | Validation | Test result | Verdict |
 |-----------|-------------|---------|
-| Is rule detected exactly once | In test data yes, but if a class is changed to an id starting with `#` it triggers while it should not | ❌ |
-| Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | Yes | ✅ |
+| Is rule detected exactly once | In test data yes, but if a class is changed to an id starting with `#` it triggers while it should not | ❌ (rule no longer triggered at all after phase 0 fixes) |
+| Is issue selectable if fixable | Yes | ✅ => ❌ (rule no longer triggered at all after phase 0 fixes) |
+| Is selecting the issue fixing the output panel | Yes | ✅ => ❌ (rule no longer triggered at all after phase 0 fixes) |
 | Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ |
 | Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ |
 | Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ |
@@ -527,9 +527,9 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
 | Is selecting the issue fixing the output panel | Yes | ✅ |
-| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ |
-| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ |
+| Is (surrounding) syntax still correct after fixing | Possibly not when “show comments” is enabled | ⚠️ => ✅ (after phase 0 fixes) |
+| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ => ✅ (after phase 0 fixes) |
+| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ => ✅ (after phase 0 fixes) |
 
 **Status: FAIL**
 
@@ -545,10 +545,10 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 |-----------|-------------|---------|
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No — extra `p`, longhands not removed | ❌ |
-| Is (surrounding) syntax still correct after fixing | No — `;` removed when it should not be | ❌ |
-| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ |
+| Is selecting the issue fixing the output panel | No — extra `p`, longhands not removed | ❌ => ✅ (after phase 0 fixes) |
+| Is (surrounding) syntax still correct after fixing | No — `;` removed when it should not be | ❌ (also after phase 0 fixes, one too many ";" remaians) |
+| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌  => ✅ (after phase 0 fixes)|
+| Is UX/UI easy to understand if “show comments” is enabled | Comment injected in front of `;` instead of after | ❌ => ✅ (after phase 0 fixes) |
 
 **Observed output (wrong)**
 ```css
@@ -583,10 +583,10 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 |-----------|-------------|---------|
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No — stray `c` remains | ❌ |
-| Is (surrounding) syntax still correct after fixing | No — output line is corrupted | ❌ |
-| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ |
-| Is UX/UI easy to understand if “show comments” is enabled | Comment text is a bit ambiguous for less experienced users | ⚠️ |
+| Is selecting the issue fixing the output panel | No — stray `c` remains | ❌ => ✅ (after phase 0 fixes) |
+| Is (surrounding) syntax still correct after fixing | No — output line is corrupted | ❌  => ✅ (after phase 0 fixes) |
+| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ => ✅ (after phase 0 fixes)|
+| Is UX/UI easy to understand if “show comments” is enabled | Comment text is a bit ambiguous for less experienced users | ⚠️ => ✅ (after phase 0 fixes) |
 
 **Observed output (wrong)**
 ```css
@@ -606,7 +606,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0 fixes)**
 
 **Human Decisions**
 - Critical auto-fix: remove stray `c` on the same line.
@@ -671,9 +671,9 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 |-----------|-------------|---------|
 | Is rule detected exactly once | Yes | ✅ |
 | Is issue selectable if fixable | Yes | ✅ |
-| Is selecting the issue fixing the output panel | No — stray `r` remains | ❌ |
-| Is (surrounding) syntax still correct after fixing | No — missing `;` | ❌ |
-| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ |
+| Is selecting the issue fixing the output panel | No — stray `r` remains | ❌ => ✅ (after phase 0 fixes) |
+| Is (surrounding) syntax still correct after fixing | No — missing `;` | ❌ => ✅ (after phase 0 fixes) |
+| Is UX/UI easy to understand for the general user base | Fix preview is highlighted in blue info color for no good reason | ❌ => ✅ (after phase 0 fixes) |
 | Is UX/UI easy to understand if “show comments” is enabled | Good | ✅ |
 
 **Observed output (wrong)**
@@ -692,7 +692,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 }
 ```
 
-**Status: FAIL**
+**Status: FAIL => PASS (after phase 0 fixes)**
 
 **Human Decisions**
 - Critical auto-fix: remove stray `r` and add `;` after value.

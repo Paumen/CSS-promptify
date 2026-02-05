@@ -1,0 +1,103 @@
+/* CSS Promptify - Test File for All 20 Rules */
+/* Each rule should detect exactly ONE issue */
+
+/* 1. safety/unrecognized-property */
+.unrecognized {
+  fakeproperty: value;
+}
+
+/* 2. safety/misspelled-property */
+.misspelled {
+  widht: 100px;
+}
+
+/* 3. safety/typo-suspicious-units */
+.suspicious-unit {
+  margin: 10xp;
+}
+
+/* 4. format/no-tabs */
+.has-tab {
+	color: red;
+}
+
+/* 5. format/indent-2-spaces (3-space indent) */
+.bad-indent {
+   color: blue;
+}
+
+/* 6. format/multiple-declarations-per-line */
+.multi-decl { color: red; background: blue; }
+
+/* 7. format/single-prop-single-line */
+.single-prop {
+  color: green;
+}
+
+/* 8. format/normalize-spaces (missing space after colon) */
+.no-space {
+  color:red;
+}
+
+/* 9. format/sort-properties (unsorted) */
+.unsorted {
+  z-index: 1;
+  color: black;
+}
+
+/* 10. format/one-selector-per-line */
+.sel-a, .sel-b { color: pink; }
+
+/* 11. tokens/zero-units */
+.zero-unit {
+  margin: 0px;
+}
+
+/* 12. tokens/shorten-hex-colors */
+.long-hex {
+  color: #aabbcc;
+}
+
+/* 13. tokens/remove-trailing-zeros */
+.trailing-zero {
+  opacity: 0.50;
+}
+
+/* 14. consolidate/shorthand-margin-padding */
+.longhands {
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+/* 15. consolidate/deduplicate-last-wins */
+.duplicate {
+  color: red;
+  color: blue;
+}
+
+/* 16. style/important-used */
+.important {
+  color: red !important;
+}
+
+/* 17. education/flex-properties-require-flex */
+.flex-no-display {
+  justify-content: center;
+}
+
+/* 18. education/grid-properties-require-grid */
+.grid-no-display {
+  grid-template-columns: 1fr;
+}
+
+/* 19. modern/prefer-hex-colors */
+.rgb-color {
+  color: rgb(255, 0, 0);
+}
+
+/* 20. safety/invalid-syntax (at end to not break parsing) */
+.invalid-syntax {
+  color: red
+}

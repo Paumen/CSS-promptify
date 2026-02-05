@@ -9,9 +9,7 @@ import {
   rangeFromCoords,
   createPatch,
 } from '../utils';
-
-// Pattern to match 6-digit hex colors (with optional alpha)
-const HEX_6_PATTERN = /#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})(?:([0-9a-fA-F]{2}))?(?![0-9a-fA-F])/g;
+import { walk } from '../../parser';
 
 /**
  * Check if a 2-digit hex can be shortened (e.g., "ff" -> "f")
@@ -38,27 +36,24 @@ export const shortenHexColorsRule: Rule = {
     autofix_notes: 'Only shorten when all three pairs can be shortened (e.g., #aabbcc -> #abc)',
   },
 
-  run(_ast: CSSNode, source: string, _config: SessionConfig): Issue[] {
+  run(ast: CSSNode, _source: string, _config: SessionConfig): Issue[] {
     const issues: Issue[] = [];
 
-    // Find all hex colors
-    const lines = source.split('\n');
-    let charOffset = 0;
+    // Walk through declarations to find hex colors in VALUES only (not selectors)
+    walk(ast, (node) => {
+      // Only process HexColor nodes inside declarations
+      if (node.type === 'HexColor' && node.loc) {
+        const hexValue = String(node.value || '');
 
-    for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-      const line = lines[lineIndex];
-      const lineNum = lineIndex + 1;
+        // Check if it's a 6-digit or 8-digit hex that can be shortened
+        if (hexValue.length !== 6 && hexValue.length !== 8) {
+          return;
+        }
 
-      // Reset regex for each line
-      const pattern = new RegExp(HEX_6_PATTERN.source, 'gi');
-      let match: RegExpExecArray | null;
-
-      while ((match = pattern.exec(line)) !== null) {
-        const fullMatch = match[0];
-        const r = match[1];
-        const g = match[2];
-        const b = match[3];
-        const a = match[4]; // Optional alpha
+        const r = hexValue.slice(0, 2);
+        const g = hexValue.slice(2, 4);
+        const b = hexValue.slice(4, 6);
+        const a = hexValue.length === 8 ? hexValue.slice(6, 8) : null;
 
         // Check if we can shorten (all pairs must be shortenable)
         const canShortenRGB = canShorten(r) && canShorten(g) && canShorten(b);
@@ -70,13 +65,15 @@ export const shortenHexColorsRule: Rule = {
             shortened += shorten(a);
           }
 
-          const column = match.index + 1; // 1-based
-          const location = rangeFromCoords(
-            lineNum,
-            column,
-            lineNum,
-            column + fullMatch.length
-          );
+          const fullMatch = `#${hexValue}`;
+
+          // css-tree uses 1-based lines and columns
+          const startLine = node.loc.start.line;
+          const startCol = node.loc.start.column;
+          const endLine = node.loc.end.line;
+          const endCol = node.loc.end.column;
+
+          const location = rangeFromCoords(startLine, startCol, endLine, endCol);
 
           issues.push(
             createSafeIssue({
@@ -97,9 +94,7 @@ export const shortenHexColorsRule: Rule = {
           );
         }
       }
-
-      charOffset += line.length + 1;
-    }
+    });
 
     return issues;
   },

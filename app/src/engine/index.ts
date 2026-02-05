@@ -114,6 +114,97 @@ export function detectConflicts(fixes: Fix[]): FixConflict[] {
 }
 
 /**
+ * Find the best position to insert a comment on a line.
+ * Returns the index after the last semicolon, or before closing brace.
+ */
+function findCommentInsertionPoint(line: string): number {
+  // Look for the last semicolon that's not inside a comment or string
+  let lastSemicolon = -1;
+  let inString = false;
+  let stringChar = '';
+  let inComment = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const nextChar = line[i + 1];
+
+    if (inComment) {
+      if (char === '*' && nextChar === '/') {
+        inComment = false;
+        i++; // Skip the /
+      }
+      continue;
+    }
+
+    if (inString) {
+      if (char === stringChar && line[i - 1] !== '\\') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"' || char === "'") {
+      inString = true;
+      stringChar = char;
+      continue;
+    }
+
+    if (char === '/' && nextChar === '*') {
+      inComment = true;
+      i++; // Skip the *
+      continue;
+    }
+
+    if (char === ';') {
+      lastSemicolon = i;
+    }
+  }
+
+  if (lastSemicolon >= 0) {
+    return lastSemicolon + 1;
+  }
+
+  // No semicolon found - insert before closing brace if present
+  const trimmed = line.trimEnd();
+  if (trimmed.endsWith('}')) {
+    return line.lastIndexOf('}');
+  }
+
+  return line.trimEnd().length;
+}
+
+/**
+ * Insert comments at the end of declarations on affected lines.
+ * Comments are placed after the last semicolon on each line.
+ */
+function insertCommentsPostProcess(
+  lines: string[],
+  lineComments: Map<number, string[]>
+): void {
+  // Sort line indices in descending order to avoid index shifting issues
+  const sortedLineIndices = Array.from(lineComments.keys()).sort((a, b) => b - a);
+
+  for (const lineIndex of sortedLineIndices) {
+    if (lineIndex < 0 || lineIndex >= lines.length) continue;
+
+    const comments = lineComments.get(lineIndex);
+    if (!comments || comments.length === 0) continue;
+
+    const line = lines[lineIndex];
+    const insertPoint = findCommentInsertionPoint(line);
+
+    const before = line.slice(0, insertPoint);
+    const after = line.slice(insertPoint);
+    const commentText = comments.map((c) => `/* ${c} */`).join(' ');
+
+    // Add space before comment if needed
+    const needsSpace = before.length > 0 && !before.endsWith(' ');
+    const afterTrimmed = after.trim();
+    lines[lineIndex] = before + (needsSpace ? ' ' : '') + commentText + (afterTrimmed ? ' ' + afterTrimmed : '');
+  }
+}
+
+/**
  * Apply selected fixes to original CSS
  * Returns new CSS string with fixes applied
  */
@@ -155,9 +246,11 @@ export function applyFixes(
     return bPos - aPos; // Reverse order
   });
 
+  // Track comments to insert (keyed by FINAL line index after patches)
+  const lineComments: Map<number, string[]> = new Map();
+
   // Apply patches
-  let result = originalCss;
-  const lines = result.split('\n');
+  const lines = originalCss.split('\n');
 
   for (const { patch, fix } of allPatches) {
     const { start, end } = patch.range;
@@ -168,11 +261,13 @@ export function applyFixes(
     const startCol = start.column - 1;
     const endCol = end.column - 1;
 
-    // Build replacement text
-    let replacement = patch.text;
-    if (includeComments && fix.comment.text) {
-      replacement += ` /* ${fix.comment.text} */`;
-    }
+    // Validate range
+    if (startLine < 0 || startLine >= lines.length) continue;
+    if (endLine < 0 || endLine >= lines.length) continue;
+
+    const replacement = patch.text;
+    const replacementLines = replacement.split('\n');
+    const newLineCount = replacementLines.length;
 
     // Apply the patch
     if (startLine === endLine) {
@@ -182,19 +277,50 @@ export function applyFixes(
       // Multi-line patch
       const firstLine = lines[startLine].slice(0, startCol);
       const lastLine = lines[endLine].slice(endCol);
-      lines.splice(startLine, endLine - startLine + 1, firstLine + replacement + lastLine);
+
+      if (newLineCount === 1) {
+        // Multi-line to single-line
+        lines.splice(startLine, endLine - startLine + 1, firstLine + replacement + lastLine);
+      } else {
+        // Multi-line to multi-line
+        const newLines: string[] = [];
+        for (let i = 0; i < replacementLines.length; i++) {
+          if (i === 0) {
+            newLines.push(firstLine + replacementLines[i]);
+          } else if (i === replacementLines.length - 1) {
+            newLines.push(replacementLines[i] + lastLine);
+          } else {
+            newLines.push(replacementLines[i]);
+          }
+        }
+        lines.splice(startLine, endLine - startLine + 1, ...newLines);
+      }
+    }
+
+    // Track comment for this line (if comments enabled)
+    if (includeComments && fix.comment?.text) {
+      // For multi-line replacements, put comment on the LAST line of the replacement
+      const commentLineIndex = startLine + newLineCount - 1;
+      const existing = lineComments.get(commentLineIndex) || [];
+      existing.push(fix.comment.text);
+      lineComments.set(commentLineIndex, existing);
     }
   }
 
-  result = lines.join('\n');
+  // Post-process: insert comments at end of declarations
+  if (includeComments && lineComments.size > 0) {
+    insertCommentsPostProcess(lines, lineComments);
+  }
+
+  const result = lines.join('\n');
 
   // Build applied fixes list
   const applied_fixes: AppliedFix[] = fixes.map((fix) => ({
     fix_id: fix.id,
-    rule_id: fix.id.split('-')[0], // Extract rule_id from fix.id
+    rule_id: fix.id.replace(/^fix-/, '').replace(/-\d+$/, ''), // Extract rule_id properly
     patches: fix.patches,
     comment: {
-      was_inserted: includeComments && !!fix.comment.text,
+      was_inserted: includeComments && !!fix.comment?.text,
       marker_prefix: 'cssreview:' as const,
       style: 'end_of_line' as const,
     },

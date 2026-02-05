@@ -32,8 +32,9 @@ export const deduplicateLastWinsRule: Rule = {
     autofix_notes: 'Remove earlier declarations, keeping only the last one (CSS last-wins semantics)',
   },
 
-  run(ast: CSSNode, _source: string, _config: SessionConfig): Issue[] {
+  run(ast: CSSNode, source: string, _config: SessionConfig): Issue[] {
     const issues: Issue[] = [];
+    const lines = source.split('\n');
 
     csstree.walk(ast as csstree.CssNode, {
       visit: 'Block',
@@ -48,13 +49,14 @@ export const deduplicateLastWinsRule: Rule = {
         block.children.forEach((child) => {
           if (child.type === 'Declaration' && child.loc) {
             const decl = child as csstree.Declaration;
+            // css-tree uses 1-based lines and columns
             declarations.push({
               property: decl.property.toLowerCase(),
               value: csstree.generate(decl.value),
               startLine: child.loc.start.line,
-              startColumn: child.loc.start.column + 1,
+              startColumn: child.loc.start.column,
               endLine: child.loc.end.line,
-              endColumn: child.loc.end.column + 1,
+              endColumn: child.loc.end.column,
               index: index++,
             });
           }
@@ -76,13 +78,31 @@ export const deduplicateLastWinsRule: Rule = {
             const lastDecl = decls[decls.length - 1];
 
             for (const dup of duplicates) {
-              // Calculate the range to remove (including semicolon)
-              const startLine = dup.startLine;
-              const startCol = dup.startColumn;
-              const endLine = dup.endLine;
-              const endCol = dup.endColumn + 1; // Include semicolon
+// Instead of regex, check if the line contains ONLY this declaration (considering whitespace)
+const lineBeforeDecl = lineContent.substring(0, dup.startColumn - 1).trim();
+const lineAfterDecl = lineContent.substring(dup.endColumn).trim();
+const isOnlyThingOnLine = lineBeforeDecl === '' && lineAfterDecl === '';
 
-              const location = rangeFromCoords(startLine, startCol, endLine, endCol);
+              let location;
+              let replacement = '';
+
+              if (isOnlyThingOnLine && dup.startLine === dup.endLine) {
+                // Remove from start of line to start of next line (entire line including newline)
+                location = rangeFromCoords(
+                  dup.startLine,
+                  1,
+                  dup.startLine + 1,
+                  1
+                );
+              } else {
+                // Declaration shares line with other content, just remove the declaration
+                location = rangeFromCoords(
+                  dup.startLine,
+                  dup.startColumn,
+                  dup.endLine,
+                  dup.endColumn
+                );
+              }
 
               issues.push(
                 createSafeIssue({
@@ -97,7 +117,7 @@ export const deduplicateLastWinsRule: Rule = {
                     when_safe: 'Safe because CSS already ignores this declaration',
                   },
                   preview: '', // Empty string = remove
-                  patches: [createPatch(location, '')],
+                  patches: [createPatch(location, replacement)],
                   commentText: `consolidate/deduplicate-last-wins: removed earlier overridden value ${dup.value}`,
                 })
               );

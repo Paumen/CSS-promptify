@@ -60,11 +60,12 @@ export const singlePropSingleLineRule: Rule = {
 
           const collapsed = `${selector} { ${property}: ${value}; }`;
 
+          // css-tree uses 1-based lines and columns
           const location = rangeFromCoords(
             startLine,
-            rule.loc.start.column + 1,
+            rule.loc.start.column,
             endLine,
-            rule.loc.end.column + 1
+            rule.loc.end.column
           );
 
           issues.push(

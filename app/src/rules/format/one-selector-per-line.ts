@@ -27,9 +27,13 @@ export const oneSelectorPerLineRule: Rule = {
 
         // Check if this is a SelectorList with multiple selectors
         if (prelude.type === 'SelectorList' && prelude.children) {
-          const selectors = prelude.children as CSSNode[];
+          // Convert css-tree List to array properly
+          const selectors: CSSNode[] = [];
+          for (const child of prelude.children as Iterable<CSSNode>) {
+            selectors.push(child);
+          }
 
-          // Only flag if there are multiple selectors
+          // Only flag if there are multiple comma-separated selectors
           if (selectors.length < 2) {
             return;
           }
@@ -43,17 +47,15 @@ export const oneSelectorPerLineRule: Rule = {
           const endOffset = preludeLoc.end.offset;
           const originalText = source.slice(startOffset, endOffset);
 
-          // Check if all selectors are on the same line (contains comma but no newlines between selectors)
-          const hasNewlines = originalText.includes('\n');
+          // Check if selectors are NOT on separate lines
+          // If each comma is followed by a newline, the selectors are already formatted
+          const commaNewlinePattern = /,\s*\n/g;
           const commaCount = (originalText.match(/,/g) || []).length;
+          const commaNewlineCount = (originalText.match(commaNewlinePattern) || []).length;
 
-          // If there are already newlines after each comma, it's likely already formatted
-          if (hasNewlines) {
-            // Count newlines vs commas - if roughly equal, probably already formatted
-            const newlineCount = (originalText.match(/\n/g) || []).length;
-            if (newlineCount >= commaCount) {
-              return;
-            }
+          // If every comma is followed by a newline, selectors are already on separate lines
+          if (commaCount > 0 && commaNewlineCount >= commaCount) {
+            return;
           }
 
           // Generate selectors each on their own line

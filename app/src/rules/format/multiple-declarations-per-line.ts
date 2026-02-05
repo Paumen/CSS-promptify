@@ -49,12 +49,13 @@ export const multipleDeclarationsPerLineRule: Rule = {
         block.children.forEach((child) => {
           if (child.type === 'Declaration' && child.loc) {
             const decl = child as csstree.Declaration;
+            // css-tree uses 1-based lines and columns
             declarations.push({
               property: decl.property,
               value: csstree.generate(decl.value),
               line: child.loc.start.line,
-              startColumn: child.loc.start.column + 1, // 1-based
-              endColumn: child.loc.end.column + 1,
+              startColumn: child.loc.start.column,
+              endColumn: child.loc.end.column,
               startOffset: child.loc.start.offset,
               endOffset: child.loc.end.offset,
             });
@@ -72,34 +73,46 @@ export const multipleDeclarationsPerLineRule: Rule = {
         // Find lines with multiple declarations
         for (const [lineNum, decls] of byLine) {
           if (decls.length > 1) {
-            // Determine the base indentation
-            const lineContent = lines[lineNum - 1];
-            const indentMatch = lineContent.match(/^(\s*)/);
-            const existingIndent = indentMatch ? indentMatch[1] : '';
+            // Sort declarations by column position
+            const sortedDecls = [...decls].sort((a, b) => a.startColumn - b.startColumn);
+            const firstDecl = sortedDecls[0];
+            const lastDecl = sortedDecls[sortedDecls.length - 1];
 
-            // Use 2-space indent, or preserve existing if it's reasonable
-            const baseIndent = existingIndent.includes('\t')
-              ? '  '
-              : (existingIndent.length > 0 ? existingIndent : '  ');
+            // Get the line content to determine context
+            const lineContent = lines[lineNum - 1];
+
+            // Check if there's a { before the first declaration on this line
+            const beforeFirst = lineContent.substring(0, firstDecl.startColumn - 1);
+            const hasOpeningBrace = beforeFirst.includes('{');
+
+            // Determine the base indentation (use 2 spaces for block content)
+            const baseIndent = '  ';
 
             // Build the replacement: each declaration on its own line
-            const replacement = decls
+            const replacement = sortedDecls
               .map((d, i) => {
                 const line = `${baseIndent}${d.property}: ${d.value};`;
+                // First line needs newline if opening brace is on same line
+                if (i === 0 && hasOpeningBrace) {
+                  return `\n${line}`;
+                }
                 return i === 0 ? line : `\n${line}`;
               })
               .join('');
 
-            // Find the range covering all declarations on this line
-            const firstDecl = decls[0];
-            const lastDecl = decls[decls.length - 1];
+            // Calculate range from first declaration start to after last declaration
+            // Find the semicolon after the last declaration
+            const afterLastDecl = lineContent.substring(lastDecl.endColumn - 1);
+            const semicolonOffset = afterLastDecl.indexOf(';');
+            const endColumn = semicolonOffset >= 0
+              ? lastDecl.endColumn + semicolonOffset + 1
+              : lastDecl.endColumn;
 
-            // Get the full line range from first decl start to last decl end
             const location = rangeFromCoords(
               lineNum,
               firstDecl.startColumn,
               lineNum,
-              lastDecl.endColumn + 1 // Include semicolon
+              endColumn
             );
 
             issues.push(

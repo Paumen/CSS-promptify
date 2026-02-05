@@ -160,14 +160,15 @@ export function createInfoIssue(params: {
 
 /**
  * Convert css-tree location to our Range type
+ * Note: css-tree uses 1-based lines and 1-based columns, same as our Range type
  */
 export function cssTreeLocToRange(loc: {
   start: { line: number; column: number };
   end: { line: number; column: number };
 }): Range {
   return {
-    start: { line: loc.start.line, column: loc.start.column + 1 }, // css-tree uses 0-based columns
-    end: { line: loc.end.line, column: loc.end.column + 1 },
+    start: { line: loc.start.line, column: loc.start.column },
+    end: { line: loc.end.line, column: loc.end.column },
   };
 }
 

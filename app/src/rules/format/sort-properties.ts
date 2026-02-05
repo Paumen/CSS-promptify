@@ -247,34 +247,43 @@ export const sortPropertiesRule: Rule = {
           return;
         }
 
-        // Sort declarations
+        // Sort declarations by their position in source
+        const sortedByPosition = [...declarations].sort(
+          (a, b) => a.loc.start.offset - b.loc.start.offset
+        );
+        const firstDecl = sortedByPosition[0];
+        const lastDecl = sortedByPosition[sortedByPosition.length - 1];
+
+        // Sort declarations by property order
         const sorted = sortDeclarations(declarations, mode);
 
         // Find the indentation of the first declaration
-        const firstDeclLine = source.split('\n')[blockStart.line - 1];
+        const lines = source.split('\n');
+        const firstDeclLine = lines[firstDecl.loc.start.line - 1];
         const indentMatch = firstDeclLine.match(/^(\s*)/);
         const indent = indentMatch ? indentMatch[1] : '  ';
 
-        // Generate sorted output
+        // Generate sorted output - each declaration on its own line with proper indentation
         const sortedText = sorted
           .map((decl) => {
             // Normalize each declaration
             const importantStr = decl.important ? ' !important' : '';
-            return `${indent}${decl.property}: ${decl.value.replace(/\s*!important\s*;?\s*$/, '').replace(/;$/, '')}${importantStr};`;
+            const cleanValue = decl.value.replace(/\s*!important\s*;?\s*$/, '').replace(/;$/, '');
+            return `${indent}${decl.property}: ${cleanValue}${importantStr};`;
           })
           .join('\n');
 
-        // Calculate the range covering all declarations
-        // We need to find the actual text range in the source
-        const firstDecl = declarations[0];
-        const lastDecl = declarations[declarations.length - 1];
-
-        // Calculate the range covering all declarations
-        const lines = source.split('\n');
-
+        // Calculate the range from start of first declaration to end of last
+        // css-tree uses 1-based lines and columns, same as our Range type
         const location: Range = {
-          start: { line: firstDecl.loc.start.line, column: 1 },
-          end: { line: lastDecl.loc.end.line, column: lines[lastDecl.loc.end.line - 1].length + 1 },
+          start: {
+            line: firstDecl.loc.start.line,
+            column: firstDecl.loc.start.column,
+          },
+          end: {
+            line: lastDecl.loc.end.line,
+            column: lastDecl.loc.end.column,
+          },
         };
 
         issues.push(

@@ -23,6 +23,8 @@ interface DeclarationInfo {
   startColumn: number;
   endLine: number;
   endColumn: number;
+  startOffset: number;
+  endOffset: number;
 }
 
 /**
@@ -68,13 +70,16 @@ export const shorthandMarginPaddingRule: Rule = {
         block.children.forEach((child) => {
           if (child.type === 'Declaration' && child.loc) {
             const decl = child as csstree.Declaration;
+            // css-tree uses 1-based lines and columns
             declarations.set(decl.property.toLowerCase(), {
               property: decl.property,
               value: csstree.generate(decl.value),
               startLine: child.loc.start.line,
-              startColumn: child.loc.start.column + 1,
+              startColumn: child.loc.start.column,
               endLine: child.loc.end.line,
-              endColumn: child.loc.end.column + 1,
+              endColumn: child.loc.end.column,
+              startOffset: child.loc.start.offset,
+              endOffset: child.loc.end.offset,
             });
           }
         });
@@ -95,14 +100,24 @@ export const shorthandMarginPaddingRule: Rule = {
               left.value
             );
 
-            // Report the issue at the first longhand (top)
-            // Note: Full fix would replace all 4, but for v1 we just report and fix the first
-            const location = rangeFromCoords(
-              top.startLine,
-              top.startColumn,
-              top.endLine,
-              top.endColumn + 1 // Include semicolon
+            // Sort declarations by their position in the source (by startOffset)
+            const allDecls = [top, right, bottom, left].sort(
+              (a, b) => a.startOffset - b.startOffset
             );
+            const firstDecl = allDecls[0];
+            const lastDecl = allDecls[allDecls.length - 1];
+
+            // Create a single patch that replaces from start of first to end of last
+            // This removes all 4 longhands and replaces with shorthand
+            const location = rangeFromCoords(
+              firstDecl.startLine,
+              firstDecl.startColumn,
+              lastDecl.endLine,
+              lastDecl.endColumn
+            );
+
+            // Build the replacement: shorthand with same indentation as first declaration
+            const shorthandDecl = `${shorthand}: ${shorthandValue};`;
 
             issues.push(
               createSafeIssue({
@@ -117,7 +132,7 @@ export const shorthandMarginPaddingRule: Rule = {
                   when_safe: 'Safe when all 4 longhands are present in the same block',
                 },
                 preview: `${shorthand}: ${shorthandValue}`,
-                patches: [createPatch(location, `${shorthand}: ${shorthandValue}`)],
+                patches: [createPatch(location, shorthandDecl)],
                 commentText: `consolidate/shorthand-margin-padding: was ${shorthand}-top/right/bottom/left`,
               })
             );

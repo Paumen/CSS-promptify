@@ -78,10 +78,11 @@ export const deduplicateLastWinsRule: Rule = {
             const lastDecl = decls[decls.length - 1];
 
             for (const dup of duplicates) {
-// Instead of regex, check if the line contains ONLY this declaration (considering whitespace)
-const lineBeforeDecl = lineContent.substring(0, dup.startColumn - 1).trim();
-const lineAfterDecl = lineContent.substring(dup.endColumn).trim();
-const isOnlyThingOnLine = lineBeforeDecl === '' && lineAfterDecl === '';
+              // Check if the line contains ONLY this declaration (considering whitespace)
+              const lineContent = lines[dup.startLine - 1] || '';
+              const lineBeforeDecl = lineContent.substring(0, dup.startColumn - 1).trim();
+              const lineAfterDecl = lineContent.substring(dup.endColumn - 1).trim();
+              const isOnlyThingOnLine = lineBeforeDecl === '' && (lineAfterDecl === '' || lineAfterDecl === ';');
 
               let location;
               let replacement = '';

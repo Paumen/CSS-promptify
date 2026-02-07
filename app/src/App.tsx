@@ -69,14 +69,6 @@ function App() {
           )}
         </div>
 
-        {hasInput && !hasAnalysis && (
-          <div className={styles.actions}>
-            <Button variant="primary" onClick={analyzeInput}>
-              Analyze CSS
-            </Button>
-          </div>
-        )}
-
         {hasAnalysis && (
           <div className={styles.statsBar}>
             <div className={styles.stat}>

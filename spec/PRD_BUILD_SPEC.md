@@ -13,7 +13,7 @@ LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but d
 
 # CSS Review Tool — PRD / Build Spec
 
-Version: 1.2
+Version: 1.3
 
 Owner: (human) 
 
@@ -63,53 +63,10 @@ vs
 
 - **Lower tokens** (less whitespace/shorter code)
 
- 
 
 This product optimizes for **LLM context first**, then applies **rule-driven token reductions** that do *not* destroy structure.
 
- 
-
 ---
-
- 
-
-## 3) Goals & Non-Goals
-
- 
-
-### 3.1 Goals
-
-- Implement a web-based, mobile-friendly CSS review tool.
-
-- Analyze pasted CSS, identifying issues and offering safe, selective fixes.
-
-- Output clean, structured CSS optimized for LLM comprehension.
-
-- For non-safe fixes, generate copy-ready LLM prompts.
-
-- Provide a fast, intuitive workflow: paste → analyze → select fixes → copy.
-
- 
-
-### 3.2 Non-Goals (Out of Scope for v1-v3)
-
-- No user accounts or authentication.
-
-- No project-wide or cross-file analysis.
-
-- No server-side analysis or hosted API.
-
-- No preprocessor support (Sass/Less).
-
-- No CLI-first workflow.
-
- 
-
- 
-
----
-
- 
 
 ## 4) Product Principles (Non-Negotiable)
 
@@ -125,15 +82,9 @@ This product optimizes for **LLM context first**, then applies **rule-driven tok
 
 6.  **Fast, Focused Workflow:** The core UX loop (paste, analyze, select, copy) must be fast and efficient, especially on mobile.
 
- 
-
 ---
 
- 
-
 ## 6) Definitions & Data Contracts
-
- 
 
 > For all official definitions, terminology, and data contracts (e.g., `Issue`, `Rule`, `Fix`), refer to the following canonical sources:
 
@@ -143,73 +94,14 @@ This product optimizes for **LLM context first**, then applies **rule-driven tok
 
 > - `spec/TYPES.md` — TypeScript interfaces.
 
- 
-
 ---
 
- 
-
-## 7) Scope & Versioning
-
- 
-
-### 7.1 In Scope v1
-
-- Web UI with mobile support.
-
-- CSS input area (paste-only) and syntax-highlighted output view.
-
-- Core analyzer engine (AST parser + rule runner).
-
-- An initial set of at least 15 rules from "Tier 1."
-
-- Issues panel with filtering by severity, group, and fixability.
-
-- Selective fixes with diff preview and revert functionality.
-
-- A "Rule Logic" panel showing WHAT/WHY/fixability for each issue.
-
-- Toggleable inline comments for applied fixes (e.g., `/* review: ... */`).
-
-- Stats display (lines, characters).
-
-- Property sorting rule (safe fix, info-level, on by default).
-
- 
-
-### 7.2 Scope v2
-
-- Generate LLM-friendly prompts for complex fixes that cannot be safely automated.
-
-- "Paste from clipboard" button for faster input.
-
-- Expand rule set to at least 25 total rules (Tier 1 & 2).
-
- 
-
-### 7.3 Scope v3 and beyond
-
-- **Accurate Token Counting:** Display exact token counts (before/after) using a precise tokenizer.
-
-- **Configuration Profiles:** Allow users to switch between presets (e.g., "Modern vs. Compatibility," "Max Context vs. Min Tokens").
-
-- **Persistence:** Optionally save user severity preferences across sessions.
-
-- **Expanded Rule Set:** Grow to 35+ rules.
-
- 
-
----
-
- 
 
 ## 8) UX Flows (What the User Does)
 
- 
 
 > UX clarification: v1 is paste → analyze → select fixes → copy. There is no manual code editing workflow.
 
- 
 
 ### 8.1 Main Flow (Review & Selective Fix)
 
@@ -255,15 +147,12 @@ This product optimizes for **LLM context first**, then applies **rule-driven tok
 
   - Inline comments are updated automatically.
 
- 
 
 ---
-
  
 
 ## 9) REQUIREMENTS (SPEC)
 
- 
 
 ### 9.1 UX & UI (UIX)
 
@@ -295,13 +184,13 @@ spec-uix-13 [v2]: If selected fixes are incompatible, the UI must clearly indica
 
 spec-uix-14 [v2]: For unsafe/manual issues, the UI offers a Generate LLM Prompt action that must include context, goal, task, constraints, target improvement, relevant CSS snippet, and expected output formatting.
 
-spec-uix-15 [v2]: Support Paste from Clipboard action + define permissions/fallback behavior.
+spec-uix-15 [v2]: Support ddirect Paste from Clipboard action for input panel.
 
 spec-uix-16 [v2]: Support sorting by severity, group, fixability, syntax, and line-number, while maintaining grouping.
 
 spec-uix-17 [v2]: Minimum of >10 issues must be visible in issue panel wihout need to scroll.
 
-spec-uix-09: Copy output with comments must include all tool-generated annotations.
+spec-uix-23: Copy output with comments must include all tool-generated annotations.
 spec-uix-10: Copy output without comments must exclude all tool annotations. 
 
 spec-uix-08: User can toggle comment visibility in output without modifying underlying code.
@@ -310,6 +199,7 @@ spec-uix-07: User pastes CSS, selects individual fixes, and sees immediate outpu
 
 spec-uix-06: Allow clear inspection of fixes, so users can trust tool suggestions.
 
+spec-uix-22: Output clean, structured CSS optimized for LLM comprehension.
 
 
 ### 9.2 Engine (ENG)
@@ -379,17 +269,16 @@ spec-sts-19 [v2]: For issues where fixability is unsafe/manual, the system offer
 spec-sts-20 [v2]: All settings are maintained across sessions and not resetting on page refresh.
 
 
-
 ##9.4 Non-functional
 
-spec-nfr-05: Ignore backend auth/account handling; focus on local CSS manipulation.
-spec-nfr-06: Ignore cross-file or project-wide analysis in v1; focus only on current input.
-nfr-07: Minimize cognitive load on the user by keeping UI simple and responsive.
+spec-nfr-01: Ignore backend auth/account handling; focus on local CSS manipulation.
+
+spec-nfr-02: Ignore cross-file or project-wide analysis in v1; focus only on current input.
+
+spec-nfr-03: Minimize cognitive load on the user by keeping UI simple and responsive.
 
  
-
 ---
-
  
 
 ## 10) INVARIANTS
@@ -404,11 +293,7 @@ inv-nfr-05: System must never attempt network requests for parsing or fixes.
 
 inv-nfr-06: Engine must never apply rules to unrelated files or external data.
 
-
-
 ---
-
- 
 
 ## 11) Rulebook Design
 
@@ -419,42 +304,21 @@ Rules are defined as a hybrid of:
 - **Declarative Metadata:** A simple structured data file (e.g., YAML, JSON) defining the `rule_id`, `group`, default `severity`, `fixability`, and applicable contexts.
 
 - **Implementation Logic:** Code (e.g., TypeScript) that performs the AST traversal, detection, and patch creation.
-
  
 
 ### 11.2 Rule Applicability
 
 - Each rule's metadata must declare its scope (e.g., properties, functions, at-rules it affects) to ensure it only runs where intended.
 
- 
-
 ---
-
- 
 
 ## 12) Data Model (Canonical)
 
- 
-
 > See `spec/DATA_CONTRACTS.md` and `spec/TYPES.md` for all data model definitions.
-
- 
 
 ---
 
- 
-
 ## 13) Acceptance Criteria (Testable)
-
-### 13.1 Modern CSS
-
-- **AC-01:** Pasting CSS with `place-items`, `container-type`, or `light-dark()` does not produce "unknown property" errors.
-
-- **AC-02:** An unrecognized property (e.g., 'new-prop: oklch(50% 0.15 250)`) emits an `info`-level issue and does not block other fixes.
-
- 
-
-### 13.2 Rule Settings
 
 - **AC-03:** Toggling a rule off and re-analyzing removes its issues from the list.
 
@@ -462,39 +326,33 @@ Rules are defined as a hybrid of:
 
 - **AC-05:** Changing a rule's severity is reflected in the issue list upon re-analysis.
 
- 
-
-### 13.3 Fixing & Revert
-
 - **AC-06:** A user can select a fix, see the output update, then unselect it, and the output correctly reverts to its previous state. If no ;, append after declaration node end. If multi-line, attach comment on last line of affected declaration.
 
 - **AC-07:** Unselecting one fix does not affect other, unrelated selected fixes.
 
 - **AC-08:** After multiple select/unselect cycles, the output remains stable and correct.
 
- 
-
-### 13.4 Inline Comments
-
-- **AC-09:** When the comments toggle is ON, applying a fix adds a `/* review: ... */` comment to the output.
+- **AC-09:** When the comments toggle is ON, applying a fix adds a `/* review: ... */` comment to the output without syntax error.
 
 - **AC-10:** The "Copy" buttons work correctly for both with and without comments.
 
 - **AC-11:** A "Remove tool comments" action strips all `review:` comments but preserves user-written comments.
 
- 
-
-### 13.5 Stats
-
 - **AC-12:** The stats panel (tokens/lines/chars) updates accurately as fixes are selected and unselected.
-
- 
-
-### 13.6 Mobile
 
 - **AC-13:** The entire core workflow (paste, analyze, filter, select, copy) is usable on a standard mobile viewport without horizontal scrolling or blocked actions.
 
  ---
+
+## 10) Scope v3 and beyond
+
+- **Accurate Token Counting:** Display exact token counts (before/after) using a precise tokenizer.
+
+- **Configuration Profiles:** Allow users to switch between presets (e.g., "Modern vs. Compatibility," "Max Context vs. Min Tokens").
+
+- **Expanded Rule Set further.
+
+ 
 
  END
 

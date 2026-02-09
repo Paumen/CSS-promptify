@@ -162,6 +162,20 @@ export const ruleFixtures: RuleFixture[] = [
     expectedWithComment:
       '.title {\n  font-weight: 700; /* cssreview: consolidate/deduplicate-last-wins: removed earlier overridden value 400 */\n}',
   },
+  {
+    ruleId: 'consolidate/deduplicate-last-wins',
+    description: 'multiple duplicate properties in same block',
+    input: '.button {\n  color: red;\n  padding: 10px;\n  color: blue;\n  padding: 20px;\n}',
+    expectedOutput: '.button {\n  color: blue;\n  padding: 20px;\n}',
+    expectedWithComment: null, // multiple comments on interleaved removals — skip exact match
+  },
+  {
+    ruleId: 'consolidate/deduplicate-last-wins',
+    description: 'three duplicates keeps only last',
+    input: '.box {\n  color: red;\n  color: green;\n  color: blue;\n}',
+    expectedOutput: '.box {\n  color: blue;\n}',
+    expectedWithComment: null, // multiple comments — skip exact match
+  },
 
   // ── modern/prefer-hex-colors ───────────────────────────────────────────
   {

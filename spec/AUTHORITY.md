@@ -1,8 +1,11 @@
-<llm_policy>
-Follow this hierarchy strictly. If documents conflict, the higher-ranked document wins.
-</llm_policy>
 <!--
-STATUS: Authoritative reference for document hierarchy
+CLAUDE_PERMISSIONS: READ | FOLLOW
+CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
+PURPOSE: Authoritative Reference
+AUTHORITY: None
+IF_CONFLICT: N/A
+IF_OUTDATED: Ignore
+PRIORITY: CRITICAL
 -->
 
 # Document Authority

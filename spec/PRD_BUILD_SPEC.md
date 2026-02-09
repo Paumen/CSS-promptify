@@ -1,12 +1,11 @@
-
 <!--
-
-STATUS: Authoritative reference for this topic
-
-SOURCE OF TRUTH: If anything conflicts, SPEC/PRD_BUILD_SPEC.md wins
-
-LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
-
+CLAUDE_PERMISSIONS: READ | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_WITH_HUMAN_PR_REVIEW
+PURPOSE: Authoritative Reference
+AUTHORITY: None
+IF_CONFLICT: N/A (this is root)
+IF_OUTDATED: Flag human
+PRIORITY: CRITICAL
 -->
 
 

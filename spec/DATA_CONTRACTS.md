@@ -1,9 +1,11 @@
-<llm_policy>
-You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review is required for any changes.
-</llm_policy>
 <!--
-STATUS: Authoritative reference for data shapes, enums, invariants, recompute model, and conflict handling
-SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
+CLAUDE_PERMISSIONS: READ | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_WITH_HUMAN_PR_REVIEW
+PURPOSE: Authoritative Reference
+AUTHORITY: spec/PRD_BUILD_SPEC.md
+IF_CONFLICT: Defer to spec/PRD_BUILD_SPEC.md
+IF_OUTDATED: Flag human
+PRIORITY: CRITICAL
 -->
 
 # Data Contracts (v1)

@@ -1,5 +1,11 @@
 <!--
-STATUS: LLM workflow guide for humans
+CLAUDE_PERMISSIONS: READ
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
 -->
 
 # WORKFLOW — How to use the LLM with this repo

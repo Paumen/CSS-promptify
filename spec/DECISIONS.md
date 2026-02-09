@@ -1,7 +1,11 @@
 <!--
-STATUS: Human decision log
-SOURCE OF TRUTH: Human decisions in this file are final unless explicitly changed by a human
-LLM_POLICY: Read-only. Do not add, remove, or change decisions. You may suggest wording improvements only.
+CLAUDE_PERMISSIONS: READ
+CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
+PURPOSE: Human-Only
+AUTHORITY: None
+IF_CONFLICT: N/A (human-only)
+IF_OUTDATED: Ignore
+PRIORITY: CRITICAL
 -->
 
 # Decisions (ADR-lite)

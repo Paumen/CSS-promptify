@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Authoritative Reference
+AUTHORITY: None
+IF_CONFLICT: N/A
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
+-->
+
 ## Quick Start (for Claude Code)
 See `CLAUDE.md` for Claude Code-specific instructions and quick orientation.
 

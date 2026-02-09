@@ -1,7 +1,11 @@
 <!--
-STATUS: Implementation guide for phased development
-LLM_POLICY: Follow phases in order. Complete each phase before moving to next.
-LAST_UPDATED: 2026-02-01
+CLAUDE_PERMISSIONS: READ | FOLLOW
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: HIGH
 -->
 
 # Implementation Checklist

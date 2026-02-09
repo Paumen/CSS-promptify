@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ | FOLLOW
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: These take precedence in Claude Code sessions
+IF_OUTDATED: Flag human
+PRIORITY: CRITICAL
+-->
+
 # Claude Code Instructions
 
 This file provides quick-start guidance for Claude Code when working on this repository.

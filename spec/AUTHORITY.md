@@ -22,9 +22,8 @@ This file defines the **single source of truth** for document hierarchy and conf
 | 5 | `spec/RULEBOOK_INDEX.md` | Rule catalog with metadata | Read + implement each rule |
 | 6 | `spec/EXAMPLES.md` | Before/after test cases | Read + validate against |
 | 7 | `spec/TYPES.md` | TypeScript interfaces (single source for types) | Read + use for type safety |
-| 8 | `spec/PROPERTY_SORT_ORDER.md` | Property sorting specification | Read + implement order |
-| 9 | `spec/TERMINOLOGY.md` | Standardized terms + glossary | Read + use consistently |
-| 10 | `spec/DECISIONS.md` | Decision log | **Read-only** - never modify |
+| 8 | `spec/TERMINOLOGY.md` | Standardized terms + glossary | Read + use consistently |
+| 9 | `spec/DECISIONS.md` | Decision log | **Read-only** - never modify |
 
 ---
 
@@ -69,7 +68,6 @@ When starting work or building context, read files in this order:
 
 - **EXAMPLES.md**: Concrete before/after cases (serve as tests)
 - **TYPES.md**: TypeScript interfaces matching DATA_CONTRACTS (single source for TypeScript types)
-- **PROPERTY_SORT_ORDER.md**: Canonical property ordering for sort rule
 - **TERMINOLOGY.md**: Which terms to use (and which to avoid) + glossary definitions
 
 ### Reference (Read-Only)

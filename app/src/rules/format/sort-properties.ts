@@ -8,7 +8,7 @@ import type { Rule, Issue, CSSNode, SessionConfig, Range } from '../../types';
 import { createSafeIssue, createPatch } from '../utils';
 import { walk } from '../../parser';
 
-// Property sort order for grouped mode (from PROPERTY_SORT_ORDER.md)
+// Property sort order for grouped mode (canonical order defined here)
 const GROUPED_ORDER: string[] = [
     // Group 1: Cascade
   'all',                           'composes',

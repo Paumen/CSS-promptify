@@ -99,7 +99,6 @@ CSS-promptify/
 │   ├── RULEBOOK_INDEX.md             # Rule catalog (19 rules in v1)
 │   ├── EXAMPLES.md                   # Before/after test cases
 │   ├── TYPES.md                      # TypeScript interfaces (single source)
-│   ├── PROPERTY_SORT_ORDER.md        # Property sort order spec
 │   ├── TERMINOLOGY.md                # Standardized terms + glossary
 │   ├── DECISIONS.md                  # Decision log (read-only)
 │   └── test-cases.json               # Machine-readable tests

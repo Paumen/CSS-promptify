@@ -145,7 +145,7 @@
       ],
       "expected_output_no_comments": ".element {\n  position: relative;\n  display: flex;\n  margin: 10px;\n  color: blue;\n}\n",
       "expected_output_with_comments": ".element {\n  position: relative;\n  display: flex;\n  margin: 10px;\n  color: blue;\n}\n",
-      "notes": "Sort order follows PROPERTY_SORT_ORDER.md grouped mode"
+      "notes": "Properties sorted in grouped mode (by logical category)"
     },
     {
       "id": "example-9",

@@ -274,7 +274,7 @@ For each rule, the following was checked:
 
 **Detection Logic:**
 - Walks all Block nodes with 2+ declarations
-- Checks if properties are in grouped order (from PROPERTY_SORT_ORDER.md)
+- Checks if properties are in grouped order (by logical category)
 - Custom properties sorted last
 
 **Fix Logic:**

@@ -5,7 +5,7 @@ PURPOSE: Authoritative Reference
 AUTHORITY: spec/PRD_BUILD_SPEC.md
 IF_CONFLICT: Defer to spec/PRD_BUILD_SPEC.md
 IF_OUTDATED: Flag human
-PRIORITY: MEDIUM
+PRIORITY: HIGH
 -->
 
 # Terminology

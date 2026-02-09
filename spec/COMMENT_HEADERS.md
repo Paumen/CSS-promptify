@@ -1,16 +1,16 @@
 <!--
-CLAUDE_PERMISSIONS: READ | SUGGEST
-CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
-PURPOSE: Instructions
+CLAUDE_PERMISSIONS: READ
+CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
+PURPOSE: Authoritative Reference
 AUTHORITY: None
 IF_CONFLICT: N/A
 IF_OUTDATED: Flag human
-PRIORITY: HIGH
+PRIORITY: Critical
 -->
 
 # Comment Headers Governance
 
-This document defines the comment header system used across all CSS Promptify documentation.
+This document defines the comment header system used across all documentation in this repository.
 
 ## Template
 
@@ -83,5 +83,5 @@ PRIORITY: [CRITICAL | HIGH | MEDIUM | LOW]
 
 1. **Placement**: Always at the top of markdown files (before title)
 2. **Format**: HTML comments `<!-- -->` (invisible in rendered markdown)
-3. **Scope**: All `.md` files in this project
-4. **Updates**: Changes to this governance system require human PR review
+3. **Scope**: All `.md` files in this project, and possibly more.
+4. **Updates**: Changes to this governance system strictly by human only. 

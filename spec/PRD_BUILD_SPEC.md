@@ -286,4 +286,6 @@ spec-nfr-01: Token estimate uses character-based heuristic (tokens ≈ character
 spec-nfr-02: Stats display token estimate, line count, and character count before/after.
 spec-nfr-03: Properties not recognized by the tool are reported as info-only; never warning/error.
 
+
+
 END

@@ -161,7 +161,7 @@ Format:
 ## 2026-01-30 — Property sort default is grouped mode
 **Decision:** Default property sort mode is `grouped` (properties sorted by logical category: positioning, layout, typography, colors, etc.).
 **Rationale:** Grouped ordering improves CSS readability and understanding of structure.
-**Consequences:** See `spec/PROPERTY_SORT_ORDER.md` for the canonical group ordering.
+**Consequences:** Property sort order is defined in the implementation (`app/src/rules/format/sort-properties.ts`).
 
 ---
 

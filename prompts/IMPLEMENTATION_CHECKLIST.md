@@ -76,7 +76,7 @@ Complete each phase before moving to the next.
 - [x] Implement `format/multiple-declarations-per-line`
 - [x] Implement `format/single-prop-single-line`
 - [x] Implement `format/normalize-spaces`
-- [x] Implement `format/sort-properties` (use PROPERTY_SORT_ORDER.md)
+- [x] Implement `format/sort-properties`
 - [x] Implement `format/one-selector-per-line`
 - [x] All fixes must be deterministic
 - [x] Write tests matching spec/EXAMPLES.md

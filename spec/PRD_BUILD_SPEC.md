@@ -269,4 +269,21 @@ Rules are defined as a hybrid of:
 ### 14.6 Mobile
 - **AC-13:** The entire core workflow (paste, analyze, filter, select, copy) is usable on a standard mobile viewport without horizontal scrolling or blocked actions.
 
+spec-uix-01: Output pane updates immediately as user checks/unchecks fixes.
+spec-uix-02: Copy actions are explicit: “copy with comments” or “copy without comments.”
+spec-uix-03: Inline tool comments are brief and end-of-line style.
+
+spec-eng-01: CSS parser is css-tree.
+spec-eng-02: Apply/revert implemented via recompute from original input + selected fixes.
+spec-eng-03: Rule IDs use verb prefix consistently: e.g., consolidate/, format/, tokenize/.
+spec-eng-04: Conflicting fixes cannot both be selected; conflicts must be visible to the user.
+
+spec-sts-01: Maximum CSS input size is 100KB; warn above 50KB.
+spec-sts-02: Rule toggles, severities, and parameters are session-only in v1; reset on refresh.
+spec-sts-03: Users can select fixes individually and revert independently.
+
+spec-nfr-01: Token estimate uses character-based heuristic (tokens ≈ characters / 4).
+spec-nfr-02: Stats display token estimate, line count, and character count before/after.
+spec-nfr-03: Properties not recognized by the tool are reported as info-only; never warning/error.
+
 END

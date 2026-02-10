@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || cd "$(dirname "$0")/../.." && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "$0")/../.." && pwd))"
 ARTIFACTS_DIR="$REPO_ROOT/.pipeline/artifacts"
 CONFIG_FILE="$REPO_ROOT/.pipeline/config.json"
 

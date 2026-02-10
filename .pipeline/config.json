@@ -1,4 +1,5 @@
 {
   "approval_mode": "prompt",
-  "_comment": "Set to 'auto' to skip human approval gates for Category C/D changes and the Phase 2→3 checkpoint. Default 'prompt' pauses for confirmation."
+  "dry_run": true,
+  "repo_root": "/home/user/CSS-promptify"
 }

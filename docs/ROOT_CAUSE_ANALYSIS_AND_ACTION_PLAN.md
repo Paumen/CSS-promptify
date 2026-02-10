@@ -379,7 +379,7 @@ Before marking a rule complete:
 
 **Batch 4C: Documentation**
 
-- Update `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` with new testing requirements
+- Update `prompts/IMPLEMENTATION_CHECKLIST.md` with new testing requirements
 
 **Deliverables:**
 - [ ] GitHub Actions workflow
@@ -424,7 +424,7 @@ Before marking a rule complete:
 | `spec/RULEBOOK_INDEX.md` | Add "does not trigger" cases |
 | `spec/UI_STYLE_GUIDE.md` | Add comment placement rules |
 | `CLAUDE.md` | Add implementation checklist |
-| `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` | Add testing requirements |
+| `prompts/IMPLEMENTATION_CHECKLIST.md` | Add testing requirements |
 | `tests/test-all-rules.css` | Fix invalid-syntax test case |
 
 ---

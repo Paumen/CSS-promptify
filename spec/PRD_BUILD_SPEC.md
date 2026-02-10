@@ -3,7 +3,7 @@
 
 STATUS: Authoritative reference for this topic
 
-SOURCE OF TRUTH: If anything conflicts, SPEC/PRD_BUILD_SPEC.md wins
+SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
 
 LLM_POLICY: You may READ this file. You may SUGGEST edits as a patch/diff, but do not rewrite silently. Human review required.
 
@@ -75,11 +75,11 @@ This product optimizes for **LLM context first**, then applies **rule-driven tok
 
 > For all official definitions, terminology, and data contracts (e.g., `Issue`, `Rule`, `Fix`), refer to the following canonical sources:
 
-> - `SPEC/TERMINOLOGY.md` — Preferred terms and naming conventions.
+> - `spec/TERMINOLOGY.md` — Preferred terms and naming conventions.
 
-> - `SPEC/DATA_CONTRACTS.md` — Enums, invariants, and data shapes.
+> - `spec/DATA_CONTRACTS.md` — Enums, invariants, and data shapes.
 
-> - `SPEC/TYPES.md` — TypeScript interfaces.
+> - `spec/TYPES.md` — TypeScript interfaces.
 
 ---
 
@@ -135,7 +135,7 @@ SPEC-eng-01: CSS parser is css-tree.
 
 SPEC-eng-02: The parser must preserve user comments and treat tool-generated comments separately.
 
-SPEC-eng-03: Each issue must conform to the data contract in SPEC/DATA_CONTRACTS.md including rule_id, severity, group, message, location, logic, and fixability.
+SPEC-eng-03: Each issue must conform to the data contract in spec/DATA_CONTRACTS.md including rule_id, severity, group, message, location, logic, and fixability.
 
 SPEC-eng-04: The engine must be deterministic.
 
@@ -239,7 +239,7 @@ Rules are defined as a hybrid of:
 
 ## 12) Data Model (Canonical)
 
-> See `SPEC/DATA_CONTRACTS.md` and `SPEC/TYPES.md` for all data model definitions.
+> See `spec/DATA_CONTRACTS.md` and `spec/TYPES.md` for all data model definitions.
 
 ---
 

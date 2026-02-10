@@ -22,7 +22,7 @@ See `spec/AUTHORITY.md` for the full hierarchy. Summary:
 11) spec/DECISIONS.md (read-only)
 
 ## Implementation phases
-See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for the full phased breakdown.
+See `prompts/IMPLEMENTATION_CHECKLIST.md` for the full phased breakdown.
 
 ## How to ask (important)
 Ask for ONE slice at a time. Examples:

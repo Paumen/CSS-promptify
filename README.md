@@ -72,7 +72,7 @@ All open questions have been decided. See `spec/DECISIONS.md` for the full decis
 - ✅ App scaffolding not created yet
 - ✅ Rule engine + UI implementation pending
 
-See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased implementation plan.
+See `prompts/IMPLEMENTATION_CHECKLIST.md` for phased implementation plan.
 
 ---
 

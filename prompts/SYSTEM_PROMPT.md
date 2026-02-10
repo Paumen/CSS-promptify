@@ -40,7 +40,7 @@ and explain which invariant would be violated and why.
 
 ## Output expectations
 - Work in small increments (one slice at a time).
-- Follow `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased development.
+- Follow `prompts/IMPLEMENTATION_CHECKLIST.md` for phased development.
 - When proposing implementation, include:
   - brief approach
   - data shapes matching DATA_CONTRACTS and TYPES.md

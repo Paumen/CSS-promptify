@@ -93,9 +93,10 @@ When this pipeline is triggered, execute the following steps IN ORDER:
 4. Record the current git state: `git rev-parse HEAD` → save to `.pipeline/artifacts/.pipeline-start-commit`.
 5. Ensure `.pipeline/config.json` exists. If not, create with defaults:
    ```json
-   { "approval_mode": "prompt" }
+   { "approval_mode": "prompt", "dry_run": false }
    ```
-6. Read each agent prompt file and replace all `{{REPO_ROOT}}` with the detected repo root path.
+6. Read `.pipeline/config.json` and check `dry_run` flag.
+7. Read each agent prompt file and replace all `{{REPO_ROOT}}` with the detected repo root path.
 
 ### Phase 1: Repo Auditor
 ```
@@ -109,6 +110,14 @@ When this pipeline is triggered, execute the following steps IN ORDER:
 5. Validate: .pipeline/artifacts/01-auditor-findings.json exists and is valid JSON
 6. If invalid or missing: ABORT pipeline with error
 7. Print: "Phase 1 complete. Findings: <summary.total_findings> (<by_severity>)"
+```
+
+### Dry Run Check
+```
+If dry_run is true:
+  1. Print the health_baseline from 01-auditor-findings.json as a formatted table
+  2. Print: "Dry run complete. Auditor found <N> findings (<E>E/<W>W/<I>I). No mutations applied."
+  3. STOP — do not proceed to Phase 2, 3, or 4.
 ```
 
 ### Phase 2: Structure & Reference Engineer

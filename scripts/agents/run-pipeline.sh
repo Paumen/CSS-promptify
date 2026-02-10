@@ -5,10 +5,11 @@
 # invocation command. The actual orchestration runs inside Claude Code.
 #
 # Usage:
-#   bash scripts/agents/run-pipeline.sh [--auto]
+#   bash scripts/agents/run-pipeline.sh [--auto] [--dry-run]
 #
 # Options:
-#   --auto    Set approval_mode to "auto" (skip human approval gates)
+#   --auto      Set approval_mode to "auto" (skip human approval gates)
+#   --dry-run   Run only the Auditor (Phase 1) — no mutations, just health report
 
 set -euo pipefail
 
@@ -20,10 +21,19 @@ echo "=== Four-Agent Repo Hygiene Pipeline ==="
 echo "Repo root: $REPO_ROOT"
 echo ""
 
-# Handle --auto flag
+# Handle flags
 APPROVAL_MODE="prompt"
-if [[ "${1:-}" == "--auto" ]]; then
-  APPROVAL_MODE="auto"
+DRY_RUN="false"
+for arg in "$@"; do
+  case "$arg" in
+    --auto)    APPROVAL_MODE="auto" ;;
+    --dry-run) DRY_RUN="true" ;;
+  esac
+done
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "[config] Mode: DRY RUN (Auditor only — no mutations)"
+elif [[ "$APPROVAL_MODE" == "auto" ]]; then
   echo "[config] Approval mode: auto (human gates disabled)"
 else
   echo "[config] Approval mode: prompt (human approval required for major changes)"
@@ -38,6 +48,7 @@ rm -f "$ARTIFACTS_DIR"/*.json "$ARTIFACTS_DIR"/*.md 2>/dev/null || true
 cat > "$CONFIG_FILE" <<EOF
 {
   "approval_mode": "$APPROVAL_MODE",
+  "dry_run": $DRY_RUN,
   "repo_root": "$REPO_ROOT"
 }
 EOF
@@ -63,12 +74,21 @@ echo "[ready] Pipeline environment prepared."
 echo ""
 echo "To run the full pipeline in Claude Code, use this prompt:"
 echo ""
-echo "  Run the repo hygiene pipeline: read and execute scripts/agents/pipeline-trigger.md"
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "  Run a dry-run repo health audit: read scripts/agents/pipeline-trigger.md and execute Phase 1 only (Auditor). Stop after producing the health baseline report. Do not run Phases 2-4."
+else
+  echo "  Run the repo hygiene pipeline: read and execute scripts/agents/pipeline-trigger.md"
+fi
 echo ""
 echo "The orchestrator will:"
 echo "  1. Detect repo root automatically (portable — no hardcoded paths)"
 echo "  2. Replace {{REPO_ROOT}} placeholders in all agent prompts"
-echo "  3. Launch each agent sequentially with hard phase gates"
-echo "  4. Display before/after health comparison with ASCII visualization"
-echo "  5. Ask for your approval before committing changes"
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "  3. Run only the Auditor agent (read-only, no mutations)"
+  echo "  4. Print the health baseline and findings summary"
+else
+  echo "  3. Launch each agent sequentially with hard phase gates"
+  echo "  4. Display before/after health comparison with ASCII visualization"
+  echo "  5. Ask for your approval before committing changes"
+fi
 echo ""

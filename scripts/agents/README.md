@@ -69,6 +69,9 @@ bash scripts/agents/run-pipeline.sh
 
 # Without human approval gates
 bash scripts/agents/run-pipeline.sh --auto
+
+# Dry run — Auditor only, no mutations, just health report
+bash scripts/agents/run-pipeline.sh --dry-run
 ```
 
 ## Human Approval Gates

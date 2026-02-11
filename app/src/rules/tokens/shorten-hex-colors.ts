@@ -41,8 +41,8 @@ export const shortenHexColorsRule: Rule = {
 
     // Walk through declarations to find hex colors in VALUES only (not selectors)
     walk(ast, (node) => {
-      // Only process HexColor nodes inside declarations
-      if (node.type === 'HexColor' && node.loc) {
+      // css-tree parses hex colors in values as Hash nodes
+      if (node.type === 'Hash' && node.loc) {
         const hexValue = String(node.value || '');
 
         // Check if it's a 6-digit or 8-digit hex that can be shortened

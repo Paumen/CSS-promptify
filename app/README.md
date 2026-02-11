@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ | EDIT
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Authoritative Reference
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: LOW
+-->
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

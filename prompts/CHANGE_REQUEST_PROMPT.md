@@ -1,6 +1,11 @@
 <!--
-STATUS: Human-facing prompt template for controlled changes
-PURPOSE: Prevent scope creep + keep docs aligned
+CLAUDE_PERMISSIONS: READ | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
 -->
 
 # CHANGE REQUEST PROMPT — use with any LLM

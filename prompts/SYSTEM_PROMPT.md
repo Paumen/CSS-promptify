@@ -1,6 +1,11 @@
 <!--
-STATUS: LLM working instructions
-LLM_POLICY: Follow these instructions for every coding/design response related to this repo.
+CLAUDE_PERMISSIONS: READ | FOLLOW
+CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: This takes precedence over all other files
+IF_OUTDATED: Ignore
+PRIORITY: CRITICAL
 -->
 
 # SYSTEM PROMPT — CSS Promptify (v1)

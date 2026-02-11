@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_AFTER_HUMAN_EXPLICIT_APPROVAL
+PURPOSE: Human-Only
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
+-->
+
 # Root Cause Analysis and Action Plan
 
 **Generated:** 2026-02-05

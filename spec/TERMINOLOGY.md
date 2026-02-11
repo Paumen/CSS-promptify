@@ -1,7 +1,11 @@
 <!--
-STATUS: Authoritative reference for terminology
-SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
-LLM_POLICY: Use these terms consistently in all code, docs, and UI.
+CLAUDE_PERMISSIONS: READ | FOLLOW | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_WITH_HUMAN_PR_REVIEW
+PURPOSE: Authoritative Reference
+AUTHORITY: spec/PRD_BUILD_SPEC.md
+IF_CONFLICT: Defer to spec/PRD_BUILD_SPEC.md
+IF_OUTDATED: Flag human
+PRIORITY: HIGH
 -->
 
 # Terminology

@@ -100,4 +100,5 @@
 /* 20. safety/invalid-syntax (at end to not break parsing) */
 .invalid-syntax {
   color: red
+  background: blue;
 }

@@ -9,7 +9,7 @@ import { createInfoIssue, findAllMatches, rangeFromCoords } from '../utils';
 export const importantUsedRule: Rule = {
   meta: {
     rule_id: 'style/important-used',
-    group: 'safety',
+    group: 'education',
     severity: 'info',
     fixability: 'none',
     enabled_by_default: true,
@@ -26,7 +26,7 @@ export const importantUsedRule: Rule = {
       issues.push(
         createInfoIssue({
           ruleId: 'style/important-used',
-          group: 'safety',
+          group: 'education',
           severity: 'info',
           message: 'Found !important declaration',
           location: rangeFromCoords(

@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ | SUGGEST | EDIT
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Authoritative Reference
+AUTHORITY: None
+IF_CONFLICT: N/A
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
+-->
+
 ## Quick Start (for Claude Code)
 See `CLAUDE.md` for Claude Code-specific instructions and quick orientation.
 
@@ -72,7 +82,7 @@ All open questions have been decided. See `spec/DECISIONS.md` for the full decis
 - ✅ App scaffolding not created yet
 - ✅ Rule engine + UI implementation pending
 
-See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased implementation plan.
+See `prompts/IMPLEMENTATION_CHECKLIST.md` for phased implementation plan.
 
 ---
 

@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ | SUGGEST | EDIT
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Authoritative Reference
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
+-->
+
 # CSS Promptify Rules Validation Report
 
 **Generated:** 2026-02-04

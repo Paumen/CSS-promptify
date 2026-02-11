@@ -1,7 +1,11 @@
 <!--
-STATUS: Authoritative reference for UI visual styling + CSS maintainability
-SOURCE OF TRUTH: If anything conflicts, spec/PRD_BUILD_SPEC.md wins
-LLM_POLICY: Follow these styling rules when building the React UI.
+CLAUDE_PERMISSIONS: READ | FOLLOW | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_WITH_HUMAN_PR_REVIEW
+PURPOSE: Authoritative Reference
+AUTHORITY: spec/PRD_BUILD_SPEC.md
+IF_CONFLICT: Defer to spec/PRD_BUILD_SPEC.md
+IF_OUTDATED: Flag human
+PRIORITY: HIGH
 -->
 
 # UI Style Guide (v1)

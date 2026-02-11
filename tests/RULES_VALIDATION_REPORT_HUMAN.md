@@ -1,3 +1,13 @@
+<!--
+CLAUDE_PERMISSIONS: READ
+CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
+PURPOSE: Human-Only
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Ignore
+PRIORITY: LOW
+-->
+
 # CSS Promptify Rules Validation Report (Human)
 
 **Generated:** 2026-02-04  

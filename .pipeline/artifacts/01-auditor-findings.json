@@ -1,0 +1,119 @@
+{
+  "agent": "repo-auditor",
+  "timestamp": "2026-02-10T21:54:00Z",
+  "repo_root": "/home/user/CSS-promptify",
+  "summary": {
+    "total_findings": 9,
+    "by_severity": {
+      "error": 2,
+      "warning": 5,
+      "info": 2
+    },
+    "navigation_friction_score": 8,
+    "overall_coherence": "High coherence with minor path inconsistencies and one semantic contradiction. Documentation is comprehensive and well-structured with clear hierarchy. Spec documents are internally consistent. Minor discrepancies exist between documented directory names and actual structure."
+  },
+  "health_baseline": {
+    "broken_references": 0,
+    "tree_drift_files": 2,
+    "spec_contradictions": 1,
+    "claude_md_accuracy_pct": 95,
+    "terminology_consistency_pct": 98,
+    "navigation_friction_score": 8
+  },
+  "findings": [
+    {
+      "id": "AUD-001",
+      "category": "tree",
+      "severity": "error",
+      "file": "CLAUDE.md",
+      "line": 87,
+      "description": "Directory name mismatch: CLAUDE.md documents directory as 'PROMPT-KIT/' but actual directory is 'prompts/'",
+      "evidence": "CLAUDE.md line 87 shows '├── PROMPT-KIT/' but filesystem contains 'prompts/' directory with all referenced files (SYSTEM_PROMPT.md, CHANGE_REQUEST_PROMPT.md, WORKFLOW.md, IMPLEMENTATION_CHECKLIST.md)",
+      "suggested_action": "Engineer: Update CLAUDE.md line 87 to 'prompts/' OR rename directory to 'PROMPT-KIT/'. Update all cross-references to use the actual directory name consistently throughout documentation."
+    },
+    {
+      "id": "AUD-002",
+      "category": "reference",
+      "severity": "warning",
+      "file": "spec/PRD_BUILD_SPEC.md",
+      "line": 6,
+      "description": "Case sensitivity inconsistency: CLAUDE.md uses 'spec/' (lowercase) while PRD_BUILD_SPEC.md uses 'SPEC/' (uppercase)",
+      "evidence": "PRD_BUILD_SPEC.md lines 6, 78-82 reference 'SPEC/TERMINOLOGY.md', 'SPEC/DATA_CONTRACTS.md', 'SPEC/TYPES.md' but all cross-references in CLAUDE.md, README.md, and other docs use lowercase 'spec/'",
+      "suggested_action": "Engineer: Standardize all references to use lowercase 'spec/' for consistency. Update PRD_BUILD_SPEC.md lines 6, 78-82 to use 'spec/' instead of 'SPEC/'."
+    },
+    {
+      "id": "AUD-003",
+      "category": "duplication",
+      "severity": "info",
+      "file": "README.md, CLAUDE.md",
+      "line": null,
+      "description": "Intentional semantic duplication: README.md and CLAUDE.md both document the canonical reading order from spec/AUTHORITY.md",
+      "evidence": "README.md lines 8-9 and CLAUDE.md lines 14-15 both reference spec/AUTHORITY.md for canonical reading order. This is intentional redundancy for discoverability.",
+      "suggested_action": "No action required. This is intentional redundancy to help users find the hierarchy from multiple entry points."
+    },
+    {
+      "id": "AUD-004",
+      "category": "claude_md",
+      "severity": "error",
+      "file": "CLAUDE.md",
+      "line": 47,
+      "description": "Semantic contradiction: Architecture diagram states '(20+ rules)' but documented v1 spec contains exactly 19 rules",
+      "evidence": "CLAUDE.md line 47 shows '│ (20+ rules) │' in the architecture diagram. CLAUDE.md line 99 and spec/RULEBOOK_INDEX.md line 41 both state 'Rule catalog (19 rules in v1)' and 'v1.0 first release includes Tier 1 + Tier 2 (19 rules)'",
+      "suggested_action": "Engineer: Update CLAUDE.md line 47 architecture diagram from '(20+ rules)' to '(19 rules)' for consistency with RULEBOOK_INDEX.md."
+    },
+    {
+      "id": "AUD-005",
+      "category": "reference",
+      "severity": "warning",
+      "file": "README.md, CLAUDE.md, docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md",
+      "line": null,
+      "description": "Broken cross-references to PROMPT-KIT path in 5 locations",
+      "evidence": "README.md line 75, CLAUDE.md lines 87, 126, docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md lines 382, 427 reference 'PROMPT-KIT/' directory, but actual directory is 'prompts/'. When users follow the reference or an automated system tries to resolve the path, it will fail.",
+      "suggested_action": "Engineer: Replace all 'PROMPT-KIT/' references with 'prompts/' in: README.md line 75, CLAUDE.md lines 87 & 126, docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md lines 382 & 427."
+    },
+    {
+      "id": "AUD-006",
+      "category": "tree",
+      "severity": "warning",
+      "file": "CSS-promptify/",
+      "line": null,
+      "description": "Undocumented directory: CSS-promptify/ subdirectory exists but is not referenced in any documentation",
+      "evidence": "Directory listing shows /home/user/CSS-promptify/CSS-promptify/ as an empty directory with no contents and no mention in CLAUDE.md, README.md, or any spec documents",
+      "suggested_action": "Engineer: Either (1) Document the purpose of CSS-promptify/ in CLAUDE.md file structure if it serves a purpose, or (2) Remove the directory if it is no longer needed."
+    },
+    {
+      "id": "AUD-007",
+      "category": "spec_consistency",
+      "severity": "info",
+      "file": "spec/EXAMPLES.md",
+      "line": 15,
+      "description": "Example uses 'LLM-friendly formatting + color shortening' title but demonstrates multiple independent fixes",
+      "evidence": "spec/EXAMPLES.md Example 1 (lines 15-42) shows fixes for: format/normalize-spaces, format/multiple-declarations-per-line, format/indent-2-spaces, and tokens/shorten-hex-colors. Title is accurate but could be more descriptive.",
+      "suggested_action": "No action required. Title is sufficiently descriptive of the overall example. This is a minor clarity opportunity, not an error."
+    },
+    {
+      "id": "AUD-008",
+      "category": "navigation",
+      "severity": "info",
+      "file": "prompts/SYSTEM_PROMPT.md",
+      "line": 43,
+      "description": "Reference uses 'PROMPT-KIT/' path instead of actual 'prompts/' path",
+      "evidence": "prompts/SYSTEM_PROMPT.md line 43 states 'Follow `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased development.' Should be 'prompts/IMPLEMENTATION_CHECKLIST.md'",
+      "suggested_action": "Engineer: Update prompts/SYSTEM_PROMPT.md line 43 reference from 'PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md' to 'prompts/IMPLEMENTATION_CHECKLIST.md'."
+    },
+    {
+      "id": "AUD-009",
+      "category": "navigation",
+      "severity": "info",
+      "file": "spec/test-cases.json",
+      "line": null,
+      "description": "Test cases JSON file exists but is not documented or referenced in CLAUDE.md file structure section",
+      "evidence": "File /home/user/CSS-promptify/spec/test-cases.json exists (per CLAUDE.md line 104), but no documentation explains its structure, purpose, or how to use it. No examples show what the JSON contains.",
+      "suggested_action": "Engineer (optional): Add brief documentation in spec/AUTHORITY.md or create a section in spec/ explaining test-cases.json format and usage, or reference it in README.md."
+    }
+  ],
+  "actual_tree": "CSS-promptify/\n├── .git/\n├── .gitignore\n├── .pipeline/\n│   ├── artifacts/\n│   └── config.json\n├── CLAUDE.md\n├── README.md\n├── CSS-promptify/                    [EMPTY - UNDOCUMENTED]\n├── app/\n│   ├── .gitignore\n│   ├── README.md\n│   ├── eslint.config.js\n│   ├── index.html\n│   ├── package-lock.json\n│   ├── package.json\n│   ├── tsconfig.json\n│   ├── tsconfig.app.json\n│   ├── tsconfig.node.json\n│   ├── vite.config.ts\n│   ├── public/\n│   │   └── vite.svg\n│   └── src/\n│       ├── App.module.css\n│       ├── App.tsx\n│       ├── index.css\n│       ├── main.tsx\n│       ├── assets/\n│       │   └── react.svg\n│       ├── engine/\n│       │   └── index.ts\n│       ├── parser/\n│       │   └── index.ts\n│       ├── rules/\n│       │   ├── consolidation/\n│       │   │   ├── deduplicate-last-wins.ts\n│       │   │   └── shorthand-margin-padding.ts\n│       │   ├── education/\n│       │   │   ├── flex-properties-require-flex.ts\n│       │   │   ├── grid-properties-require-grid.ts\n│       │   │   └── index.ts\n│       │   ├── format/\n│       │   │   ├── indent-2-spaces.ts\n│       │   │   ├── multiple-declarations-per-line.ts\n│       │   │   ├── no-tabs.ts\n│       │   │   ├── normalize-spaces.ts\n│       │   │   ├── one-selector-per-line.ts\n│       │   │   ├── single-prop-single-line.ts\n│       │   │   ├── sort-properties.ts\n│       │   │   └── index.ts\n│       │   ├── modern/\n│       │   │   ├── prefer-hex-colors.ts\n│       │   │   └── index.ts\n│       │   ├── safety/\n│       │   │   ├── invalid-syntax.ts\n│       │   │   ├── misspelled-property.ts\n│       │   │   ├── typo-suspicious-units.ts\n│       │   │   ├── unrecognized-property.ts\n│       │   │   └── index.ts\n│       │   ├── style/\n│       │   │   ├── important-used.ts\n│       │   │   └── index.ts\n│       │   ├── tokens/\n│       │   │   ├── remove-trailing-zeros.ts\n│       │   │   ├── shorten-hex-colors.ts\n│       │   │   ├── zero-units.ts\n│       │   │   └── index.ts\n│       │   ├── index.ts\n│       │   ├── rules.test.ts\n│       │   └── utils.ts\n│       ├── state/\n│       │   └── index.ts\n│       ├── styles/\n│       │   └── tokens.css\n│       ├── test/\n│       │   └── setup.ts\n│       ├── types/\n│       │   ├── index.ts\n│       │   └── index.test.ts\n│       └── ui/\n│           └── InputPanel.module.css\n├── docs/\n│   └── ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md\n├── prompts/                          [Documented as 'PROMPT-KIT/' in CLAUDE.md]\n│   ├── CHANGE_REQUEST_PROMPT.md\n│   ├── IMPLEMENTATION_CHECKLIST.md\n│   ├── SYSTEM_PROMPT.md\n│   └── WORKFLOW.md\n├── scripts/\n│   └── generate-examples-md.js\n├── spec/\n│   ├── AUTHORITY.md\n│   ├── DATA_CONTRACTS.md\n│   ├── DECISIONS.md\n│   ├── EXAMPLES.md\n│   ├── PRD_BUILD_SPEC.md\n│   ├── RULEBOOK_INDEX.md\n│   ├── TERMINOLOGY.md\n│   ├── TYPES.md\n│   ├── UI_BEHAVIOR.md\n│   ├── UI_STYLE_GUIDE.md\n│   └── test-cases.json\n├── tests/\n│   ├── RULES_VALIDATION_REPORT.md\n│   ├── RULES_VALIDATION_REPORT_HUMAN.md\n│   └── test-all-rules.css\n└── test.prompt.yml",
+  "documented_trees": {
+    "CLAUDE.md": "CSS-promptify/\n├── CLAUDE.md\n├── README.md\n├── .gitignore\n├── PROMPT-KIT/                        [ACTUAL: prompts/]\n│   ├── SYSTEM_PROMPT.md\n│   ├── CHANGE_REQUEST_PROMPT.md\n│   ├── WORKFLOW.md\n│   └── IMPLEMENTATION_CHECKLIST.md\n├── spec/\n│   ├── AUTHORITY.md\n│   ├── PRD_BUILD_SPEC.md\n│   ├── DATA_CONTRACTS.md\n│   ├── UI_BEHAVIOR.md\n│   ├── UI_STYLE_GUIDE.md\n│   ├── RULEBOOK_INDEX.md\n│   ├── EXAMPLES.md\n│   ├── TYPES.md\n│   ├── TERMINOLOGY.md\n│   ├── DECISIONS.md\n│   └── test-cases.json\n└── app/\n    ├── src/\n    │   ├── parser/\n    │   ├── rules/\n    │   ├── engine/\n    │   ├── ui/\n    │   └── types/\n    └── package.json"
+  }
+}

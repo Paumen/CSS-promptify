@@ -1,6 +1,11 @@
 <!--
-STATUS: LLM working instructions
-LLM_POLICY: Follow these instructions for every coding/design response related to this repo.
+CLAUDE_PERMISSIONS: READ | FOLLOW
+CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: This takes precedence over all other files
+IF_OUTDATED: Ignore
+PRIORITY: CRITICAL
 -->
 
 # SYSTEM PROMPT — CSS Promptify (v1)
@@ -40,7 +45,7 @@ and explain which invariant would be violated and why.
 
 ## Output expectations
 - Work in small increments (one slice at a time).
-- Follow `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for phased development.
+- Follow `prompts/IMPLEMENTATION_CHECKLIST.md` for phased development.
 - When proposing implementation, include:
   - brief approach
   - data shapes matching DATA_CONTRACTS and TYPES.md

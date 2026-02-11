@@ -1,5 +1,11 @@
 <!--
-STATUS: LLM workflow guide for humans
+CLAUDE_PERMISSIONS: READ | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_AND_INFORM
+PURPOSE: Instructions
+AUTHORITY: None
+IF_CONFLICT: request HUMAN if unclear
+IF_OUTDATED: Flag human
+PRIORITY: MEDIUM
 -->
 
 # WORKFLOW — How to use the LLM with this repo
@@ -22,7 +28,7 @@ See `spec/AUTHORITY.md` for the full hierarchy. Summary:
 11) spec/DECISIONS.md (read-only)
 
 ## Implementation phases
-See `PROMPT-KIT/IMPLEMENTATION_CHECKLIST.md` for the full phased breakdown.
+See `prompts/IMPLEMENTATION_CHECKLIST.md` for the full phased breakdown.
 
 ## How to ask (important)
 Ask for ONE slice at a time. Examples:

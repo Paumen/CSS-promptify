@@ -1,7 +1,11 @@
 <!--
-STATUS: Authoritative reference for TypeScript types
-SOURCE OF TRUTH: If anything conflicts, spec/DATA_CONTRACTS.md wins
-LLM_POLICY: Use these exact interfaces when implementing. Types must match DATA_CONTRACTS.
+CLAUDE_PERMISSIONS: READ | FOLLOW | SUGGEST
+CLAUDE_UPDATE_POLICY: ALLOWED_WITH_HUMAN_PR_REVIEW
+PURPOSE: Authoritative Reference
+AUTHORITY: spec/DATA_CONTRACTS.md
+IF_CONFLICT: Defer to spec/DATA_CONTRACTS.md
+IF_OUTDATED: Flag human
+PRIORITY: HIGH
 -->
 
 # TypeScript Types

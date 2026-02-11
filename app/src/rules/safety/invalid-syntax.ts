@@ -16,7 +16,7 @@ export function createParseErrorIssues(errors: ParseError[]): Issue[] {
       ruleId: 'safety/invalid-syntax',
       group: 'safety',
       severity: 'error',
-      message: error.message,
+      message: `Syntax error at line ${error.location.line}: ${error.message}`,
       location: rangeFromCoords(
         error.location.line,
         error.location.column,
@@ -24,9 +24,9 @@ export function createParseErrorIssues(errors: ParseError[]): Issue[] {
         error.location.column + 1
       ),
       logic: {
-        what: `CSS syntax error: ${error.message}`,
-        why: 'Invalid CSS will not be parsed correctly by browsers and may cause unexpected behavior',
-        when_safe: 'Not auto-fixable - manual correction required',
+        what: `CSS syntax error at line ${error.location.line}, column ${error.location.column}: ${error.message}. Common causes include missing semicolons (;), unclosed braces, or malformed property values.`,
+        why: 'Invalid CSS will not be parsed correctly by browsers and may cause unexpected behavior. Properties before the error may be ignored or misinterpreted.',
+        when_safe: 'Not auto-fixable - manual correction required. Check for missing semicolons between declarations.',
       },
     })
   );
@@ -37,7 +37,7 @@ export const invalidSyntaxRule: Rule = {
     rule_id: 'safety/invalid-syntax',
     group: 'safety',
     severity: 'error',
-    fixability: 'none',
+    fixability: 'prompt',
     enabled_by_default: true,
     applies_to: 'all CSS content with syntax errors',
   },

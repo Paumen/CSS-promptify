@@ -21,13 +21,13 @@
 Broken references:       [░░░░░░░░░░] 0 → [░░░░░░░░░░] 0  ✓
 Tree drift (files):      [██░░░░░░░░] 2 → [░░░░░░░░░░] 0  ✓✓
 Spec contradictions:     [█░░░░░░░░░] 1 → [░░░░░░░░░░] 0  ✓
-CLAUDE.md accuracy:      [█████████░] 95% → [██████████] 98%  ✓
+CLAUDE.md accuracy:      [█████████░] 95% → [█████████░] 98%  ✓
 Terminology consistency: [██████████] 98% → [██████████] 98%  =
 Navigation friction:     [████████░░] 8 → [███░░░░░░░] 3  ✓✓✓
 ```
 
 ### Overall Health Grade
-**Before: B (0.77) → After: A (0.92)**
+**Before: B (0.77) → After: A (0.95)**
 
 Grade calculation:
 - Broken references: 1.00 (weight 0.20) → 0.20

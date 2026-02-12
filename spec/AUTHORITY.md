@@ -99,7 +99,7 @@ When starting work or building context, read files in this order:
 
 The following documents are not part of the ranked spec hierarchy. If two non-spec documents conflict, resolve by priority level (CRITICAL > HIGH > MEDIUM > LOW). If priority is equal, escalate to a human.
 
-| File | Purpose | Priority |
+| File | Role    | Priority |
 |------|---------|----------|
 | `CLAUDE.md` | Instructions (Claude Code entry point) | CRITICAL |
 | `prompts/SYSTEM_PROMPT.md` | Instructions (LLM session behavior) | CRITICAL |

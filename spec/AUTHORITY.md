@@ -4,13 +4,24 @@ CLAUDE_UPDATE_POLICY: STRICTLY_DISALLOWED
 PURPOSE: Authoritative Reference
 AUTHORITY: None
 IF_CONFLICT: N/A
-IF_OUTDATED: Ignore
+IF_OUTDATED: Flag human
 PRIORITY: CRITICAL
 -->
 
 # Document Authority
 
 This file defines the **single source of truth** for document hierarchy and conflict resolution in this repository.
+
+---
+
+## Meta-Governance Documents
+
+The following documents sit above the ranked hierarchy. They are not ranked but govern the system itself:
+
+- **`spec/AUTHORITY.md`** (this file): Defines document hierarchy and content conflict resolution.
+- **`spec/COMMENT_HEADERS.md`**: Defines the metadata header system (permissions, update policies, priority).
+
+If these two documents conflict with each other, escalate to a human.
 
 ---
 
@@ -36,6 +47,7 @@ This file defines the **single source of truth** for document hierarchy and conf
 2. **If spec and code conflict**: Spec wins; fix the code
 3. **If example contradicts spec**: Spec wins; fix the example
 4. **If unclear**: Ask for clarification before proceeding
+5. **Session vs product scope**: `PRD_BUILD_SPEC.md` is authoritative for product requirements. `prompts/SYSTEM_PROMPT.md` and `CLAUDE.md` govern LLM session behavior only and do not override product specifications. If session instructions contradict product specs, product specs win.
 
 ---
 
@@ -46,19 +58,25 @@ When starting work or building context, read files in this order:
 ```
 1. CLAUDE.md                          (quick orientation)
 2. spec/AUTHORITY.md                  (this file - hierarchy)
-3. spec/PRD_BUILD_SPEC.md             (requirements)
-4. spec/DATA_CONTRACTS.md             (data shapes, enums, invariants)
-5. spec/UI_BEHAVIOR.md                (UI specification)
-6. spec/RULEBOOK_INDEX.md             (rules)
-7. spec/EXAMPLES.md                   (test cases)
-8. spec/TYPES.md                      (TypeScript)
-9. spec/TERMINOLOGY.md                (standard terms + glossary)
-10. spec/DECISIONS.md                 (context - read-only)
+3. spec/COMMENT_HEADERS.md            (header governance system)
+4. spec/PRD_BUILD_SPEC.md             (requirements)
+5. spec/DATA_CONTRACTS.md             (data shapes, enums, invariants)
+6. spec/UI_BEHAVIOR.md                (UI specification)
+7. spec/RULEBOOK_INDEX.md             (rules)
+8. spec/EXAMPLES.md                   (test cases)
+9. spec/TYPES.md                      (TypeScript)
+10. spec/TERMINOLOGY.md               (standard terms + glossary)
+11. spec/DECISIONS.md                 (context - read-only)
 ```
 
 ---
 
 ## File Purposes
+
+### Meta-Governance
+
+- **AUTHORITY.md**: Document hierarchy and conflict resolution (this file)
+- **COMMENT_HEADERS.md**: Header governance system — permissions, update policies, priority definitions
 
 ### Core Specifications
 
@@ -76,6 +94,23 @@ When starting work or building context, read files in this order:
 ### Reference (Read-Only)
 
 - **DECISIONS.md**: Why decisions were made (human-edited only)
+
+### Non-Spec Documents (unranked)
+
+The following documents are not part of the ranked spec hierarchy. If two non-spec documents conflict, resolve by priority level (CRITICAL > HIGH > MEDIUM > LOW). If priority is equal, escalate to a human.
+
+| File | Role    | Priority |
+|------|---------|----------|
+| `CLAUDE.md` | Instructions (Claude Code entry point) | CRITICAL |
+| `prompts/SYSTEM_PROMPT.md` | Instructions (LLM session behavior) | CRITICAL |
+| `prompts/IMPLEMENTATION_CHECKLIST.md` | Instructions (phased dev guide) | HIGH |
+| `prompts/WORKFLOW.md` | Instructions (LLM workflow) | MEDIUM |
+| `prompts/CHANGE_REQUEST_PROMPT.md` | Instructions (change template) | MEDIUM |
+| `README.md` | Project overview | MEDIUM |
+| `docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md` | Human-Only (RCA) | MEDIUM |
+| `tests/RULES_VALIDATION_REPORT.md` | Validation report | MEDIUM |
+| `app/README.md` | App setup guide | LOW |
+| `tests/RULES_VALIDATION_REPORT_HUMAN.md` | Human-Only (validation) | LOW |
 
 ### Archived/Removed
 

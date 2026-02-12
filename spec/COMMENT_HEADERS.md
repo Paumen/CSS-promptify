@@ -130,7 +130,7 @@ Complete inventory of all documentation files with their governance headers.
 ```
 PRD_BUILD_SPEC.md (root)
 ├── DATA_CONTRACTS.md
-├── TYPES.md
+│   └── TYPES.md
 ├── UI_BEHAVIOR.md
 ├── RULEBOOK_INDEX.md
 ├── EXAMPLES.md

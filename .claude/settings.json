@@ -29,19 +29,11 @@
       "Edit(spec/RULEBOOK_INDEX.md)",
       "Edit(docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md)",
 
-      "Write"
+      "Write",
+      "bash cat *"
     ],
 
-    "allow": [
-      "Read",
-      "Skill",
 
-      "Edit(spec/DATA_CONTRACTS.md)",
-      "Edit(spec/TYPES.md)",
-      "Edit(spec/UI_BEHAVIOR.md)",
-      "Edit(spec/EXAMPLES.md)",
-      "Edit(spec/UI_STYLE_GUIDE.md)",
-      "Edit(spec/TERMINOLOGY.md)"
     ]
   }
 }

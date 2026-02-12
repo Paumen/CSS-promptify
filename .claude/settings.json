@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-file-size.sh"
+            "command": "/home/user/CSS-promptify/.claude/hooks/check-file-size.sh"
           }
         ]
       }

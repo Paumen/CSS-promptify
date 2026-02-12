@@ -151,7 +151,7 @@ PRD_BUILD_SPEC.md (root)
 
 | Purpose | Count | Documents |
 |---------|-------|-----------|
-| **Authoritative Reference** | 13 | All 10 spec files + README, app/README, RULES_VALIDATION_REPORT |
+| **Authoritative Reference** | 13 | 10 spec files (all except DECISIONS.md), plus README.md, app/README.md, and RULES_VALIDATION_REPORT.md |
 | **Instructions** | 5 | CLAUDE.md, SYSTEM_PROMPT.md, IMPLEMENTATION_CHECKLIST.md, WORKFLOW.md, CHANGE_REQUEST_PROMPT.md |
 | **Human-Only** | 3 | DECISIONS.md, ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md, RULES_VALIDATION_REPORT_HUMAN.md |
 

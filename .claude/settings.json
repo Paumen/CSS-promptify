@@ -7,25 +7,27 @@
       "Edit(spec/AUTHORITY.md)",
       "Edit(spec/COMMENT_HEADERS.md)",
       "Edit(prompts/SYSTEM_PROMPT.md)",
-      "Edit(tests/RULES_VALIDATION_REPORT_HUMAN.md)",
-
-      "Edit(spec/PRD_BUILD_SPEC.md)",
-      "Edit(spec/RULEBOOK_INDEX.md)",
-      "Edit(docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md)"
+      "Edit(tests/RULES_VALIDATION_REPORT_HUMAN.md)"
     ],
 
     "ask": [
+      "Edit(spec/PRD_BUILD_SPEC.md)",
+      "Edit(spec/RULEBOOK_INDEX.md)",
+      "Edit(docs/ROOT_CAUSE_ANALYSIS_AND_ACTION_PLAN.md)",
+
+      "Write"
+    ],
+
+    "allow": [
+      "Read",
+      "Skill",
+
       "Edit(spec/DATA_CONTRACTS.md)",
       "Edit(spec/TYPES.md)",
       "Edit(spec/UI_BEHAVIOR.md)",
       "Edit(spec/EXAMPLES.md)",
       "Edit(spec/UI_STYLE_GUIDE.md)",
       "Edit(spec/TERMINOLOGY.md)"
-    ],
-
-    "allow": [
-      "Read",
-      "Skill"
     ]
   }
 }

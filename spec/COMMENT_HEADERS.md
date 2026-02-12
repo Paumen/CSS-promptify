@@ -19,7 +19,7 @@ This document defines the comment header system used across all documentation in
 CLAUDE_PERMISSIONS: [READ | SUGGEST | EDIT | FOLLOW | REFUSE_MODIFY]
 CLAUDE_UPDATE_POLICY: [STRICTLY_DISALLOWED | ALLOWED_AND_INFORM | ALLOWED_WITH_HUMAN_PR_REVIEW | ALLOWED_AFTER_HUMAN_EXPLICIT_APPROVAL]
 PURPOSE: [Authoritative Reference | Instructions | Human-Only | Deprecated]
-AUTHORITY: [Parent document | "None" if root]
+AUTHORITY: [Parent document | "None" if root | "N/A" if standalone]
 IF_CONFLICT: [Resolution rule | "see parent document at authority" | "request HUMAN if unclear"]
 IF_OUTDATED: [Flag human | Ignore | Update with note]
 PRIORITY: [CRITICAL | HIGH | MEDIUM | LOW]
@@ -71,6 +71,7 @@ PRIORITY: [CRITICAL | HIGH | MEDIUM | LOW]
 | **"Defer to [Doc] §X.Y"** | Follow that section. Cite in decisions. |
 | **"see parent document at authority"** | Resolve via AUTHORITY chain recursively. |
 | **"request HUMAN if unclear"** | Ask HUMAN for clarification. Provide: what conflicts + why it matters. |
+| **"N/A"** | Not applicable — document does not participate in content conflicts (e.g., meta-governance docs, human-only docs). |
 
 ### Agent Scope
 
@@ -94,6 +95,7 @@ PRIORITY: [CRITICAL | HIGH | MEDIUM | LOW]
 2. **Format**: HTML comments `<!-- -->` (invisible in rendered markdown)
 3. **Scope**: All `.md` files in this project, and possibly more.
 4. **Updates**: Changes to this governance system strictly by human only.
+5. **Governance boundary**: This document (`COMMENT_HEADERS.md`) governs the metadata header system. `spec/AUTHORITY.md` governs document hierarchy and content conflict resolution. If these two documents conflict with each other, escalate to a human.
 
 ---
 
@@ -109,7 +111,7 @@ Complete inventory of all documentation files with their governance headers.
 | 4 | `spec/AUTHORITY.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | STRICTLY_DISALLOWED | None | **CRITICAL** | Document hierarchy; conflict resolution rules |
 | 5 | `spec/TYPES.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_WITH_HUMAN_PR_REVIEW | DATA_CONTRACTS.md | **HIGH** | TypeScript interfaces; must match DATA_CONTRACTS |
 | 6 | `spec/UI_BEHAVIOR.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_WITH_HUMAN_PR_REVIEW | PRD_BUILD_SPEC.md | **HIGH** | UI state, interactions, user flows |
-| 7 | `spec/RULEBOOK_INDEX.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_AFTER_HUMAN_EXPLICIT_APPROVAL | PRD_BUILD_SPEC.md | **HIGH** | Catalog of 20 rules; rule IDs, grouping, defaults |
+| 7 | `spec/RULEBOOK_INDEX.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_AFTER_HUMAN_EXPLICIT_APPROVAL | PRD_BUILD_SPEC.md | **HIGH** | Catalog of 19 rules; rule IDs, grouping, defaults |
 | 8 | `spec/EXAMPLES.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_WITH_HUMAN_PR_REVIEW | PRD_BUILD_SPEC.md | **HIGH** | Test cases; before/after examples for all rules |
 | 9 | `spec/UI_STYLE_GUIDE.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_WITH_HUMAN_PR_REVIEW | PRD_BUILD_SPEC.md | **HIGH** | Visual styling rules; CSS maintainability |
 | 10 | `spec/TERMINOLOGY.md` | Authoritative Reference | READ \| FOLLOW \| SUGGEST | ALLOWED_WITH_HUMAN_PR_REVIEW | PRD_BUILD_SPEC.md | **HIGH** | Standardized terms; consistent usage across codebase |

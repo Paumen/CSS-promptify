@@ -197,7 +197,7 @@ export interface AppliedFix {
   /** Comment metadata */
   comment: {
     was_inserted: boolean;
-    marker_prefix: 'cssreview:';
+    marker_prefix: 'review:';
     style: 'end_of_line';
   };
 }

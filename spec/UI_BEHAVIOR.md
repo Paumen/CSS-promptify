@@ -138,18 +138,18 @@ Notes:
 - When OFF: derived output must not show tool comments
 
 ### 4.2 Comment format
-- Dedicated marker prefix required: `cssreview:`
+- Dedicated marker prefix required: `review:`
 - Comments must be **brief but clear** and should include old property/value when applicable.
 - Preferred style: **end-of-line** (compact)
 
 Example:
 ```css
-color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */
+color: #fff; /* review: tokens/shorten-hex-colors: was #ffffff */
 ```
 
 ### 4.3 Remove tool comments
 
-“Remove tool comments” removes only comments containing cssreview: and preserves all other user comments.
+“Remove tool comments” removes only comments containing review: and preserves all other user comments.
 This action must be idempotent.
 
 ### 4.4 Copy modes
@@ -250,7 +250,7 @@ Copy buttons are reachable without precision clicking
 
 User can: paste → analyze → filter → select issue → preview fix → select fix → see output → unselect fix → output reverts → copy output.
 User can toggle inline comments ON/OFF and see output update immediately.
-Copy “no comments” never includes cssreview: comments even if comments are ON.
+Copy “no comments” never includes review: comments even if comments are ON.
 “Remove tool comments” removes only tool comments, not user comments.
 
 END

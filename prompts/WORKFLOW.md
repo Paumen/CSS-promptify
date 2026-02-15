@@ -35,7 +35,7 @@ Ask for ONE slice at a time. Examples:
 - "Scaffold the React app (choose tooling) and explain why."
 - "Implement the CSS parser + AST location extraction."
 - "Implement the rule engine skeleton and one rule with a safe fix."
-- "Implement recompute apply/revert using selected_fix_ids (deterministic order + conflicts)."
+- "Implement recompute apply/revert using selected_fix_ids (see `spec/DATA_CONTRACTS.md` §4.3 for canonical model, deterministic order + conflicts)."
 - "Implement the UI screens: Input / Fixes / Output, wired to mock data first."
 
 ## Before starting

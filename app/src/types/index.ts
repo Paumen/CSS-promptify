@@ -20,7 +20,7 @@ export type Severity = 'error' | 'warning' | 'info';
  */
 export type RuleGroup =
   | 'modern'
-  | 'consolidation'
+  | 'consolidate'
   | 'format'
   | 'tokens'
   | 'safety'
@@ -28,11 +28,26 @@ export type RuleGroup =
 
 /**
  * Fix availability for an issue
- * - safe: deterministic auto-fix available
- * - prompt: LLM prompt available (not safe to auto-fix)
+ * - safe (auto): deterministic fix exists and can be applied automatically once selected
+ * - safe (force user to choose): safe fix exists but requires a user choice or session config before applying
+ * - prompt: guidance / copy-ready LLM prompt (not safe to auto-fix)
  * - none: no fix available
  */
-export type Fixability = 'safe' | 'prompt' | 'none';
+export type Fixability =
+  | 'safe (auto)'
+  | 'safe (force user to choose)'
+  | 'prompt'
+  | 'none';
+
+/**
+ * Rule-level default fix offering (what the UI should offer by default)
+ */
+export type DefaultFixability = Fixability;
+
+/**
+ * Rule-level max fix offering (caps what the tool is allowed to do)
+ */
+export type MaxFixability = Fixability;
 
 /**
  * Patch operation types (v1 supports replace_range only)
@@ -180,7 +195,7 @@ export interface AppliedFix {
   /** Comment metadata */
   comment: {
     was_inserted: boolean;
-    marker_prefix: 'cssreview:';
+    marker_prefix: 'review:';
     style: 'end_of_line';
   };
 }
@@ -399,10 +414,13 @@ export interface IssueFilters {
 // ============================================================================
 
 /**
- * Check if issue has a safe fix
+ * Check if issue has a safe fix (auto or force user to choose)
  */
 export function hasSafeFix(issue: Issue): issue is Issue & { fix: Fix } {
-  return issue.fixability === 'safe' && issue.fix !== undefined;
+  return (
+    (issue.fixability === 'safe (auto)' || issue.fixability === 'safe (force user to choose)')
+    && issue.fix !== undefined
+  );
 }
 
 /**
@@ -423,7 +441,7 @@ export function validateIssue(issue: Issue): string[] {
   const errors: string[] = [];
 
   // Check fixability constraints
-  if (issue.fixability === 'safe') {
+  if (issue.fixability === 'safe (auto)' || issue.fixability === 'safe (force user to choose)') {
     if (!issue.fix) {
       errors.push('fixability=safe requires fix to be present');
     } else if (issue.fix.patches.length === 0) {

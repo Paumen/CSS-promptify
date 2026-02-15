@@ -387,7 +387,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ## 4) Consolidation / Shorthands
 
 ### consolidate/shorthand-margin-padding
-- **group:** consolidation
+- **group:** consolidate
 - **default_severity:** warning
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -401,7 +401,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - Combine longhands into shorthand when deterministic and allowed by config.
 
 ### consolidate/shorthand-full-values
-- **group:** consolidation
+- **group:** consolidate
 - **default_severity:** warning
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -419,7 +419,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - Expands shorthand properties to their full, explicit form to improve clarity for LLM parsing.
 
 ### consolidate/deduplicate-last-wins
-- **group:** consolidation
+- **group:** consolidate
 - **default_severity:** warning
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -436,7 +436,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - Only applies within a single declaration block (not across blocks).
 
 ### consolidate/duplicate-selectors
-- **group:** consolidation
+- **group:** consolidate
 - **default_severity:** warning
 - **default_fixability:** safe (force user to choose)
 - **max_fixability:** safe (auto)
@@ -580,13 +580,13 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - context: any declaration containing `!important`
   - condition: same line MUST contain approval comment marker
 - **params (session):**
-  - `requiredCommentMarker`: "cssreview: important-ok:"
+  - `requiredCommentMarker`: "review: important-ok:"
   - `sameLineOnly`: true
   - `minReasonLength`: 3
   - `autofixAddsPlaceholderReason`: boolean (default true)
 - **notes:**
   - Allowed example:
-    - `color: red !important; /* cssreview: important-ok: override legacy */`
+    - `color: red !important; /* review: important-ok: override legacy */`
 
 ### info/universal-selector-used
 - **group:** education

@@ -24,7 +24,7 @@ interface DeclarationInfo {
 export const deduplicateLastWinsRule: Rule = {
   meta: {
     rule_id: 'consolidate/deduplicate-last-wins',
-    group: 'consolidation',
+    group: 'consolidate',
     severity: 'warning',
     fixability: 'safe',
     enabled_by_default: true,
@@ -108,7 +108,7 @@ export const deduplicateLastWinsRule: Rule = {
               issues.push(
                 createSafeIssue({
                   ruleId: 'consolidate/deduplicate-last-wins',
-                  group: 'consolidation',
+                  group: 'consolidate',
                   severity: 'warning',
                   message: `Duplicate '${property}' will be overridden by later value`,
                   location,

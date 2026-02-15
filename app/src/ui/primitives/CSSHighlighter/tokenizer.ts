@@ -4,7 +4,7 @@
  * Produces tokens for CSS syntax highlighting with support for:
  * - Modern CSS features (@layer, @container, light-dark(), is(), has(), etc.)
  * - Nesting depth tracking for brace coloring
- * - Tool comments (cssreview:) vs user comments distinction
+ * - Tool comments (review:) vs user comments distinction
  * - Modern units (fr, dvh, cqi, etc.)
  */
 
@@ -194,7 +194,7 @@ export function tokenizeCSS(source: string): Token[] {
     }
 
     // Check if it's a tool comment
-    const isToolComment = value.includes('cssreview:');
+    const isToolComment = value.includes('review:');
     addToken(isToolComment ? 'comment-tool' : 'comment-user', value, startPos, startLine, startColumn);
   };
 

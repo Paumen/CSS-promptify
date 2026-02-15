@@ -38,7 +38,7 @@ Allowed values: `error | warning | info`
 
 ### 1.2 Rule groups (minimum v1)
 
-Allowed values: `modern | consolidation | format | tokens | safety | education`
+Allowed values: `modern | consolidate | format | tokens | safety | education`
 
 ### 1.3 Fixability
 
@@ -119,7 +119,7 @@ Positions are **1-based**.
     "comment": {
       "enabled_by_ui": true,
       "style": "end_of_line",
-      "text": "/* cssreview: format/multiple-declarations-per-line: split declarations */"
+      "text": "/* review: format/multiple-declarations-per-line: split declarations */"
     }
   }
 }
@@ -150,7 +150,7 @@ Canonical patch:
     "start": { "line": 14, "column": 3 },
     "end": { "line": 18, "column": 1 }
   },
-  "text": "  margin: 4px 8px; /* cssreview: consolidate/shorthand: was margin-top/right/bottom/left */\n"
+  "text": "  margin: 4px 8px; /* review: consolidate/shorthand: was margin-top/right/bottom/left */\n"
 }
 ```
 
@@ -181,12 +181,12 @@ To support "apply selected fixes" AND "deselect to revert", the session tracks s
         "start": { "line": 14, "column": 3 },
         "end": { "line": 18, "column": 1 }
       },
-      "text": "  margin: 4px 8px; /* cssreview: consolidate/shorthand: was margin-top/right/bottom/left */\n"
+      "text": "  margin: 4px 8px; /* review: consolidate/shorthand: was margin-top/right/bottom/left */\n"
     }
   ],
   "comment": {
     "was_inserted": true,
-    "marker_prefix": "cssreview:",
+    "marker_prefix": "review:",
     "style": "end_of_line"
   }
 }
@@ -266,7 +266,7 @@ No fixes are applied automatically; only via explicit user selection. Revert MUS
 
 ### 6.4 Tool comments only
 
-"Remove tool comments" MUST remove only comments that contain the marker prefix `cssreview:` and MUST NOT remove/alter user comments. Copy output must support both modes: with tool comments / without tool comments.
+"Remove tool comments" MUST remove only comments that contain the marker prefix `review:` and MUST NOT remove/alter user comments. Copy output must support both modes: with tool comments / without tool comments.
 
 ### 6.5 Modern CSS & unrecognized properties
 
@@ -277,7 +277,7 @@ Unrecognized properties MUST produce `info` only and MUST NOT block other fixes.
 ## 7) Minimal validation rules (for implementers)
 
 - `severity` ∈ `{error, warning, info}`
-- `group` ∈ `{modern, consolidation, format, tokens, safety, education}`
+- `group` ∈ `{modern, consolidate, format, tokens, safety, education}`
 - `fixability` ∈ `{safe (auto), safe (force user to choose), prompt, none}`
 - If `fixability` starts with `safe` ⇒ `fix` present and `patches.length ≥ 1`
 - If `fixability = prompt` ⇒ `llm_prompt` present and `fix` absent

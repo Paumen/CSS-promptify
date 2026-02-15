@@ -181,7 +181,7 @@ SPEC-sts-12: Tool comment syntax must be unique and easily detectable as /* revi
 
 SPEC-sts-13: Tool comment placement rule is to append /* review: ... */ at end of the modified line starting exactly one space after the terminating ';'.
 
-SPEC-sts-14: Tool comments should be concise with length under 80 characters and must explain the change.
+SPEC-sts-14: Tool comments should be concise with length under 60 characters and must explain the change.
 
 SPEC-sts-15: If a fix is reverted, its associated tool comment is automatically removed.
 

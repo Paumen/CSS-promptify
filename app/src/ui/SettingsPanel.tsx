@@ -8,7 +8,7 @@ const RULE_GROUPS: { id: RuleGroup; label: string; description: string }[] = [
   { id: 'safety', label: 'Safety', description: 'Syntax validation and error detection' },
   { id: 'format', label: 'Format', description: 'LLM-friendly formatting rules' },
   { id: 'tokens', label: 'Tokens', description: 'Token optimization and simplification' },
-  { id: 'consolidation', label: 'Consolidation', description: 'CSS deduplication and merging' },
+  { id: 'consolidate', label: 'Consolidate', description: 'CSS deduplication and merging' },
   { id: 'modern', label: 'Modern', description: 'Modern CSS best practices' },
   { id: 'education', label: 'Education', description: 'Educational warnings about CSS usage' },
 ];

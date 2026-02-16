@@ -38,7 +38,7 @@ Allowed values: `error | warning | info`
 
 ### 1.2 Rule groups (minimum v1)
 
-Allowed values: `modern | consolidation | format | tokens | safety | education`
+Allowed values: `modern | consolidation | format | tokenize | safety | education`
 
 ### 1.3 Fixability
 

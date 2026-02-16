@@ -187,7 +187,7 @@ refactor: rename appliedFixes to selectedFixIds
 | **default_fixability** | Default fix offering level for a rule. |
 | **max_fixability** | Maximum fix offering level for a rule. |
 | **Tool comment** | Tool-added comment `/* cssreview: ... */` describing what changed. |
-| **Rule group** | Logical grouping of rules (modern/consolidation/format/tokens/safety/education). |
+| **Rule group** | Logical grouping of rules (modern/consolidation/format/tokenize/safety/education). |
 | **Session config** | Rule toggles, severities, and parameters that reset on refresh (v1). |
 | **LLM prompt** | Copy-ready prompt generated for complex fixes that are not safe to automate. |
 | **Selected fix** | A fix the user has chosen to include in the output. |

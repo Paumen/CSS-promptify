@@ -23,7 +23,7 @@ It exists to keep the tool **modern**, avoid **outdated-linter** behavior, and p
 Each rule entry contains:
 
 - **rule_id**: stable identifier (do not rename lightly)
-- **group**: `modern | consolidation | format | tokens | safety | education`
+- **group**: `modern | consolidation | format | tokenize | safety | education`
 - **default_severity**: `off | info | warning | error`
 - **default_fixability**: `safe (auto) | safe (force user to choose) | prompt | none`
 - **max_fixability**: `safe (auto) | safe (force user to choose) | prompt | none`
@@ -55,8 +55,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 | `format/multiple-declarations-per-line` | format | safe (auto) | Core formatting rule |
 | `format/single-prop-single-line` | format | safe (auto) | Token optimization |
 | `format/normalize-spaces` | format | safe (auto) | Clean spacing |
-| `tokens/zero-units` | tokens | safe (auto) | Simple, high-value |
-| `tokens/shorten-hex-colors` | tokens | safe (auto) | Simple, high-value |
+| `tokenize/zero-units` | tokenize | safe (auto) | Simple, high-value |
+| `tokenize/shorten-hex-colors` | tokenize | safe (auto) | Simple, high-value |
 | `consolidate/shorthand-margin-padding` | consolidation | safe (auto) | High-impact consolidation |
 | `consolidate/deduplicate-last-wins` | consolidation | safe (auto) | Remove redundant declarations |
 | `style/important-used` | education | none | Basic awareness |
@@ -69,7 +69,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 | `safety/misspelled-property` | safety | prompt | Catches typos |
 | `safety/typo-suspicious-units-and-tokens` | safety | safe (force user to choose) | Catches `2xp` etc. |
 | `format/sort-properties` | format | safe (auto) | Per spec requirement |
-| `tokens/remove-trailing-zeros` | tokens | safe (auto) | Clean numbers |
+| `tokenize/remove-trailing-zeros` | tokenize | safe (auto) | Clean numbers |
 | `modern/prefer-hex-colors` | modern | safe (auto) | Simple conversion |
 ### Tier 3: Defer to v1.1+ — remaining rules
 
@@ -78,7 +78,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 | `safety/parse-error-*` (3 rules) | Subsume into invalid-syntax |
 | `safety/duplicate-property-in-block` | Complex; often intentional fallbacks | safe (force user to choose) | `format/one-selector-per-line` | Lower priority formatting |
 | `format/max-nesting-depth` | Disabled by default | prompt | `format/max-nesting-lines` | Disabled by default |
-| `tokens/remove-leading-zero` | Lower priority | safe (auto) | `tokens/remove-redundant-whitespace` | Edge cases |
+| `tokenize/remove-leading-zero` | Lower priority | safe (auto) | `tokenize/remove-redundant-whitespace` | Edge cases |
 | `consolidate/shorthand-full-values` | May conflict with shorthand collapse | safe (auto) | `consolidate/duplicate-selectors` | Cascade-affecting; risky |
 | `consolidate/merge-adjacent-identical-selectors` | Added 2026-01-31; safe merge of adjacent identical selectors |  | `modern/prefer-dvh-over-vh` | Browser support varies |
 | `modern/prefer-individual-transform-properties` | Complex analysis | safe (auto) | `modern/suggest-place-shorthand` | Prompt-only; lower priority |
@@ -316,10 +316,10 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 
 ---
 
-## 3) Tokens (rule-driven, structure-preserving)
+## 3) Tokenize (rule-driven, structure-preserving)
 
-### tokens/zero-units
-- **group:** tokens
+### tokenize/zero-units
+- **group:** tokenize
 - **default_severity:** warning
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -332,8 +332,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 - **autofix_notes:**
   - Convert `0&lt;unit&gt;` → `0` when unit is redundant and allowed by config.
 
-### tokens/remove-trailing-zeros
-- **group:** tokens
+### tokenize/remove-trailing-zeros
+- **group:** tokenize
 - **default_severity:** warning
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -344,8 +344,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 - **autofix_notes:**
   - Remove trailing zeros where value remains exact.
 
-### tokens/remove-leading-zero
-- **group:** tokens
+### tokenize/remove-leading-zero
+- **group:** tokenize
 - **default_severity:** info
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -356,8 +356,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 - **autofix_notes:**
   - Remove leading zero where valid CSS and unchanged value.
 
-### tokens/shorten-hex-colors
-- **group:** tokens
+### tokenize/shorten-hex-colors
+- **group:** tokenize
 - **default_severity:** warning
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -371,8 +371,8 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
   - If expandToFullHex=false, shorten only when equivalent.
   - If expandToFullHex=true, expand short hex to full hex.
 
-### tokens/remove-redundant-whitespace
-- **group:** tokens
+### tokenize/remove-redundant-whitespace
+- **group:** tokenize
 - **default_severity:** info
 - **default_fixability:** safe (auto)
 - **max_fixability:** safe (auto)
@@ -701,7 +701,7 @@ Rules are organized into implementation tiers. **v1.0 first release includes Tie
 ## 9) Design system / value enforcement (optional)
 
 ### design/step-values
-- **group:** tokens
+- **group:** tokenize
 - **default_severity:** warning
 - **default_fixability:** safe (force user to choose)
 - **max_fixability:** safe (auto)

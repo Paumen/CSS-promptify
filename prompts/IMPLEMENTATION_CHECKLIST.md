@@ -86,9 +86,9 @@ Complete each phase before moving to the next.
 - [x] Write tests matching spec/EXAMPLES.md
 
 ### 1.5 Token Rules (Safe Fixes)
-- [x] Implement `tokens/zero-units` (0px → 0)
-- [x] Implement `tokens/shorten-hex-colors` (#ffffff → #fff)
-- [x] Implement `tokens/remove-trailing-zeros` (1.0 → 1)
+- [x] Implement `tokenize/zero-units` (0px → 0)
+- [x] Implement `tokenize/shorten-hex-colors` (#ffffff → #fff)
+- [x] Implement `tokenize/remove-trailing-zeros` (1.0 → 1)
 - [x] Write tests matching spec/EXAMPLES.md
 
 

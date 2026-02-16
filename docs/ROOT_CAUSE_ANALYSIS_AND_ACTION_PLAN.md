@@ -99,11 +99,11 @@ color: red; /* cssreview: ... */
 | Rule | Expected Triggers | Actual Triggers | Over-trigger |
 |------|-------------------|-----------------|--------------|
 | format/one-selector-per-line | 1 | 19 | +18 |
-| tokens/shorten-hex-colors | values only | also selectors | yes |
+| tokenize/shorten-hex-colors | values only | also selectors | yes |
 
 **Root causes:**
 - `format/one-selector-per-line`: Regex/AST matching is too broad; fires on any Rule node
-- `tokens/shorten-hex-colors`: Uses regex that matches `#` anywhere, including in ID selectors like `#header`
+- `tokenize/shorten-hex-colors`: Uses regex that matches `#` anywhere, including in ID selectors like `#header`
 
 #### RC-5: No Snapshot Testing for Fix Output
 
@@ -277,7 +277,7 @@ Use `test-all-rules.css` as input, capture expected output snapshot.
 
 For each rule, add:
 ```markdown
-### Rule: tokens/zero-units
+### Rule: tokenize/zero-units
 
 **Input:**
 ```css
@@ -291,7 +291,7 @@ For each rule, add:
 
 **Output (fix applied, with comments):**
 ```css
-.card { margin: 0; /* cssreview: tokens/zero-units: removed unnecessary unit from 0 */ }
+.card { margin: 0; /* cssreview: tokenize/zero-units: removed unnecessary unit from 0 */ }
 ```
 ```
 

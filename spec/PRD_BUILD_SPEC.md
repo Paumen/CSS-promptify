@@ -177,9 +177,9 @@ SPEC-sts-10: A diff preview must be available for both single and batched fixes.
 
 SPEC-sts-11: Inline tool comments can be toggled ON/OFF by the user and default is ON. When inline comments are ON, insert a tool comment only for applied fixes.
 
-SPEC-sts-12: Tool comment syntax must be unique and easily detectable as /* review: ... */.
+SPEC-sts-12: Tool comment syntax must be unique and easily detectable as /* cssreview: ... */.
 
-SPEC-sts-13: Tool comment placement rule is to append /* review: ... */ at end of the modified line starting exactly one space after the terminating ';'.
+SPEC-sts-13: Tool comment placement rule is to append /* cssreview: ... */ at end of the modified line starting exactly one space after the terminating ';'.
 
 SPEC-sts-14: Tool comments should be concise with length under 80 characters and must explain the change.
 
@@ -256,11 +256,11 @@ Rules are defined as a hybrid of:
 
 - **AC-08:** After multiple select/unselect cycles, the output remains stable and correct.
 
-- **AC-09:** When the comments toggle is ON, applying a fix adds a `/* review: ... */` comment to the output without syntax error.
+- **AC-09:** When the comments toggle is ON, applying a fix adds a `/* cssreview: ... */` comment to the output without syntax error.
 
 - **AC-10:** The "Copy" buttons work correctly for both with and without comments.
 
-- **AC-11:** A "Remove tool comments" action strips all `review:` comments but preserves user-written comments.
+- **AC-11:** A "Remove tool comments" action strips all `cssreview:` comments but preserves user-written comments.
 
 - **AC-12:** The stats panel (tokens/lines/chars) updates accurately as fixes are selected and unselected.
 

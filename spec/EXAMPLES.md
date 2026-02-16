@@ -27,7 +27,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 - format/normalize-spaces (info)
 - format/multiple-declarations-per-line (warning)
 - format/indent-2-spaces (warning)
-- tokens/shorten-hex-colors (warning)
+- tokenize/shorten-hex-colors (warning)
 
 ### Expected output (no comments)
 ```css
@@ -41,7 +41,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ```css
 .button {
   display: flex; /* cssreview: format/multiple-declarations-per-line: split declarations */
-  color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */
+  color: #fff; /* cssreview: tokenize/shorten-hex-colors: was #ffffff */
 }
 ```
 
@@ -84,7 +84,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 - format/no-tabs (warning)
 - format/normalize-spaces (info)
 - format/multiple-declarations-per-line (warning)
-- tokens/zero-units (warning)
+- tokenize/zero-units (warning)
 
 ### Expected output (no comments)
 ```css
@@ -98,7 +98,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ```css
 .card {
   padding: 8px; /* cssreview: format/no-tabs: converted tabs to spaces */
-  margin: 0; /* cssreview: tokens/zero-units: was 0px */
+  margin: 0; /* cssreview: tokenize/zero-units: was 0px */
 }
 ```
 
@@ -274,7 +274,7 @@ This example locks the v1 behavior that output is derived from **original input 
 - format/normalize-spaces (info)
 - format/multiple-declarations-per-line (warning)
 - format/indent-2-spaces (warning)
-- tokens/shorten-hex-colors (warning)
+- tokenize/shorten-hex-colors (warning)
 
 ### Expected sequence (behavior)
 1) User clicks Analyze  
@@ -378,7 +378,7 @@ Covers: `format/multiple-declarations-per-line` (safe)
 
 ## Example 12 — Numeric normalization (trailing + leading zeros)
 
-Covers: `tokens/remove-leading-zero` (safe), `tokens/remove-trailing-zeros` (safe)
+Covers: `tokenize/remove-leading-zero` (safe), `tokenize/remove-trailing-zeros` (safe)
 
 ### Input
 ```css
@@ -389,8 +389,8 @@ Covers: `tokens/remove-leading-zero` (safe), `tokens/remove-trailing-zeros` (saf
 ```
 
 ### Expected issues (summary)
-- tokens/remove-leading-zero (info)
-- tokens/remove-trailing-zeros (warning)
+- tokenize/remove-leading-zero (info)
+- tokenize/remove-trailing-zeros (warning)
 
 ### Expected output (no comments)
 ```css
@@ -403,8 +403,8 @@ Covers: `tokens/remove-leading-zero` (safe), `tokens/remove-trailing-zeros` (saf
 ### Expected output (with comments)
 ```css
 .num {
-  opacity: .5; /* cssreview: tokens/remove-leading-zero: was 0.50 */
-  line-height: 1; /* cssreview: tokens/remove-trailing-zeros: was 1.0 */
+  opacity: .5; /* cssreview: tokenize/remove-leading-zero: was 0.50 */
+  line-height: 1; /* cssreview: tokenize/remove-trailing-zeros: was 1.0 */
 }
 ```
 
@@ -412,7 +412,7 @@ Covers: `tokens/remove-leading-zero` (safe), `tokens/remove-trailing-zeros` (saf
 
 ## Example 13 — Remove redundant whitespace in values
 
-Covers: `tokens/remove-redundant-whitespace` (safe)
+Covers: `tokenize/remove-redundant-whitespace` (safe)
 
 ### Input
 ```css
@@ -423,7 +423,7 @@ Covers: `tokens/remove-redundant-whitespace` (safe)
 ```
 
 ### Expected issues (summary)
-- tokens/remove-redundant-whitespace (info)
+- tokenize/remove-redundant-whitespace (info)
 
 ### Expected output (no comments)
 ```css
@@ -436,8 +436,8 @@ Covers: `tokens/remove-redundant-whitespace` (safe)
 ### Expected output (with comments)
 ```css
 .spaced {
-  margin: 10px 20px; /* cssreview: tokens/remove-redundant-whitespace: normalized spacing */
-  padding: 5px 0; /* cssreview: tokens/remove-redundant-whitespace: normalized spacing */
+  margin: 10px 20px; /* cssreview: tokenize/remove-redundant-whitespace: normalized spacing */
+  padding: 5px 0; /* cssreview: tokenize/remove-redundant-whitespace: normalized spacing */
 }
 ```
 

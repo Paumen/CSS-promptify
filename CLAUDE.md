@@ -10,7 +10,7 @@ PRIORITY: CRITICAL
 
 # Claude Code Instructions
 
-This file provides quick-start guidance for Claude Code when working on this repository.
+This file provides quick-start guidance for Claude Code and other llm agents when working on this repository.
 
 ## Project Overview
 

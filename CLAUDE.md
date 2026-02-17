@@ -161,21 +161,14 @@ CSS-promptify/
 - **Framework**: React 18+ with TypeScript
 - **Build**: Vite
 - **CSS Parser**: css-tree (detailed AST, location tracking, modern CSS support)
-- **State**: React Context or Zustand
-- **Styling**: Plain CSS or CSS Modules (not Tailwind)
+- **State**: Zustand
+- **Styling**: Plain CSS  
 - **Testing**: Vitest + React Testing Library
 
-## Key v1 Decisions
-
-- **Token estimation**: Character-based heuristic (`tokens ≈ chars / 4`)
-- **Conflict handling**: Prevent selecting both conflicting fixes (Option A)
-- **Fix selection**: Immediate output update (Variant A, no "Apply" button)
-- **Property sort default**: Grouped mode
-- **Max input size**: 100KB (primary input is copy-paste, not file upload)
-- **Format severity**: Warning by default
+## Key Decisions
 
 See `spec/DECISIONS.md` for full decision log.
 
 ## Contact
 
-Report issues: Check the spec first, then ask for clarification if behavior is ambiguous.
+Report issues: Check the spec first, then ask human for clarification if behavior is ambiguous.

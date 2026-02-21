@@ -46,7 +46,7 @@ export function OutputPanel() {
   };
 
   const handleCopyWithoutComments = async () => {
-    const cleaned = outputCss.replace(/\s*\/\*\s*cssreview:[^*]*\*\//g, '');
+    const cleaned = outputCss.replace(/\s*\/\*\s*review:[^*]*\*\//g, '');
     try {
       await navigator.clipboard.writeText(cleaned);
       setCopied(true);

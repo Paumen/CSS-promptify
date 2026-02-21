@@ -40,8 +40,8 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected output (with comments)
 ```css
 .button {
-  display: flex; /* cssreview: format/multiple-declarations-per-line: split declarations */
-  color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */
+  display: flex; /* review: format/multiple-declarations-per-line: split declarations */
+  color: #fff; /* review: tokens/shorten-hex-colors: was #ffffff */
 }
 ```
 
@@ -66,7 +66,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 
 ### Expected output (with comments)
 ```css
-.a { color: #fff; } /* cssreview: format/single-prop-single-line: single property kept on one line */
+.a { color: #fff; } /* review: format/single-prop-single-line: single property kept on one line */
 ```
 
 ---
@@ -97,8 +97,8 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected output (with comments)
 ```css
 .card {
-  padding: 8px; /* cssreview: format/no-tabs: converted tabs to spaces */
-  margin: 0; /* cssreview: tokens/zero-units: was 0px */
+  padding: 8px; /* review: format/no-tabs: converted tabs to spaces */
+  margin: 0; /* review: tokens/zero-units: was 0px */
 }
 ```
 
@@ -129,7 +129,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected output (with comments)
 ```css
 .box {
-  margin: 4px 8px; /* cssreview: consolidate/shorthand-margin-padding: was margin-top/right/bottom/left */
+  margin: 4px 8px; /* review: consolidate/shorthand-margin-padding: was margin-top/right/bottom/left */
 }
 ```
 
@@ -158,7 +158,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected output (with comments)
 ```css
 .title {
-  font-weight: 700; /* cssreview: consolidate/deduplicate-last-wins: removed earlier overridden value 400 */
+  font-weight: 700; /* review: consolidate/deduplicate-last-wins: removed earlier overridden value 400 */
 }
 ```
 
@@ -215,7 +215,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 ### Expected output (with comments)
 ```css
 .layout {
-  place-items: center; /* cssreview: modern/suggest-place-shorthand: replaced align-items + justify-items */
+  place-items: center; /* review: modern/suggest-place-shorthand: replaced align-items + justify-items */
 }
 ```
 
@@ -249,7 +249,7 @@ These examples define expected behavior for analysis, fixes, formatting, inline 
 .card {
   display: flex;
   align-items: center;
-  color: #fff; /* cssreview: format/sort-properties: reordered properties (mode=grouped) */
+  color: #fff; /* review: format/sort-properties: reordered properties (mode=grouped) */
 }
 ```
 
@@ -338,7 +338,7 @@ Covers: `format/one-selector-per-line` (safe)
 .btn,
 .btn-primary,
 .btn-secondary {
-  color: red; /* cssreview: format/one-selector-per-line: split selector list */
+  color: red; /* review: format/one-selector-per-line: split selector list */
 }
 ```
 
@@ -368,7 +368,7 @@ Covers: `format/multiple-declarations-per-line` (safe)
 ### Expected output (with comments)
 ```css
 .card {
-  padding: 8px; /* cssreview: format/multiple-declarations-per-line: split declarations */
+  padding: 8px; /* review: format/multiple-declarations-per-line: split declarations */
   margin: 0;
   color: #112233;
 }
@@ -403,8 +403,8 @@ Covers: `tokens/remove-leading-zero` (safe), `tokens/remove-trailing-zeros` (saf
 ### Expected output (with comments)
 ```css
 .num {
-  opacity: .5; /* cssreview: tokens/remove-leading-zero: was 0.50 */
-  line-height: 1; /* cssreview: tokens/remove-trailing-zeros: was 1.0 */
+  opacity: .5; /* review: tokens/remove-leading-zero: was 0.50 */
+  line-height: 1; /* review: tokens/remove-trailing-zeros: was 1.0 */
 }
 ```
 
@@ -436,8 +436,8 @@ Covers: `tokens/remove-redundant-whitespace` (safe)
 ### Expected output (with comments)
 ```css
 .spaced {
-  margin: 10px 20px; /* cssreview: tokens/remove-redundant-whitespace: normalized spacing */
-  padding: 5px 0; /* cssreview: tokens/remove-redundant-whitespace: normalized spacing */
+  margin: 10px 20px; /* review: tokens/remove-redundant-whitespace: normalized spacing */
+  padding: 5px 0; /* review: tokens/remove-redundant-whitespace: normalized spacing */
 }
 ```
 
@@ -467,7 +467,7 @@ Covers: `consolidate/shorthand-full-values` (safe)
 ### Expected output (with comments)
 ```css
 .box {
-  margin: 4px 8px 4px 8px; /* cssreview: consolidate/shorthand-full-values: expanded from 2-value shorthand */
+  margin: 4px 8px 4px 8px; /* review: consolidate/shorthand-full-values: expanded from 2-value shorthand */
 }
 ```
 
@@ -692,7 +692,7 @@ Covers:
 .modern {
   height: 100vh;
   transform: translateX(10px) rotate(10deg);
-  color: #112233; /* cssreview: modern/prefer-hex-colors: was rgb(17, 34, 51) */
+  color: #112233; /* review: modern/prefer-hex-colors: was rgb(17, 34, 51) */
   margin: 7px;
 }
 ```

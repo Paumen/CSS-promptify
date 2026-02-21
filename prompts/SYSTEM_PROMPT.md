@@ -35,9 +35,9 @@ and explain which invariant would be violated and why.
 
 
 ## Key constraints (must follow)
-- v1 is paste → analyze → select fixes → copy output. No code editing workflow beyond paste.
+- v1 core workflow: paste → analyze → select fixes → copy output (see `spec/PRD_BUILD_SPEC.md` §3 Product Principles). No code editing workflow beyond paste.
 - Apply/revert uses recompute-from-original using selected_fix_ids (deterministic order, conflict handling).
-- Inline tool comments use marker prefix `cssreview:` and are end-of-line style.
+- Inline tool comments use marker prefix `review:` and are end-of-line style.
 - Copy output supports with/without tool comments. “Remove tool comments” removes only tool comments.
 - Unrecognized properties are info-only and never block other fixes.
 - Property sorting exists in v1: enabled by default, severity info-only, user-selectable to apply.

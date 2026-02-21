@@ -47,7 +47,7 @@ function buildShorthand(top: string, right: string, bottom: string, left: string
 export const shorthandMarginPaddingRule: Rule = {
   meta: {
     rule_id: 'consolidate/shorthand-margin-padding',
-    group: 'consolidation',
+    group: 'consolidate',
     severity: 'warning',
     fixability: 'safe',
     enabled_by_default: true,
@@ -122,7 +122,7 @@ export const shorthandMarginPaddingRule: Rule = {
             issues.push(
               createSafeIssue({
                 ruleId: 'consolidate/shorthand-margin-padding',
-                group: 'consolidation',
+                group: 'consolidate',
                 severity: 'warning',
                 message: `${shorthand} longhands can be consolidated to: ${shorthand}: ${shorthandValue}`,
                 location,

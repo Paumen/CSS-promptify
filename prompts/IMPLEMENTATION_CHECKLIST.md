@@ -135,8 +135,8 @@ Complete each phase before moving to the next.
 - [x] Write conflict tests
 
 ### 2.4 Comment Handling (PRD FR-COMMENT-01 to FR-COMMENT-06)
-- [x] Implement tool comment insertion (`/* cssreview: ... */`)
-- [x] Comments max ~40 characters with old value reference (FR-COMMENT-04)
+- [x] Implement tool comment insertion (`/* review: ... */`)
+- [x] Comments max ~60 characters with old value reference (FR-COMMENT-04)
 - [x] Implement tool comment removal (preserve user comments)
 - [x] Verify idempotency of remove operation
 - [x] Write comment handling tests
@@ -243,7 +243,7 @@ Complete each phase before moving to the next.
 - [ ] Test all invariants (CLAUDE.md §Critical Invariants)
 
 ### 4.2 UI Testing
-- [ ] Test full user flow: paste → analyze → select → copy
+- [ ] Test full user flow: paste → analyze → select → copy (see `spec/PRD_BUILD_SPEC.md` §3 for workflow definition)
 - [ ] Test revert flow (AC-06, AC-07, AC-08)
 - [ ] Test comment toggle (AC-09, AC-10, AC-11)
 - [ ] Test mobile layout (AC-13)

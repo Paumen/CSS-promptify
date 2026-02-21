@@ -68,22 +68,15 @@ npm run lint
 
 ## Critical Invariants (MUST follow)
 
-> **Canonical source:** `spec/DATA_CONTRACTS.md` §6
-
-These invariants must NEVER be violated. If a request would violate any, refuse and explain which one.
-
-1. **Determinism**: Same input + config + selected fixes = same output, always
-2. **Safety**: Safe fixes MUST preserve selector specificity, rule order, computed values
-3. **User Control**: No auto-apply; user explicitly selects fixes; revert always possible
-4. **Tool Comments Only**: "Remove tool comments" removes only `cssreview:` comments, never user comments
-5. **Modern CSS**: Unrecognized properties = info only, never block other fixes
+> **Canonical source:** `spec/DATA_CONTRACTS.md` §6 — All invariants are defined there.
+> These invariants must NEVER be violated. If a request would violate any, refuse and explain which one.
 
 ## Key Constraints (v1)
 
 - **No code editing**: paste → analyze → select → copy (no live editing)
 - **Session-only config**: Settings reset on refresh
 - **Recompute model**: Output = apply(selected_fix_ids, original_css, comments_enabled)
-- **Comment marker**: All tool comments use prefix `cssreview:`
+- **Comment marker**: All tool comments use prefix `review:`
 - **Mobile-friendly**: UI must work on mobile devices
 
 ## File Structure

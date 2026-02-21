@@ -87,7 +87,7 @@ if (includeComments && fix.comment.text) {
 
 **Correct behavior per spec:** Comments should always appear AFTER `property: value;` with one space:
 ```css
-color: red; /* cssreview: ... */
+color: red; /* review: ... */
 ```
 
 **This is a fundamental architecture issue:** Comment placement should be a post-processing step that finds the end of each affected declaration, not an inline patch modification.
@@ -251,7 +251,7 @@ Same as above but with `includeComments: true`:
 ```typescript
 it('injects comment correctly', () => {
   const input = '...';
-  const expectedWithComment = '... /* cssreview: ... */';
+  const expectedWithComment = '... /* review: ... */';
   const { issues } = analyze(input, config);
   const { css } = applyFixes(input, issues, [issues[0].fix.id], true);
   expect(css).toBe(expectedWithComment);
@@ -291,7 +291,7 @@ For each rule, add:
 
 **Output (fix applied, with comments):**
 ```css
-.card { margin: 0; /* cssreview: tokens/zero-units: removed unnecessary unit from 0 */ }
+.card { margin: 0; /* review: tokens/zero-units: removed unnecessary unit from 0 */ }
 ```
 ```
 
@@ -315,8 +315,8 @@ Comments MUST be placed:
 - With exactly 1 space after the semicolon
 - On the same line as the declaration
 
-Correct: `color: red; /* cssreview: ... */`
-Incorrect: `color:  /* cssreview: ... */red;`
+Correct: `color: red; /* review: ... */`
+Incorrect: `color:  /* review: ... */red;`
 ```
 
 **Batch 2D: Update CLAUDE.md**

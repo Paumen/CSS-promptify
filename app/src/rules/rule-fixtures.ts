@@ -40,7 +40,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n\tpadding: 8px;\n}',
     expectedOutput: '.card {\n  padding: 8px;\n}',
     expectedWithComment:
-      '.card {\n  padding: 8px; /* cssreview: format/no-tabs: converted tabs to spaces */\n}',
+      '.card {\n  padding: 8px; /* review: format/no-tabs: converted tabs to spaces */\n}',
   },
   {
     ruleId: 'format/no-tabs',
@@ -48,7 +48,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n\t\tpadding: 8px;\n}',
     expectedOutput: '.card {\n    padding: 8px;\n}',
     expectedWithComment:
-      '.card {\n    padding: 8px; /* cssreview: format/no-tabs: converted tabs to spaces */\n}',
+      '.card {\n    padding: 8px; /* review: format/no-tabs: converted tabs to spaces */\n}',
   },
   {
     ruleId: 'format/no-tabs',
@@ -56,7 +56,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n\tpadding: 8px;\n\tmargin: 0;\n}',
     expectedOutput: '.card {\n  padding: 8px;\n  margin: 0;\n}',
     expectedWithComment:
-      '.card {\n  padding: 8px; /* cssreview: format/no-tabs: converted tabs to spaces */\n  margin: 0; /* cssreview: format/no-tabs: converted tabs to spaces */\n}',
+      '.card {\n  padding: 8px; /* review: format/no-tabs: converted tabs to spaces */\n  margin: 0; /* review: format/no-tabs: converted tabs to spaces */\n}',
   },
 
   // ── format/indent-2-spaces ──────────────────────────────────────────────
@@ -66,7 +66,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n   padding: 8px;\n}',
     expectedOutput: '.card {\n    padding: 8px;\n}',
     expectedWithComment:
-      '.card {\n    padding: 8px; /* cssreview: format/indent-2-spaces: normalized from 3 to 4 spaces */\n}',
+      '.card {\n    padding: 8px; /* review: format/indent-2-spaces: normalized from 3 to 4 spaces */\n}',
   },
   {
     ruleId: 'format/indent-2-spaces',
@@ -74,7 +74,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n padding: 8px;\n}',
     expectedOutput: '.card {\n  padding: 8px;\n}',
     expectedWithComment:
-      '.card {\n  padding: 8px; /* cssreview: format/indent-2-spaces: normalized from 1 to 2 spaces */\n}',
+      '.card {\n  padding: 8px; /* review: format/indent-2-spaces: normalized from 1 to 2 spaces */\n}',
   },
 
   // ── format/normalize-spaces ─────────────────────────────────────────────
@@ -84,7 +84,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n  color:red;\n}',
     expectedOutput: '.card {\n  color: red;\n}',
     expectedWithComment:
-      '.card {\n  color: red; /* cssreview: format/normalize-spaces: added space after colon */\n}',
+      '.card {\n  color: red; /* review: format/normalize-spaces: added space after colon */\n}',
   },
 
   // ── format/single-prop-single-line ──────────────────────────────────────
@@ -94,7 +94,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.a {\n  color: #fff;\n}',
     expectedOutput: '.a { color: #fff; }',
     expectedWithComment:
-      '.a { color: #fff; /* cssreview: format/single-prop-single-line: single property kept on one line */ }',
+      '.a { color: #fff; /* review: format/single-prop-single-line: single property kept on one line */ }',
   },
 
   // ── format/one-selector-per-line ────────────────────────────────────────
@@ -104,7 +104,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.sel-a, .sel-b {\n  color: pink;\n}',
     expectedOutput: '.sel-a,\n.sel-b {\n  color: pink;\n}',
     expectedWithComment:
-      '.sel-a,\n.sel-b {\n  color: pink; /* cssreview: format/one-selector-per-line: split selectors to separate lines */\n}',
+      '.sel-a,\n.sel-b {\n  color: pink; /* review: format/one-selector-per-line: split selectors to separate lines */\n}',
   },
 
   // ── tokens/zero-units ──────────────────────────────────────────────────
@@ -114,7 +114,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n  margin: 0px;\n}',
     expectedOutput: '.card {\n  margin: 0;\n}',
     expectedWithComment:
-      '.card {\n  margin: 0; /* cssreview: tokens/zero-units: was 0px */\n}',
+      '.card {\n  margin: 0; /* review: tokens/zero-units: was 0px */\n}',
   },
 
   // ── tokens/shorten-hex-colors ──────────────────────────────────────────
@@ -124,7 +124,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n  color: #ffffff;\n}',
     expectedOutput: '.card {\n  color: #fff;\n}',
     expectedWithComment:
-      '.card {\n  color: #fff; /* cssreview: tokens/shorten-hex-colors: was #ffffff */\n}',
+      '.card {\n  color: #fff; /* review: tokens/shorten-hex-colors: was #ffffff */\n}',
   },
   {
     ruleId: 'tokens/shorten-hex-colors',
@@ -132,7 +132,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n  color: #aabbcc;\n}',
     expectedOutput: '.card {\n  color: #abc;\n}',
     expectedWithComment:
-      '.card {\n  color: #abc; /* cssreview: tokens/shorten-hex-colors: was #aabbcc */\n}',
+      '.card {\n  color: #abc; /* review: tokens/shorten-hex-colors: was #aabbcc */\n}',
   },
 
   // ── tokens/remove-trailing-zeros ───────────────────────────────────────
@@ -142,7 +142,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n  opacity: 0.50;\n}',
     expectedOutput: '.card {\n  opacity: 0.5;\n}',
     expectedWithComment:
-      '.card {\n  opacity: 0.5; /* cssreview: tokens/remove-trailing-zeros: was 0.50 */\n}',
+      '.card {\n  opacity: 0.5; /* review: tokens/remove-trailing-zeros: was 0.50 */\n}',
   },
   {
     ruleId: 'tokens/remove-trailing-zeros',
@@ -150,7 +150,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.card {\n  line-height: 1.0;\n}',
     expectedOutput: '.card {\n  line-height: 1;\n}',
     expectedWithComment:
-      '.card {\n  line-height: 1; /* cssreview: tokens/remove-trailing-zeros: was 1.0 */\n}',
+      '.card {\n  line-height: 1; /* review: tokens/remove-trailing-zeros: was 1.0 */\n}',
   },
 
   // ── consolidate/deduplicate-last-wins ──────────────────────────────────
@@ -160,7 +160,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.title {\n  font-weight: 400;\n  font-weight: 700;\n}',
     expectedOutput: '.title {\n  font-weight: 700;\n}',
     expectedWithComment:
-      '.title {\n  font-weight: 700; /* cssreview: consolidate/deduplicate-last-wins: removed earlier overridden value 400 */\n}',
+      '.title {\n  font-weight: 700; /* review: consolidate/deduplicate-last-wins: removed earlier overridden value 400 */\n}',
   },
   {
     ruleId: 'consolidate/deduplicate-last-wins',
@@ -184,7 +184,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.box {\n  color: rgb(255, 0, 0);\n}',
     expectedOutput: '.box {\n  color: #f00;\n}',
     expectedWithComment:
-      '.box {\n  color: #f00; /* cssreview: modern/prefer-hex-colors: converted from rgb(255,0,0) */\n}',
+      '.box {\n  color: #f00; /* review: modern/prefer-hex-colors: converted from rgb(255,0,0) */\n}',
   },
   {
     ruleId: 'modern/prefer-hex-colors',
@@ -192,7 +192,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.box {\n  color: rgb(255, 255, 255);\n}',
     expectedOutput: '.box {\n  color: #fff;\n}',
     expectedWithComment:
-      '.box {\n  color: #fff; /* cssreview: modern/prefer-hex-colors: converted from rgb(255,255,255) */\n}',
+      '.box {\n  color: #fff; /* review: modern/prefer-hex-colors: converted from rgb(255,255,255) */\n}',
   },
 
   // ── format/sort-properties ─────────────────────────────────────────────
@@ -205,7 +205,7 @@ export const ruleFixtures: RuleFixture[] = [
     input: '.box {\n  color: black;\n  display: flex;\n}',
     expectedOutput: '.box {\n    display: flex;\n  color: black;;\n}',
     expectedWithComment:
-      '.box {\n    display: flex;\n  color: black;; /* cssreview: format/sort-properties: reordered to grouped order */\n}',
+      '.box {\n    display: flex;\n  color: black;; /* review: format/sort-properties: reordered to grouped order */\n}',
   },
 
   // ── consolidate/shorthand-margin-padding ───────────────────────────────
@@ -218,7 +218,7 @@ export const ruleFixtures: RuleFixture[] = [
       '.box {\n  padding-top: 10px;\n  padding-right: 10px;\n  padding-bottom: 10px;\n  padding-left: 10px;\n}',
     expectedOutput: '.box {\n  padding: 10px;;\n}',
     expectedWithComment:
-      '.box {\n  padding: 10px;; /* cssreview: consolidate/shorthand-margin-padding: was padding-top/right/bottom/left */\n}',
+      '.box {\n  padding: 10px;; /* review: consolidate/shorthand-margin-padding: was padding-top/right/bottom/left */\n}',
   },
 
   // ── format/multiple-declarations-per-line ──────────────────────────────

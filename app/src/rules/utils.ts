@@ -85,7 +85,7 @@ export function createComment(text: string): CommentConfig {
   return {
     enabled_by_ui: false,
     style: 'end_of_line',
-    text: `cssreview: ${text}`,
+    text: `review: ${text}`,
   };
 }
 

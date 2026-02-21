@@ -263,7 +263,7 @@ Human adjusted testing data:
 ```css
   /* 4. format/no-tabs */
   .has-tab {
-     /* cssreview: format/no-tabs: converted tabs to spaces */color: red;
+     /* review: format/no-tabs: converted tabs to spaces */color: red;
   }
 ```
 
@@ -271,7 +271,7 @@ Human adjusted testing data:
 ```css
 /* 4. format/no-tabs */
 .has-tab {
-  color: red; /* cssreview: format/no-tabs: converted tabs to spaces */
+  color: red; /* review: format/no-tabs: converted tabs to spaces */
 }
 ```
 
@@ -305,7 +305,7 @@ Human adjusted testing data:
 ```css
 /* 5. format/indent-2-spaces (3-space indent) */
 .bad-indent {
-     /* cssreview: format/indent-2-spaces: normalized from 3 to 4 spaces */color: blue;
+     /* review: format/indent-2-spaces: normalized from 3 to 4 spaces */color: blue;
 }
 ```
 
@@ -313,7 +313,7 @@ Human adjusted testing data:
 ```css
 /* 5. format/indent-2-spaces (3-space indent) */
 .bad-indent {
-  color: blue; /* cssreview: format/indent-2-spaces: normalized from 3 to 4 spaces */
+  color: blue; /* review: format/indent-2-spaces: normalized from 3 to 4 spaces */
 }
 ```
 
@@ -342,7 +342,7 @@ Human adjusted testing data:
 ```css
 /* 6. format/multiple-declarations-per-line */
 .multi-decl { c  color: red;
-  background: blue; /* cssreview: format/multiple-declarations-per-line: split declarations */}
+  background: blue; /* review: format/multiple-declarations-per-line: split declarations */}
 ```
 
 **Expected output (good)**
@@ -350,7 +350,7 @@ Human adjusted testing data:
 /* 6. format/multiple-declarations-per-line */
 .multi-decl {
   color: red;
-  background: blue; /* cssreview: format/multiple-declarations-per-line: split declarations */
+  background: blue; /* review: format/multiple-declarations-per-line: split declarations */
 }
 ```
 
@@ -375,13 +375,13 @@ Human adjusted testing data:
 **Observed output (wrong)**
 ```css
 /* 7. format/single-prop-single-line */
-..single-prop { color: green; } /* cssreview: format/single-prop-single-line: single property kept on one line */
+..single-prop { color: green; } /* review: format/single-prop-single-line: single property kept on one line */
 ```
 
 **Expected output (good)**
 ```css
 /* 7. format/single-prop-single-line */
-.single-prop { color: green; /* cssreview: format/single-prop-single-line: single property kept on one line */
+.single-prop { color: green; /* review: format/single-prop-single-line: single property kept on one line */
 }
 ```
 
@@ -406,14 +406,14 @@ Human adjusted testing data:
 **Observed output (wrong)**
 ```css
 .no-space {
-  color:  /* cssreview: format/normalize-spaces: added space after colon */red;
+  color:  /* review: format/normalize-spaces: added space after colon */red;
 }
 ```
 
 **Expected output (good)**
 ```css
 .no-space {
-  color: red; /* cssreview: format/normalize-spaces: added space after colon */
+  color: red; /* review: format/normalize-spaces: added space after colon */
 }
 ```
 
@@ -439,15 +439,15 @@ Human adjusted testing data:
 ```css
 /* 6. format/multiple-declarations-per-line */
 background: blue;
-color: red; /* cssreview: format/sort-properties: reordered to grouped order */
+color: red; /* review: format/sort-properties: reordered to grouped order */
 ```
 
 **Expected output (good)**
 ```css
 /* 6. format/multiple-declarations-per-line */
 .multi-decl {
-  background: blue; /* cssreview: format/sort-properties: reordered to grouped order */
-  color: red; /* cssreview: format/sort-properties: reordered to grouped order */
+  background: blue; /* review: format/sort-properties: reordered to grouped order */
+  color: red; /* review: format/sort-properties: reordered to grouped order */
 }
 ```
 
@@ -473,14 +473,14 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 10. format/one-selector-per-line */
 ..sel-a,
-.sel-b /* cssreview: format/one-selector-per-line: split selectors to separate lines */{ color: pink; }
+.sel-b /* review: format/one-selector-per-line: split selectors to separate lines */{ color: pink; }
 ```
 
 **Expected output (good)**
 ```css
 /* 10. format/one-selector-per-line */
-.sel-a, /* cssreview: format/one-selector-per-line: split selectors to separate lines */
-.sel-b { /* cssreview: format/one-selector-per-line: split selectors to separate lines */
+.sel-a, /* review: format/one-selector-per-line: split selectors to separate lines */
+.sel-b { /* review: format/one-selector-per-line: split selectors to separate lines */
   color: pink;
 }
 ```
@@ -564,7 +564,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 14. consolidate/shorthand-margin-padding */
 .longhands {
-  ppadding: 10px /* cssreview: consolidate/shorthand-margin-padding: was padding-top/right/bottom/left */
+  ppadding: 10px /* review: consolidate/shorthand-margin-padding: was padding-top/right/bottom/left */
   padding-right: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
@@ -575,7 +575,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 14. consolidate/shorthand-margin-padding */
 .longhands {
-  padding: 10px; /* cssreview: consolidate/shorthand-margin-padding: was padding-top/right/bottom/left */
+  padding: 10px; /* review: consolidate/shorthand-margin-padding: was padding-top/right/bottom/left */
 }
 ```
 
@@ -602,7 +602,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 15. consolidate/deduplicate-last-wins */
 .duplicate {
-  c /* cssreview: consolidate/deduplicate-last-wins: removed earlier overridden value red */
+  c /* review: consolidate/deduplicate-last-wins: removed earlier overridden value red */
   color: blue;
 }
 ```
@@ -611,7 +611,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 15. consolidate/deduplicate-last-wins */
 .duplicate {
-  /* cssreview: consolidate/deduplicate-last-wins: removed earlier overridden value red */
+  /* review: consolidate/deduplicate-last-wins: removed earlier overridden value red */
   color: blue;
 }
 ```
@@ -690,7 +690,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 19. modern/prefer-hex-colors */
 .rgb-color {
-  color: r#f00 /* cssreview: modern/prefer-hex-colors: converted from rgb(255,0,0) */
+  color: r#f00 /* review: modern/prefer-hex-colors: converted from rgb(255,0,0) */
 }
 ```
 
@@ -698,7 +698,7 @@ color: red; /* cssreview: format/sort-properties: reordered to grouped order */
 ```css
 /* 19. modern/prefer-hex-colors */
 .rgb-color {
-  color: #f00; /* cssreview: modern/prefer-hex-colors: converted from rgb(255,0,0) */
+  color: #f00; /* review: modern/prefer-hex-colors: converted from rgb(255,0,0) */
 }
 ```
 

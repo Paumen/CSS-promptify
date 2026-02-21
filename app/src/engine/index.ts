@@ -321,7 +321,7 @@ export function applyFixes(
     patches: fix.patches,
     comment: {
       was_inserted: includeComments && !!fix.comment?.text,
-      marker_prefix: 'cssreview:' as const,
+      marker_prefix: 'review:' as const,
       style: 'end_of_line' as const,
     },
   }));

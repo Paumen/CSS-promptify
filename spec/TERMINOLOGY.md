@@ -56,9 +56,9 @@ Use the **preferred terms** consistently. Avoid the **deprecated terms**.
 
 | Preferred Term | Definition | Deprecated/Avoid |
 |----------------|------------|------------------|
-| **Tool comment** | Comment with `cssreview:` marker | "auto comment", "generated comment" |
-| **User comment** | Any comment without `cssreview:` marker | "manual comment", "original comment" |
-| **Comment marker** | The prefix `cssreview:` | "comment prefix", "marker prefix" |
+| **Tool comment** | Comment with `review:` marker | "auto comment", "generated comment" |
+| **User comment** | Any comment without `review:` marker | "manual comment", "original comment" |
+| **Comment marker** | The prefix `review:` | "comment prefix", "marker prefix" |
 
 ---
 
@@ -78,7 +78,7 @@ Use the **preferred terms** consistently. Avoid the **deprecated terms**.
 |----------------|------------|------------------|
 | **Analyze** | Run parsing + rule evaluation | "scan", "lint", "check" |
 | **Copy output** | Copy derived CSS to clipboard | "export", "download" |
-| **Remove tool comments** | Strip only `cssreview:` comments | "clean comments", "strip comments" |
+| **Remove tool comments** | Strip only `review:` comments | "clean comments", "strip comments" |
 | **Reset** | Return to original CSS, clear selections | "clear", "start over" |
 
 ---
@@ -109,7 +109,7 @@ Use the **preferred terms** consistently. Avoid the **deprecated terms**.
 - "After **unselecting** the fix, the output **reverts** via **recompute**."
 - "This is a **safe fix (auto)** with **default_fixability: safe (auto)**."
 - "This is a **safe fix (force user to choose)** with **default_fixability: safe (force user to choose)**."
-- "**Tool comments** use the `cssreview:` **marker**."
+- "**Tool comments** use the `review:` **marker**."
 - "Check the **Issues Panel** for all findings."
 
 ### Incorrect
@@ -186,7 +186,7 @@ refactor: rename appliedFixes to selectedFixIds
 | **Safe fix** | Semantics-preserving fix. May be **safe (auto)** or **safe (force user to choose)**. |
 | **default_fixability** | Default fix offering level for a rule. |
 | **max_fixability** | Maximum fix offering level for a rule. |
-| **Tool comment** | Tool-added comment `/* cssreview: ... */` describing what changed. |
+| **Tool comment** | Tool-added comment `/* review: ... */` describing what changed. |
 | **Rule group** | Logical grouping of rules (modern/consolidation/format/tokens/safety/education). |
 | **Session config** | Rule toggles, severities, and parameters that reset on refresh (v1). |
 | **LLM prompt** | Copy-ready prompt generated for complex fixes that are not safe to automate. |
